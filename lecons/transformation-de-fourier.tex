@@ -1,0 +1,416 @@
+\documentclass[11pt,a4paper,twocolumn]{article}
+
+\usepackage[frenchb]{babel}
+\usepackage{csquotes} % guillemets
+
+\usepackage{amssymb,amsthm,amsmath}
+\usepackage{algorithm,caption}
+\usepackage{algpseudocode}
+\usepackage{proof}
+\usepackage{multicol}
+%\usepackage{stmaryrd,icomma}
+\usepackage{url}
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[a4paper,landscape,border shrink=0mm]
+
+\usepackage[landscape, margin=2cm]{geometry}
+
+\usepackage{unicode-math}
+
+\theoremstyle{definition}
+% http://tex.stackexchange.com/questions/59278/can-i-disable-italics-in-the-body-text-of-a-theorem-without-amsthm-ntheorem
+\newtheorem{definition}[equation]{Définition}
+\newtheorem*{definition*}{Définition}
+\newtheorem{example}[equation]{Exemple}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{theorem}[equation]{Théorème}
+\newtheorem{application}[equation]{Application}
+\newtheorem{algo}[equation]{Algorithme}
+\newtheorem{lemma}[equation]{Lemme}
+\newtheorem{remark}[equation]{Remarque}
+\newtheorem{corollary}[equation]{Corollaire}
+\newtheorem{code}[equation]{Code}
+\newcounter{n}
+\newtheorem{dev}[n]{Développement}
+
+\algtext*{EndProcedure}
+\algtext*{EndWhile}
+\algtext*{EndFor}
+\algtext*{EndIf}
+\algrenewcommand\algorithmicprocedure{\textbf{procédure}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{alors}}
+\algrenewcommand\algorithmicelse{\textbf{sinon}}
+\algrenewcommand\algorithmicfor{\textbf{pour}}
+\algrenewcommand\algorithmicwhile{\textbf{tant que}}
+\algrenewcommand\algorithmicdo{\textbf{faire}}
+\algrenewcommand\algorithmicreturn{\textbf{renvoyer}}
+
+\newcommand\lesson[1]{{\noindent \LARGE \bfseries #1}\\[1pt]}
+%\def\authorship{{\null \vfill \hfill \small \@author{} -- \url{agreg-cachan.fr}}}
+\def\A{{\cal{A}}}
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\U{\mathbb{U}}
+\def\K{\mathbb{K}}
+\def\P{\mathbb{P}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\L{{\cal{L}}}
+\def\S{{\cal{S}}}
+\def\V{{\cal{V}}}
+\def\T{{\cal{T}}}
+\def\O{{\cal{O}}}
+\def\Fs{{\cal{F}}}
+\def\Ps{{\cal{P}}}
+\def\Cf{{\cal{C}}}
+\def\M{\mathcal{M}}
+\def\MnK{{\cal M}_n(\K)}
+\def\Tr{\textnormal{Tr}}
+\def\Sp{\textnormal{Sp}}
+\def\Re{\textnormal{Re}}
+\def\Vect{\textnormal{Vect}}
+\def\car{\textnormal{car}}
+\def\pgcd{\textnormal{pgcd}}
+\def\ppcm{\textnormal{ppcm}}
+\def\Sigmap{\mathfrak{S}}
+\def\prog{\texttt{prog}}
+\renewcommand\vector[1]{\left(\begin{array}{c}#1\end{array}\right)}
+\newcommand\enonce[3]{\{#1\}\ #2\ \{#3\}}
+\newcommand\hoare[1]{\State $\textcolor{gray}{\{#1\}}$}
+
+% J'aime pas la logique
+\def\bv{\textnormal{bv}}
+\def\fv{\textnormal{fv}}
+\def\dom{\textnormal{dom}}
+\newcommand\sem[1]{\llbracket #1 \rrbracket}
+\def\seq{\longrightarrow}
+\def\LK{\textbf{LK}}
+
+\author{\textsc{Nguyễn} Lê Thành Dũng}
+
+\def\supp{\textnormal{supp }}
+\def\F{\mathcal{F}}
+\def\iF{\overline{\mathcal{F}}}
+\def\hf{\hat{f}}
+\def\hg{\hat{g}}
+\def\T{\mathbb{T}}
+
+\begin{document}
+\lesson{250. Transformation de Fourier.\\ Applications.}
+
+Dans toute cette leçon, on fixe $d \in \N^*$.
+
+\section{Transformation de Fourier des fonctions $\R^d \to \C$}
+
+\subsection{Transformée de Fourier sur $L^1(\R^d)$}
+
+\begin{definition}
+La \emph{transformée de Fourier} de $f \in L^1(\R^d)$ est notée $\hf$ et définie par :
+\[ \forall \xi \in \R^d, \hf(\xi) = \int_{\R^d} f(x) e^{-ix \cdot \xi} \,dx. \]
+\end{definition}
+
+\begin{example}
+  Pour $f : t \mapsto e^{-|t|} \in L^1(\R)$, $\hf(\omega) = 2/(1+\omega^2)$.
+\end{example}
+
+\begin{example}
+  On a $\widehat{\mathbb{1}_{[-1,1]}} = 2 \cdot \mathrm{sinc}$. $L^1(\R)$ n'est donc pas
+  stable par transformée de Fourier (et plus généralement $L^1(\R^d)$).
+\end{example}
+
+\begin{proposition}
+  Pour tout $f \in L^1(\R^d)$, $\hf$ est continue, et $\|\hf\|_\infty \leq
+  \|f\|_1$.
+\end{proposition}
+
+\begin{lemma}[Riemann-Lebesgue]
+  Pour $f \in L^1(\R^d)$,
+  $\displaystyle \lim_{|\xi| \to +\infty} \hf(\xi) = 0$.
+\end{lemma}
+
+
+% \begin{example}
+% Soit $h \in L^1(\R)$. On pose pour $\omega \in \R$, $e_\omega : t \mapsto e^{i \omega t}$ et on a :
+% \[ \forall \omega \in \R, \qquad e_\omega \star h = \hat{h}(\omega) e_\omega. \]
+% Donc pour tout $\omega \in \R$, $e_\omega$ est vecteur propre pour l'opérateur de convolution \linebreak $f \mapsto f \star h$, associé à la valeur propre $\hat{h}(\omega)$.
+% \end{example}
+
+
+\begin{proposition}[Convolution]
+  On note $\star$ le produit de convolution. Pour tous $f, g \in L^1(\R)$,
+  $f\star g$ est défini presque partout et est dans $L^1(\R^d)$, et on a $\|f \star
+  g\|_1 \leq \|f\|_1 \|g\|_1$, et $\widehat{f \star g} = \hf \cdot \hg$.
+\end{proposition}
+
+\begin{proposition}[Dérivation]
+  Soit $f \in L^1(\R^d)$ et $k \in \{1, \ldots, d\}$.
+  \begin{itemize}
+  \item Si $\partial_k f$ existe et est dans $L^1(\R^d)$, alors $\forall \xi \in
+    \R^d, \widehat{\partial_k f}(\xi) = i\xi_k \hf(\xi)$. 
+  \item Si $x_kf(x) \in L^1(\R^d)$ ($k \in \{1,\ldots,d\}$), alors $\hf$ est
+    dérivable par rapport à $\xi_k$ et $\partial_k \hf(\xi) = -i \cdot
+    \widehat{x_kf(x)}(\xi)$.
+  \end{itemize}
+\end{proposition}
+
+\begin{corollary}
+  En dimension $d = 1$, si $f \in L^1(\R) \cap C^1(\R)$ avec $f' \in L^1(\R)$,
+  alors $\hf(\omega) = (i\omega)^{-1}\widehat{f'}(\omega) = o(1/\omega)$ quand
+  $|\omega| \to +\infty$.
+\end{corollary}
+
+\begin{proposition}
+  Si $g_K$ est une gaussienne centrée de matrice de covariance $K$, alors
+  \[ \widehat{g_K}(\xi) = \exp\left( -\frac{1}{2}\xi^T K \xi \right).\]
+\end{proposition}
+
+\begin{theorem}[Inversion de Fourier]
+  Soit $f \in L^1(\R^d)$. Si $\hat{f} \in L^1(\R^d)$ aussi, on a pour presque
+  tout $x \in \R^d$ :
+\[ f(x) = \frac{1}{(2\pi)^d} \int_\R \hf(\xi) e^{i\xi \cdot x} \,d\xi =
+  \hat{\hf}(-x). \]
+\end{theorem}
+
+\begin{dev}
+  Preuve des deux propositions précédentes quand $d = 1$. On admettra que les
+  gaussiennes sont des approximations de l'unité.
+\end{dev}
+
+\begin{example}
+  Pour $f : t \mapsto 1/(1+t^2)$, $\hf(\omega) = \pi e^{-|\omega|}$ pour tout $\omega \in \R$.
+\end{example}
+
+\begin{corollary}
+  La transformée de Fourier est injective sur $L^1(\R^d)$.
+\end{corollary}
+
+\begin{corollary}[Décroissance vs régularité bis]
+  Soit $f \in L^1(\R^d)$. Supposons que $\hf(\xi)(1 + |\xi|^k) \in L^1(\R^d)$
+  pour $k \in \N$. Alors $f \in C^k(\R^d)$ et les dérivées jusqu'à l'ordre $k$
+  de $f$ s'annulent à l'infini.
+\end{corollary}
+
+
+\subsection{Transformée de Fourier sur $L^2(\R^d)$}
+
+\begin{theorem}[Formule de Plancherel]
+  Soit $f \in L^1(\R^d) \cap L^2(\R^d)$. Alors $\hf \in L^2(\R^d)$, avec
+  $\|\hf\|_2 = (2\pi)^{d/2} \|f\|_2$.
+\end{theorem}
+
+\begin{corollary}[Transformation de Fourier-Plancherel]
+  Il existe un unique opérateur linéaire continu $\F$ sur $L^2(\R^d)$
+  prolongeant la transformée de Fourier sur $L^1(\R^d) \cap L^2(\R^d)$. De plus,
+  $(2\pi)^{-d/2}\F$ est une isométrie.
+\end{corollary}
+
+\begin{theorem}[Inversion de Fourier $L^2$]
+  $\F$ est bijective et \[ \forall f \in L^2(\R^d), \qquad \F^{-1}(f) =
+    \frac{1}{(2\pi)^d}\F[x \mapsto f(-x)]. \]
+\end{theorem}
+
+\begin{corollary}
+  $\F$ est un opérateur unitaire, et
+  \[ \forall f, g \in L^2(\R^d), \qquad \int_{\R^d} \F(f)g = \int_{\R^d}
+    f\F(g).\]
+\end{corollary}
+
+\begin{example}
+  On a $\F(\mathrm{sinc}) = \pi \mathbb{1}_{[-1,1]}$.
+\end{example}
+
+\subsection{Classe de Schwartz et distributions tempérées}
+
+\begin{definition}
+  On appelle \emph{espace de Schwartz} (noté $\S(\R^d)$) l'ensemble des
+  fonctions de $C^\infty(\R^d)$ dont toutes les semi-normes $\sup_{x \in \R^d}
+  |x^\alpha \partial^{\beta}f(x)|$ ($\alpha$, $\beta \in \N^d$ multi-indices)
+  sont finies. C'est un espace vectoriel muni de la topologie donnée par
+  cette famille de semi-normes.
+\end{definition}
+
+\begin{proposition}
+  Pour tout $p \in [1, +\infty]$, $\S(\R^d) \subset L^p(\R^d)$. \\
+  En particulier, $\S(\R^d) \subset L^1(\R^d) \cup L^2(\R^d)$.
+\end{proposition}
+
+\begin{proposition}
+  Si $f \in \S(\R^d)$ et $\alpha \in \N^d$ alors $\partial^\alpha f$ et
+  $x^\alpha f$ sont dans $\S(\R)$.
+\end{proposition}
+
+\begin{proposition}
+  $\S(\R^d)$ est stable par transformation de Fourier.
+\end{proposition}
+
+
+\begin{definition}
+  L'espace $\S'(\R^d)$ est le dual topologique de $\S(\R^d)$ ; ses éléments sont
+  appelés \emph{distributions tempérées}. Pour $T \in \S'(\R)$ et $\varphi \in
+  \S(\R)$, on note $\langle T, \varphi \rangle$ l'application de la forme
+  linéaire $T$ à $\varphi$.
+\end{definition}
+
+\begin{proposition}
+  Pour tout $p \in [1, +\infty]$, $L^p(\R^d)$ s'injecte dans $\S'(\R^d)$.
+\end{proposition}
+
+\begin{example}
+  Les distributions \emph{$\delta$ de Dirac} sont définies pour $x \in \R^d$ par\\
+  $\forall \phi \in \S(\R^d),\,\langle \delta_x, \phi \rangle = \phi(x)$.
+\end{example}
+
+
+\begin{definition}
+  Si $T \in \S'(\R^d)$, la transformée de Fourier de $T$, notée $\F(T)$ ou
+  $\hat{T}$, est une distribution tempérée définie par :
+\[ \forall \varphi \in \S(\R^d), \qquad \langle \F(T), \varphi \rangle = \langle T, \F (\varphi) \rangle. \]
+\end{definition}
+
+\begin{example}
+$\F (\delta_0) = \mathbb{1}$ et réciproquement $\F (\mathbb{1}) = 2\pi\delta_0$.
+\end{example}
+
+\begin{proposition}
+  Si $T \in L^p(\R^d)$ ($p = 1 \text{ ou } 2$), la transformée de Fourier de $T$
+  dans $\S'(\R^d)$ coïncide avec celle dans $L^p(\R^d)$.
+\end{proposition}
+
+
+
+\section{Variantes de la transformée de Fourier}
+
+\subsection{Lien avec les séries de Fourier}
+
+\begin{theorem}[Formule sommatoire de Poisson]
+  Soit $f \in \S(\R)$, alors pour tout $t \in \R$,
+  \[ \sum_{n \in \Z} f(t + 2\pi n) = \frac{1}{2\pi} \sum_{n \in \Z}
+    \hf(n)e^{int}\] les deux côtés de l'égalité étant des séries normalement
+  convergentes sur tout compact. (Périodiser une fonction revient à ne garder
+  que les fréquences entières de son spectre.)
+\end{theorem}
+
+\begin{dev}
+  Preuve de la formule de Poisson et application :
+  \[ \Theta(x) = \sum_{n \in \Z} x^{n^2} \underset{x \to 1^-}{\sim} \sqrt{\frac{\pi}{1-x}} \]
+\end{dev}
+
+\begin{corollary}[Transformée de Fourier du peigne de Dirac]
+  \[ \F\left( \sum_{n \in \Z} \delta_n \right) = 2\pi \left( \sum_{n \in \Z}
+      \delta_{2\pi n} \right) \]
+\end{corollary}
+
+\subsection{Fonctions caractéristiques en probabilités}
+
+\begin{definition}
+  Soit $X$ une variable aléatoire à valeurs dans $\R^d$, sa \emph{fonction
+    caractéristique} est définie comme $\phi_X : \xi \mapsto
+  \mathbb{E}[\exp(i\xi \cdot X)]$.
+\end{definition}
+
+\begin{proposition}
+  Les mesures de probabilité sur $\R^d$ s'injectent dans les distributions
+  tempérées et si $X$ est une variable aléatoire de loi $\mu$, alors
+  $\phi_X(\xi)$ = $\hat{\mu}(-\xi)$.
+\end{proposition}
+
+\begin{remark} Soit $X$ une variable aléatoire à valeurs dans $\R^d$ de loi $\mu$.
+  \begin{itemize}
+  \item Si $\mu$ a une densité $f \in L^1(\R^d)$, alors $\hat{\mu} = \hf$.
+  \item Si $X$ est un variable discrète à valeurs dans $\Z^d$, alors $\phi_X$
+    est une série de Fourier (à plusieurs variables) normalement convergente, de
+    coefficients $\mathbb{P}(X = (n_1, \ldots, n_d))$, $(n_1,\ldots,n_d) \in
+      \Z^d$.
+  \end{itemize}
+\end{remark}
+
+\begin{application}[Théorème de Pólya]
+  La marche aléatoire symétrique sur $\Z^d$ est récurrente si et seulement si $d
+  \geq 3$.
+\end{application}
+
+\begin{proposition}
+  La transformée de Fourier est injective sur les mesures de probabilité.
+\end{proposition}
+
+\begin{theorem}[Lévy]
+  Soit $(X_n)_{n \in \N}$ une suite de variables aléatoires à valeurs dans
+  $\R^d$ et $X$ une variable aléatoire. Alors $X_n \underset{n \to
+    \infty}{\longrightarrow} X$ en loi si et seulement si $\phi_{X_n}
+  \underset{n \to \infty}{\longrightarrow} \phi_X$ ponctuellement.
+\end{theorem}
+
+\begin{application}
+  Démonstration du théorème central limite.
+\end{application}
+
+\section{Applications}
+
+\subsection{Équations aux dérivées partielles}
+
+\begin{remark}
+  La transformation de Fourier envoie un opérateur différentiel sur une
+  multiplication par un polynôme.
+  \begin{itemize}
+  \item On peut ainsi réduire une EDP à une équation algébrique.
+  \item En prenant une transformée de Fourier partielle par rapport à toutes les
+    variables sauf une (typiquement une variable de temps), on se ramène à une
+    équation différentielle ordinaire.
+  \end{itemize}
+\end{remark}
+
+\begin{application}[Équation de la chaleur]
+  On cherche $u \in C^0(\R_+ \times \R^d) \cap C^2(\R_+^* \times \R^d)$
+  sous condition initiale $u(0, .) = f$ vérifiant
+  \[ \partial_t u = \Delta u = \partial^2_{x_1} u + \ldots + \partial^2_{x_d} u \]
+  Si $f$ est continue bornée, une solution est donnée par $u(t, \cdot) = f \star
+  g_{K(t)}$ pour $t > 0$ (convolution par un noyau gaussien de matrice de
+  covariance $K(t) = 2tI$).
+\end{application}
+
+
+\subsection{Traitement du signal}
+
+\begin{remark}
+  On filtre souvent des signaux par des opérateurs de convolution car ils sont
+  linéaires et invariants dans le temps. La transformée de Fourier permet de les
+  écrire comme une multiplication.
+\end{remark}
+
+Nous cherchons maintenant à reconstruire un signal à partir d'échantillons
+espacés d'une période $T > 0$.
+
+\begin{proposition}[Variante de la formule de Poisson]
+  Soit $f \in \S(\R)$.
+  \[ \forall \omega \in \R, \;
+    \F\left( \sum_{n \in \Z} f(nT)\delta_{nT} \right)(\omega) =
+    \sum_{n \in \Z} f(n)e^{-inT\omega} =
+    \frac{1}{T} \sum_{k \in \Z} \hf\left(\omega - \frac{2\pi k}{T}\right) \]
+\end{proposition}
+
+\begin{theorem}[Nyquist--Shannon]
+  Soit $f \in \S(\R)$, $\mathrm{supp}(\hf) \subseteq [-\pi/T,/T]$
+  \[ \forall t \in \R,\; f(t) = \sum_{n \in \Z} f(nT)\,\mathrm{sinc}\left(
+    \frac{\pi}{T}(t - nT)\right) \]
+\end{theorem}
+
+
+
+\section*{Développements}
+
+\begin{enumerate}
+\item TF de la gaussienne et inversion de Fourier en dimension 1
+\item Formule sommatoire de Poisson + application
+\end{enumerate}
+
+\section*{Références}
+
+\begin{itemize}
+\item \emph{Analyse pour l'agrégation}, Zuily--Queffélec
+\item \emph{Une exploration des signaux en ondelettes}, Mallat
+\end{itemize}
+
+\end{document}

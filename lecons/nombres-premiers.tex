@@ -1,0 +1,480 @@
+\documentclass[a5paper, 10pt]{article}
+
+\usepackage[frenchb]{babel}
+\usepackage{csquotes} % guillemets
+
+\usepackage{amssymb,amsthm,amsmath}
+\usepackage{algorithm,caption}
+\usepackage{algpseudocode}
+\usepackage{proof}
+\usepackage{multicol}
+%\usepackage{stmaryrd,icomma}
+\usepackage{url}
+\usepackage{pgfpages}
+\pgfpagesuselayout{2 on 1}[a4paper,landscape]
+\usepackage[hmargin=1cm,vmargin=1.5cm]{geometry}
+
+\usepackage{unicode-math}
+
+% TeX Gyre Pagella = URW Palladio (free Palatino) extended
+\setmainfont[Mapping=tex-text]{TeX Gyre Pagella}
+\setmathfont{Asana Math}
+
+
+\theoremstyle{definition}
+% http://tex.stackexchange.com/questions/59278/can-i-disable-italics-in-the-body-text-of-a-theorem-without-amsthm-ntheorem
+\newtheorem{definition}[equation]{Définition}
+\newtheorem*{definition*}{Définition}
+\newtheorem{example}[equation]{Exemple}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{theorem}[equation]{Théorème}
+\newtheorem{application}[equation]{Application}
+\newtheorem{algo}[equation]{Algorithme}
+\newtheorem{lemma}[equation]{Lemme}
+\newtheorem{remark}[equation]{Remarque}
+\newtheorem{corollary}[equation]{Corollaire}
+\newtheorem{code}[equation]{Code}
+\newcounter{n}
+\newtheorem{dev}[n]{Développement}
+
+\algtext*{EndProcedure}
+\algtext*{EndWhile}
+\algtext*{EndFor}
+\algtext*{EndIf}
+\algrenewcommand\algorithmicprocedure{\textbf{procédure}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{alors}}
+\algrenewcommand\algorithmicelse{\textbf{sinon}}
+\algrenewcommand\algorithmicfor{\textbf{pour}}
+\algrenewcommand\algorithmicwhile{\textbf{tant que}}
+\algrenewcommand\algorithmicdo{\textbf{faire}}
+\algrenewcommand\algorithmicreturn{\textbf{renvoyer}}
+
+\newcommand\lesson[1]{{\noindent \LARGE \bfseries #1}\\[1pt]}
+%\def\authorship{{\null \vfill \hfill \small \@author{} -- \url{agreg-cachan.fr}}}
+\def\A{{\cal{A}}}
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\U{\mathbb{U}}
+\def\K{\mathbb{K}}
+\def\P{\mathbb{P}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\L{{\cal{L}}}
+\def\S{{\cal{S}}}
+\def\V{{\cal{V}}}
+\def\T{{\cal{T}}}
+\def\O{{\cal{O}}}
+\def\Fs{{\cal{F}}}
+\def\Ps{{\cal{P}}}
+\def\Cf{{\cal{C}}}
+\def\M{\mathcal{M}}
+\def\MnK{{\cal M}_n(\K)}
+\def\Tr{\textnormal{Tr}}
+\def\Sp{\textnormal{Sp}}
+\def\Re{\textnormal{Re}}
+\def\Vect{\textnormal{Vect}}
+\def\car{\textnormal{car}}
+\def\pgcd{\textnormal{pgcd}}
+\def\ppcm{\textnormal{ppcm}}
+\def\Sigmap{\mathfrak{S}}
+\def\prog{\texttt{prog}}
+\renewcommand\vector[1]{\left(\begin{array}{c}#1\end{array}\right)}
+\newcommand\enonce[3]{\{#1\}\ #2\ \{#3\}}
+\newcommand\hoare[1]{\State $\textcolor{gray}{\{#1\}}$}
+
+% J'aime pas la logique
+\def\bv{\textnormal{bv}}
+\def\fv{\textnormal{fv}}
+\def\dom{\textnormal{dom}}
+\newcommand\sem[1]{\llbracket #1 \rrbracket}
+\def\seq{\longrightarrow}
+\def\LK{\textbf{LK}}
+
+\begin{document}
+
+\author{\textsc{Nguyễn} Lê Thành Dũng}
+
+\lesson{121 --- Nombres premiers. Applications.}
+
+\section{Définitions et propriétés de base}
+
+\begin{definition}
+  Un \emph{nombre premier} est un entier naturel qui admet exactement
+  deux diviseurs dans $\N$, 1 et lui-même.
+\end{definition}
+\begin{example}
+  Les nombres premiers inférieurs à 10 sont 2, 3, 5 et 7.
+\end{example}
+\begin{example}
+  $n^2 + n + 41$ est premier pour $n = 0, \ldots, 39$.
+\end{example}
+\begin{example}
+  Si $2^n+1$ est premier pour $n \in \N^*$, alors $n$ est de la forme
+  $2^m$ pour $m \in \N$ (et ce n'est pas une condition suffisante). Un
+  tel nombre est appelé \emph{nombre premier de Fermat}.
+\end{example}
+
+\begin{theorem}
+  Il existe une infinité de nombres premiers.
+\end{theorem}
+\begin{algo}[Crible d'Ératosthène]
+  L'algorithme suivant permet d'obtenir la liste des nombres premiers
+  inférieurs à $n \in \N$ :
+\begin{algorithmic}
+\State $\mathrm{premier}[i] \gets \mathbf{vrai}$ pour $i = 2, \ldots, n$
+\For{$i = 2$ à $\lfloor \sqrt{n} \rfloor$}
+\If{$\mathrm{premier}[i]$}
+\For{$k = 2$ à $\lfloor n/i \rfloor$}
+\State $\mathrm{premier}[ik] \gets \mathbf{faux}$
+\EndFor
+\EndIf
+\EndFor
+\end{algorithmic}
+\end{algo}
+
+\begin{lemma}[Euclide]
+  Soient $p$ premier et $a, b \in \N$. Si $p \mid ab$, alors
+  $p \mid a$ ou $p \mid b$.
+\end{lemma}
+\begin{theorem}[Théorème fondamental de l'arithmétique]
+  Tout entier $n \in \N^*$ admet une \emph{décomposition en facteurs
+    premiers}, c'est-à-dire s'écrit comme produit d'un multi-ensemble
+  de nombres premiers, et cette décomposition est unique.
+\end{theorem}
+\begin{corollary}
+  $\Z$ est un anneau factoriel dont les irréductibles sont les nombres
+  premiers et leurs opposés.
+\end{corollary}
+
+\begin{definition}
+  La \emph{valuation $p$-adique} d'un entier $n \in \N^*$, notée
+  $v_p(n)$, est la multiplicité de $p$ dans la décomposition en
+  facteurs premiers de $n$.
+\end{definition}
+\begin{proposition}
+  Pour $p$ premier et $a, b \in \N^*$,
+  $v_p(\pgcd(a,b)) = \min(v_p(a), v_p(b))$ et
+  $v_p(\ppcm(a,b)) = \max(v_p(a), v_p(b))$.
+\end{proposition}
+\begin{theorem}[Formule de Legendre]
+Pour $p$ premier et $n \in \N$,
+$\displaystyle v_p(n!) = \sum_{i=1}^{+\infty} \left\lfloor \frac{n}{p^i} \right\rfloor$
+\end{theorem}
+
+
+\section{Corps $\Z/p\Z$}
+
+\subsection{Généralités}
+
+\begin{proposition}
+  Pour $n \in \N^*$, $\Z/n\Z$ est intègre ssi $\Z/nZ$ est un corps ssi
+  $n$ est premier.
+\end{proposition}
+\begin{remark}
+  Pour $p$ premier, le corps $\Z/p\Z$ sera aussi noté $\F_p$.
+\end{remark}
+
+\begin{definition}
+  La \emph{caractéristique} d'un anneau $A$, notée $\car(A)$, est
+  l'entier naturel engendrant le noyau du morphisme canonique
+  $\Z \to A$.
+\end{definition}
+\begin{proposition}
+  La caractéristique d'un corps est soit 0, soit un nombre premier
+  $p$. Dans ce dernier cas, le corps contient un sous-corps isomorphe
+  à $\F_p$.
+\end{proposition}
+\begin{corollary}
+  Le cardinal d'un corps fini est une puissance de sa caractéristique,
+  cette dernière étant un nombre premier.
+\end{corollary}
+\begin{proposition}
+  Dans un corps $K$ de caractéristique $p$, pour $a, b \in K$,
+  ${(a+b)}^p = a^p + b^p$.
+\end{proposition}
+\begin{definition}
+  Si $K$ est un corps de caractéristique $p$, $x \in K \mapsto x^p$
+  est appelé \emph{endormorphisme de Frobenius}.
+\end{definition}
+\begin{theorem}[Petit théorème de Fermat]
+  L'endomorphisme de Frobenius est l'identité sur $\F_p$ pour $p$
+  premier.
+\end{theorem}
+\begin{proposition}
+  Pour $p$ premier, $\F_p^*$ est un groupe cyclique.
+\end{proposition}
+\begin{theorem}[Wilson]
+  Un entier $n \geq 2$ est premier si et seulement si
+  $(n-1)! \equiv -1 \mod n$.
+\end{theorem}
+
+\subsection{Polynômes irréductibles}
+
+\begin{lemma}
+  Soit $p$ un nombre premier et $n \in \N^*$. Le corps de
+  décomposition de $X^{p^n} - X$ sur $\F_p$ a un groupe des
+  inversibles cyclique. Il est donc engendré par un élément primitif.
+\end{lemma}
+\begin{remark}
+  On peut montrer que c'est l'unique corps de cardinal $p^n$ à
+  isomorphisme près.
+\end{remark}
+\begin{proposition}
+  Pour $p$ premier, $\F_p[X]$ contient au moins un polynôme
+  irréductible de chaque degré non nul.
+\end{proposition}
+
+\begin{proposition}
+  Tout polynôme à coefficients entiers irréductible dans $\F_p[X]$
+  ($p$ premier) est irréductible dans $\Z[X]$.
+\end{proposition}
+\begin{theorem}[Eisenstein]
+  Soit $p$ premier et $P(X) = \sum_{i=0}^n a_i X^i \in \Z[X]$. Si on a
+  $p \nmid a_n$, $p \mid a_i$ pour $i < n$ et $p^2 \nmid a_0$, alors
+  $P$ est irréductible dans $\Q[X]$.
+\end{theorem}
+\begin{remark}
+  Si de plus $P$ est un polynôme primitif (les $a_i$ sont premiers
+  entre eux dans leur ensemble) alors il est aussi irréductible dans
+  $\Z[X]$.
+\end{remark}
+
+\subsection{Carrés modulo $p$ et formes quadratiques}
+
+Dans cette sous-section, $p$ est un nombre premier \emph{impair} fixé.
+
+\begin{proposition}
+  La suite
+  $1 \to \{\pm 1\} \to \F_p^* \overset{{(-)}^2}{\longrightarrow} \F_p^*
+  \overset{{(-)}^{(p-1)/2}}{\longrightarrow} \{\pm 1\} \to 1$ est
+  exacte.
+\end{proposition}
+\begin{corollary}
+$\F_p^*/{(\F_p^*)}^2 \simeq \{\pm 1\}$
+\end{corollary}
+\begin{corollary}
+Pour $a \in \F_p$, \(\displaystyle a^{(p-1)/2} = \begin{cases}
+   0 &\text{si \(a = 0\),} \\
+  +1 &\text{si \(a\) est un carré dans \(\F_p\),} \\
+  -1 &\text{sinon.}
+\end{cases}\)
+\end{corollary}
+\begin{definition}
+  On définit le \emph{symbole de Legendre} de $a \in \F_p$ par
+  $\displaystyle \left(\frac{a}{p}\right) = a^{(p-1)/2}$.
+\end{definition}
+\begin{proposition}
+  $\displaystyle \left(\frac{-1}{p}\right) = 1$ ssi $p \equiv 1 \mod 4$.
+\end{proposition}
+\begin{application}
+  Il existe une infinité de nombres premiers de la forme $4k+1$, $k \in \N^*$.
+\end{application}
+
+\begin{definition}
+  Si $A$ est une matrice symétrique inversible sur un corps $K$, on
+  appelle \emph{discriminant} de $A$ la classe de $\det(A)$ dans
+  $K^*/{(K^*)}^2$.
+\end{definition}
+\begin{proposition}
+  Le discriminant est un invariant pour la relation de congruence.
+\end{proposition}
+\begin{theorem}[Classification des formes quadratiques sur $\F_p$]
+  Deux matrices symétriques inversibles sur $\F_p$ sont congruentes
+  ssi elles ont même discriminant.
+\end{theorem}
+\begin{remark}
+  Il existe donc exactement deux classes de congruence de formes
+  quadratiques non dégénérées sur $\F_p$.
+\end{remark}
+
+\begin{dev}[Loi de réciprocité quadratique]
+  Soient $p$ et $q$ deux nombres premiers impairs. Alors
+  $\displaystyle \left(\frac{p}{q}\right)\left(\frac{q}{p}\right) =
+  {(-1)}^{\frac{(p-1)(q-1)}{4}}$.
+\end{dev}
+
+\section{Anneaux $\Z/p^n\Z$ et entiers $p$-adiques}
+
+Dans toute cette section, $p$ est un nombre premier fixé.
+
+\begin{proposition}
+  Soit $n \geq 2$ un entier naturel.
+  \begin{itemize}
+  \item Si $p$ est impair, ${(\Z/p^n\Z)}^\times \simeq \Z/(p-1)p^{n-1}\Z$.
+  \item Si $p = 2$ est impair, ${(\Z/2^n\Z)}^\times \simeq \Z/2\Z \times \Z/2^{n-2}\Z$.
+  \end{itemize}
+\end{proposition}
+\begin{definition}
+  On appelle \emph{entier $p$-adique} une suite $(a_n)_{n \in \N^*}$
+  avec $a_n \in \Z/p^n\Z$ et $\pi_n(a_{n+1}) = a_n$ pour $n \in \N^*$,
+  où $\pi_n : \Z/p^{n+1}\Z \to \Z/p^n\Z$ est la projection canonique.
+\end{definition}
+\begin{proposition}
+  Les entiers $p$-adiques forment un sous-anneau de
+  $\prod_{n \in \N^*} \Z/p^n\Z$, de caractéristique nulle. Cet anneau
+  est noté $\Z_p$.
+\end{proposition}
+
+\begin{definition}
+  Le \emph{corps des nombres $p$-adiques} $\Q_p$ est le complété de
+  $\Q$ pour la distance $d_p(x,y) = p^{-v_p(x-y)}$.
+\end{definition}
+\begin{proposition}
+  La boule fermée de centre 0 et de rayon 1 dans $\Q_p$ est un
+  sous-anneau isomorphe à $\Z_p$.
+\end{proposition}
+
+\begin{lemma}[Hensel]
+  Soient $f \in \Z_p[X]$ et $a \in \Z/p\Z$ tels que dans $\Z/p\Z$, on
+  ait $f(a) = 0$ et $f'(a) \neq 0$. Alors il existe un unique
+  $\alpha \in \Z_p$ tel que $f(\alpha) = 0$ et dont la classe dans
+  $\Z/p\Z$ soit $a$.
+\end{lemma}
+\begin{remark}
+  Il s'agit de l'analogue $p$-adique de la méthode de Newton sur $\R$.
+\end{remark}
+\begin{corollary}
+  Soient $f \in \Z[X]$ et $a \in \Z$ tels que $f(a) \equiv 0 \mod p$
+  et $f'(a) \not\equiv 0 \mod p$. Alors pour tout $n \in \N^*$, il
+  existe $\alpha \in \Z$ tel que $f(\alpha) \equiv 0 \mod p^n$ et
+  $\alpha \equiv a \mod p$.
+\end{corollary}
+
+\section{Théorie des nombres analytique et répartition}
+
+\begin{definition}
+  La \emph{fonction zêta de Riemann} est le prolongement analytique à
+  $\C \setminus \{1\}$ de la fonction définie pour $Re(s) > 1$ par
+$\displaystyle \zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s}$.
+\end{definition}
+\begin{theorem}[Formule du produit eulérien]
+  Pour $Re(s) > 1$,
+  $\displaystyle \frac{1}{\zeta(s)} = \prod_{\text{\(p\) premier}} \left(1 - \frac{1}{p^s}\right)$.
+\end{theorem}
+\begin{corollary}
+  $\displaystyle \sum_{\text{\(p\) premier}} \frac{1}{p}$ est une série divergente.
+\end{corollary}
+
+Les quatre théorèmes suivants sont admis sans démonstration.
+
+\begin{theorem}[Mertens]
+  Pour $n \in \N^*$, $\displaystyle \sum_{p \leq n} \frac{1}{p} = \ln \ln n + O(1)$.
+\end{theorem}
+
+\begin{definition}
+  La \emph{fonction de compte des nombres premiers} est définie pour
+  $x \in \R$ par $\pi(x) = \mathrm{Card}(\{p \leq x \mid \text{\(p\) premier}\})$.
+\end{definition}
+\begin{theorem}[Postulat de Bertrand]
+  Pour tout $n \in \N^*$, $\pi(2n) - \pi(n) \geq 1$.
+\end{theorem}
+\begin{theorem}[\enquote{Th.\ des nombres premiers}, Hadamard -- de la Vallée Poussin]
+  $\displaystyle \pi(x) \underset{x \to \infty}{\sim} \frac{x}{\log x}$
+\end{theorem}
+
+\begin{theorem}[Dirichlet]
+  Si $a, r \in \N^*$ sont premiers entre eux, alors il existe une
+  infinité de nombres premiers de la forme $a+nr$, $n \in \N$.
+\end{theorem}
+\begin{remark}
+  Le cas $a = 1$ peut être prouvé de façon purement algébrique.
+\end{remark}
+
+\section{Applications}
+
+\subsection{Cryptographie}
+
+\begin{theorem}[Restes chinois]
+  Si $m$ et $n$ sont deux entiers premiers entre eux, alors
+  $\Z/(mn)\Z \simeq \Z/m\Z \times \Z/n\Z$.
+\end{theorem}
+\begin{corollary}
+  Si $p$ et $q$ sont deux nombres premiers distincts,
+  ${(\Z/(pq)\Z)}^\times \simeq \F_p^* \times \F_q^* \simeq \Z/(p-1)\Z
+  \times \Z/(q-1)\Z$.
+\end{corollary}
+\begin{corollary}[Cas particulier du théorème d'Euler]
+  Si $e, d \in \N^*$ vérifient $ed \equiv 1 \mod (p-1)(q-1)$, alors
+  pour tout $x \in \Z/(pq)\Z$, $(x^e)^d = x^{ed} = x$.
+\end{corollary}
+
+\begin{application}[Chiffrement RSA]
+  On génère aléatoirement $p, q$ premiers et $e \in \N^*$ et on
+  calcule un inverse $d$ de $e$ modulo $(p-1)(q-1)$. Soit $n = pq$ ;
+  les messages à chiffrer seront représentés comme des éléments de
+  $\Z/nZ$. Alors
+  \begin{itemize}
+  \item la \emph{clé publique} est $(n,e)$ ;
+  \item la \emph{clé privée} est $(n,d)$.
+  \end{itemize}
+  Pour chiffrer un message clair $m \in \Z/n\Z$, on calcule
+  $c = m^e \mod n$ en utilisant la clé publique. L'opération inverse
+  de déchiffrement d'un chiffré $c \in \Z/n\Z$ s'obtient par
+  $m = c^d \mod n$ si l'on dispose de la clé privée.
+\end{application}
+
+\begin{proposition}[Sécurité du chiffrement RSA]
+  Casser le chiffrement RSA revient à calculer des racines $e$-ièmes
+  modulaires, problème conjecturé difficile à résoudre.
+\end{proposition}
+\begin{remark}
+  Ce problème est facile à résoudre si l'on sait calculer la
+  factorisation de $n$ en nombres premiers.
+\end{remark}
+
+\subsection{Théorie des groupes finis}
+
+\begin{definition}
+  Si $p$ est un nombre premier, on appelle \emph{$p$-groupe} un groupe
+  dont l'ordre est une puissance de $p$.
+\end{definition}
+\begin{proposition}
+  Le centre d'un $p$-groupe non trivial est non trivial.
+\end{proposition}
+\begin{corollary}
+  Un groupe d'ordre $p^n$ ($p$ premier, $n \in \N$) contient des
+  sous-groupes d'ordre $p^i$ pour $i = 0, \ldots, n$.
+\end{corollary}
+\begin{corollary}
+  Pour $p$ premier, le seul $p$-groupe simple est $\Z/p\Z$.
+\end{corollary}
+
+\begin{definition}
+  Si $p$ est un diviseur premier de l'ordre d'un groupe fini $G$, un
+  \emph{$p$-sous-groupe de Sylow} de $G$ (ou \emph{$p$-Sylow}) est un
+  sous-groupe de $G$ d'ordre $p^{v_p(|G|)}$.
+\end{definition}
+\begin{lemma}
+  Soient $G$ un groupe, $p$ un diviseur premier de $|G|$, $H \leq G$
+  un sous-groupe quelconque, et $S \leq G$ un $p$-Sylow. Alors il
+  existe $a \in G$ tel que $aSa^{-1} \cap H$ soit un $p$-Sylow de $H$.
+\end{lemma}
+\begin{dev}[Théorèmes de Sylow]
+  Soit $G$ un groupe d'ordre $p^n m$ ($p$ premier, $n, m \in
+  \N^*$). Alors
+  \begin{enumerate}
+  \item $G$ contient un $p$-Sylow ;
+  \item tout $p$-sous-groupe de $G$ est contenu dans un $p$-Sylow ;
+  \item les $p$-Sylow sont tous conjugués dans $G$ ;
+  \item leur nombre divise $m$ et est congru à 1 modulo $p$.
+  \end{enumerate}
+\end{dev}
+
+\begin{application}
+  $\C$ est algébriquement clos. (Preuve algébrique par la théorie de
+  Galois.)
+\end{application}
+
+\section{Références}
+
+\begin{itemize}
+\item Serre, \emph{Cours d'arithmétique}
+\item Perrin, \emph{Cours d'algèbre}
+\item Caldero et Germoni, \emph{Histoires hédonistes de groupes et de géométries, tome 1}
+\end{itemize}
+
+\end{document}
+
