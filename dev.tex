@@ -1,0 +1,646 @@
+\documentclass[a4paper, 11pt]{article}
+
+% Math symbols, notation, etc.
+% Apparently, must be loaded earlier than mathspec?
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{amsthm}
+
+% Locale/encoding with XeTeX: UTF-8 by default, use fontspec
+\usepackage{unicode-math}
+\usepackage{polyglossia} % Modern replacement for Babel
+\setmainlanguage{french} % or {english}
+\usepackage{csquotes} % guillemets
+
+% TeX Gyre Pagella = URW Palladio (free Palatino) extended
+\setmainfont[Mapping=tex-text]{TeX Gyre Pagella}
+\setmathfont{Asana Math}
+
+% Other
+\usepackage{fullpage}
+%\usepackage{enumerate}
+%\usepackage{graphicx}
+
+% Macros de Jill-Jênn
+\def\A{{\cal{A}}}
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\U{\mathbb{U}}
+\def\K{\mathbb{K}}
+\def\P{\mathbb{P}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\L{{\cal{L}}}
+\def\S{{\cal{S}}}
+\def\V{{\cal{V}}}
+\def\T{{\cal{T}}}
+\def\O{{\cal{O}}}
+\def\Fs{{\cal{F}}}
+\def\Ps{{\cal{P}}}
+\def\Cf{{\cal{C}}}
+\def\M{\mathcal{M}}
+\def\MnK{{\cal M}_n(\K)}
+\def\Tr{\textnormal{Tr}}
+\def\Sp{\textnormal{Sp}}
+\def\Re{\textnormal{Re}}
+\def\Vect{\textnormal{Vect}}
+\def\car{\textnormal{car}}
+\def\pgcd{\textnormal{pgcd}}
+\def\ppcm{\textnormal{ppcm}}
+\def\Sigmap{\mathfrak{S}}
+\def\prog{\texttt{prog}}
+
+% Ajout personnel
+\def\E{\mathbb{E}}
+\def\Var{\textnormal{Var}}
+\def\Ker{\textnormal{Ker}}
+\def\Indic{\mathbb{1}}
+
+\newtheorem*{definition}{Définition}
+\newtheorem*{example}{Exemple}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{theorem}{Théorème}
+\newtheorem*{application}{Application}
+\newtheorem*{algo}{Algorithme}
+\newtheorem*{lemma}{Lemme}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{corollary}{Corollaire}
+
+\begin{document}
+
+\title{Mes développements d'agrég de math(-info)}
+\author{Nguyễn Lê Thành Dũng}
+\date{Préparation à l'agrégation de l'ENS Paris-Saclay, 2016--2017}
+\maketitle
+
+\tableofcontents
+
+\section{Algèbre et analyse}
+
+\subsection{Sous-espace de dimension finie de $\Cf(\R)$ stables par translation}
+
+
+\subsection{Fonction tangente et permutations zigzag}
+
+Cf. Richard P. Stanley, \emph{A Survey of Alternating Permutations}. Le terme
+\enquote{permutation alternante} pouvant induire en confusion avec le groupe
+alterné, nous parlerons ici de \emph{permutation zigzag}.
+
+\begin{theorem}[Désiré André]
+La série génératrice des permutations haut-bas est $tan(z)+sec(z)$.
+\end{theorem}
+
+Merci à Paul Melotti, cf. son PDF.
+
+
+\section{Algèbre}
+
+\subsection{Automorphisme exceptionnel de $\Sigmap_6$}
+
+Référence : à trouver (c'est dans H2G2 paraît-il).
+
+On veut montrer que $\Sigmap_6$ admet un automorphisme extérieur\footnote{Ou
+  encore que le groupoïde des ensembles de cardinal 6 admet un endofoncteur
+  pleinement fidèle qui n'est pas naturellement isomorphe à l'identité.}.
+
+\begin{remark}
+  Il revient au même trouver un isomorphisme $\phi : \Sigmap_6 \to \Sigmap(E)$
+  qui n'est induit par aucune bijection $\{1,\ldots,6\} \to E$.
+\end{remark}
+\begin{proof}
+  En effet, si $E = \{1,\ldots,6\}$, l'isomorphisme (automorphisme, donc)
+  $\Sigmap_6 \to \Sigmap_6$ induit par une permutation $\sigma$ de
+  $\{1,\ldots,6\}$ est exactement la conjugaison par $\sigma$ (penser à l'action
+  de la conjugaison sur la décomposition en cycles disjoints). On retrouve ainsi
+  les automorphismes intérieurs.
+
+  Réciproquement, si $\phi : \Sigmap_6 \to \Sigmap(E)$ n'est pas induit par une
+  bijection, on a tout de même une égalité de cardinaux entraînant l'existence
+  d'une bijection $f : \{1,\ldots,6\} \to E$, et alors quelle que soit $f$,
+  $\phi \circ \Sigmap(f)^{-1}$ est un automorphisme extérieur. S'il s'agissait
+  de la conjugaison par $\sigma$, on aurait $\phi = \Sigmap(f \circ \sigma)$
+  (TODO vérifier si c'est pas $-1$).
+\end{proof}
+
+Nous allons construire une telle bijection à partir du lemme ci-dessous dont la
+démonstration sera renvoyée à la fin.
+
+\begin{lemma}
+  Il existe un sous-groupe $H < \Sigmap_6$ d'indice 6 agissant transitivement
+  sur $\{1,\ldots,6\}$ (pour l'action canonique de $\Sigmap_6$, bien entendu).
+\end{lemma}
+
+Posons maintenant $E = \Sigmap_6/H$ l'ensemble des classes à gauche. $\Sigmap_6$
+agit dessus par translation ce qui donne un morphisme $\phi : \Sigmap_6 \to
+\Sigmap(E)$. $Ker(\phi)$ est distingué dans $\Sigmap_6$, et d'indice au moins 6
+(taille d'une orbite), donc c'est $\{\textnormal{id}\}$. $\phi$ est ainsi
+injective, et même bijective entre groupes de même cardinal.
+
+Si $f$ était telle que $\phi = \Sigmap(f)$, alors le stabilisateur de $H \in E$
+pour l'action $\phi$ serait le groupe des permutations ayant pour point fixe
+$f^{-1}(H) \in \{1,\ldots,6\}$. Or ici, le stabilisateur de $H$ contient $H$, vu
+comme sous-groupe de $\Sigma_6$, qui agit transitivement donc dont les éléments
+n'ont aucun point fixe commun. L'existence d'une telle $f$ est donc impossible.
+$\phi$ est donc un isomorphisme qui n'est pas induit par une bijection.
+
+\paragraph{Démonstration du lemme que nous avions délaissé} C'est assez bizarre
+comme truc : on fait agir $\Sigmap_5$ sur ses 5-Sylow (au nombre de 6) par
+conjugaison, c'est transitif (théorème de Sylow) et ça donne un morphisme
+(injectif) de $\Sigmap_5$ dans le groupe des permutations de ces six 5-Sylow.
+Sur un autre ensemble de 6 éléments (on avait dit $\{1,\ldots,6\}$ au départ),
+il faut transférer par un choix arbitraire et non canonique de bijection. Ça
+m'embête parce que c'est pas pratique pour s'assurer de la fonctorialité de la
+procédure qui a un ensemble associe $E = \Sigmap_6/H$ correspondant.
+
+
+\subsection{Théorèmes de Sylow}
+
+Pour aller vite, utiliser la démonstration due à Serre, qu'on trouvera dans le
+Perrin. C'est beaucoup plus laborieux (mais moins astucieux) dans \emph{Algebra}
+de Lang.
+
+\subsection{Réciprocité quadratique par les coniques}
+
+Dans H2G2 tome 1.
+
+\subsection{Théorème de l'élément primitif via le résultant}
+
+(Cf. PDF de Paul Melotti.)
+
+\begin{theorem}
+  Si $L/K$ est une extension de corps finie séparable, alors il existe $\alpha
+  \in L$ tel que $L = K(\alpha)$.
+\end{theorem}
+
+Comme on a \enquote{facilement} que $L = K(\alpha_1, \ldots, \alpha_n)$, on peut
+faire une récurrence sur $n$ et il suffit pour cela de traiter le cas $n = 2$ :
+$L = K(\alpha,\beta)$ avec $\alpha, \beta$ qui sont dans $L$ mais pas dans $K$.
+
+Notons $P$ et $Q$ sont les polynômes minimaux respectifs de $\alpha$ et $\beta$
+sur $K$. On cherche $\gamma$ tel que $L = K(\gamma)$, qu'on cherche de la forme
+$\gamma = \alpha + t\beta$. 
+
+
+\subsection{Dénombrement des polynômes irréductibles de $\F_q$}
+
+Le résultat sur $\Z/p\Z$ permet de construire les corps finis comme corps de
+rupture. Trouvable dans le poly de Pellerin. Utilise l'inversion de Möbius.
+
+\section{Analyse}
+
+\subsection{Théorème du minimax}
+
+Dans \emph{Techniques of Variational Analysis}.
+
+\subsection{Théorème du point fixe de Schauder}
+
+\begin{theorem}
+  Soit $K$ une partie compacte convexe d'un EVN, $f : K \to K$ continue. Alors
+  $f$ admet au moins un point fixe.
+\end{theorem}
+Application : théorème d'existence de Cauchy-Peano.
+
+
+\subsection{Récurrence d'une marche aléatoire via séries de Fourier}
+
+Un théorème célèbre, avec une preuve étrangement moins célèbre et pourtant
+stylée, que j'ai découverte dans le cours de processus aléatoires de Josselin
+Garnier et qui est également trouvable sur Internet.
+
+\begin{theorem}[Pólya]
+  La marche aléatoire symétrique sur $\Z^d$ est \emph{récurrente} si et
+  seulement si $d \leq 2$.
+\end{theorem}
+
+Précisons ce que signifie \enquote{récurrente}. Cette marche aléatoire est
+définie par la suite de v.a. $S_n = X_1 + \ldots + X_n$ où les $(X_i)$ sont iid
+uniformes parmi $\{\pm e_1, \ldots, \pm e_d\}$. Soit $N$ le nombre de passages à
+l'origine : $N = \mathrm{Card}\left\{n \in \N \mid S_n = 0\right\}$. On dit que
+la marche est récurrente quand $\E[N] = +\infty$.
+
+
+\paragraph{Premières remarques} On a $\displaystyle \E[N] = \E\left[
+  \sum_{n=0}^\infty \Indic_{\{S_n = 0\}} \right] =
+\sum_{n=0}^\infty \P(S_n = 0)$.\\
+On peut ne garder que les termes pairs dans cette somme. En effet, pour tout $n
+\in \N$, on établit facilement que $\sum_{i=1}^d \langle S_n, e_i \rangle \equiv
+n \mod 2$, ce qui entraîne que $S_n \neq 0$ quand $n$ est impair.\\
+On cherche donc une expression pour $\P(S_n = 0)$, $n = 2m$ avec $m \in \N$.
+
+\paragraph{Utilisation de la fonction caractéristique}
+
+Si $\varphi$ est la fonction caractéristique de $X_1$, alors celle de $S_n$
+est égale à $\varphi^n$ (somme de v.a. indépendantes).
+
+\[ \forall x \in \R^d,\quad \varphi(x) = \E\left[ e^{i \langle x, X_1 \rangle}
+  \right]
+  = \sum_{j=1}^d \left( \frac{1}{2d}e^{ix_j} + \frac{1}{2d}e^{-ix_j}\right)
+  = \frac{1}{d} \sum_{j=1}^d \cos(x_i) \]
+
+Pour en déduire les probabilités recherchées on utilise :
+\begin{lemma} Soit $k = (k_1, \ldots, k_d) \in \Z^d$. On a la formule des
+  coefficients de Fourier :
+ \[ \displaystyle \P(S_n = k) = \frac{1}{(2\pi)^d} \int_{[-\pi,\pi]^d} \varphi_n(x)e^{-i\langle k,x \rangle} \]
+\end{lemma}
+En fait, $\phi_n$ est une série de Fourier $d$-dimensionnelle normalement
+convergente dont les coefficients sont les $\P(S_n = (k_1, \ldots, k_d))$. Ce
+n'est pas anecdotique : la preuve qu'on est en train de dérouler repose
+fondamentalement sur un passage au domaine de Fourier\footnote{Ici les
+  \enquote{fréquences} (le dual) sont dans le tore et le \enquote{temps} (le
+  primal) est discret ; on est habitués à l'autre sens, mais c'est juste
+  l'involutivité de la dualité de Pontriaguine. Les anglophones parlent de
+  \enquote{discrete-time Fourier transform}, à ne pas confondre avec la
+  transformée de Fourier discrète d'un signal \emph{fini}.} pour convertir une
+convolution de mesures en produit de fonctions, c'est complètement dans l'esprit
+de l'analyse de Fourier. Mais ici, pas besoin de toute cette théorie, il suffit
+de calculer :
+\begin{proof}[Preuve du lemme]
+  \[ \int_{[-\pi,\pi]^d} \varphi_n(x)e^{-i\langle k,x \rangle} dx =
+    \int_{[-\pi,\pi]^d} \E\left[ e^{i\langle S_n, x \rangle} e^{-i\langle k,x
+        \rangle}\right] dx
+    = \E\left[ \int_{[-\pi,\pi]^d} e^{i\langle S_n - k, x \rangle} dx \right]
+    = \E\left[ (2\pi)^d \Indic_{\{S_n = k\}} \right] \]
+  où on a pu intervenir $\int$ et $\E$ grâce au théorème de Fubini appliqué à
+  une fonction bornée, donc intégrable sur un produit d'espaces de mesure finie.
+\end{proof}
+Ainsi, en se souvenant que $\varphi$ est à valeurs réelles, ses puissances
+paires sont positives (!), et
+\[ (2\pi)^d \E[N] = \sum_{m=0}^{\infty} \int_{[-\pi,\pi]^d} \varphi(x)^{2m} dx
+  = \int_{[-\pi,\pi]^d} \frac{dx}{1 - \varphi(x)^2}\]
+par convergence monotone, l'expression finale étant valable parce que
+$|\varphi(x)| < 1$ presque partout. (Si on avait gardé les termes impairs (qui
+peuvent être négatifs), comme c'est le cas dans certaines références,
+l'interversion série-intégrale aurait été plus dure à justifier ; il faut une
+astuce dans ce cas…)
+
+\paragraph{Étude d'une intégrale et conclusion} Il s'agit donc de savoir si
+cette intégrale est finie ou non. $1/(1-\varphi^2)$ part à l'infini exactement
+aux points où il y a un problème de convergence à savoir $|\varphi| = 1$ , soit
+$(0,\ldots,0)$ ainsi que les $2^d$ points $(\pm \pi, \ldots, \pm \pi)$ ; et elle
+est continue en-dehors de ces points. Ces derniers points sont des anti-périodes
+de $\varphi$, donc des périodes de $1/(1-\varphi^2)$ : il suffit donc d'étudier
+l'intégrabilité en 0, sur un voisinage $B(0,\varepsilon)$ où $0 < \varepsilon <
+\pi$.
+
+Pour $x \to 0$,
+\[ 1 - \varphi(x) = \frac{1}{d} \sum_{j=1}^d (1 - \cos x_j) \sim
+  -\frac{1}{d}(x_1^2 + \ldots + x_d^2) \] d'où
+\[\frac{1}{1 - \varphi(x)^2} = \frac{1}{(1 + \varphi(x))(1 - \varphi(x))} \sim
+  \frac{2d}{\|x\|^2} \]
+Finalement, reste à étudier l'intégrabilité de $\|x\|^{-2}$. Un passage en
+coordonnées polaires et le théorème de Tonelli donnent
+\[ \int_{B(0,\varepsilon)} \|x\|^{-2}\,dx = \int_{]0,\varepsilon[ \times S^{d-1}}
+  r^{-2} \cdot r^{d-1}\,dr\,d\omega = \textnormal{Vol}(S^{d-1}) \int_0^\varepsilon
+  r^{d-3}\,dr \]
+Ce qui est infini exactement quand $d < 3$, CQFD.
+
+\paragraph{Si le temps permet…} On expliquera pourquoi $\E[N] = +\infty$ est
+équivalent à presque sûrement repasser par l'origine au moins une fois. (C'est
+une propriété générale des chaînes de Markov.)
+
+
+\subsection{Théorème de bornitude uniforme et série de Fourier divergente}
+
+Moralement : l'évaluation en 0 de la somme partielle de Fourier est un produit
+scalaire avec un noyau de Dirichlet, dont la norme tend vers $+\infty$.
+
+\subsection{Gaussiennes et inversion de Fourier (en dimension 1)}
+
+Notre but est de montrer, dans le cas $d = 1$ :
+
+\begin{theorem}[Inversion de Fourier]
+  Soit $f \in L^1(\R^d)$. Si $\hat{f} \in L^1(\R^d)$, on a pour presque
+  tout $x \in \R^d$ :
+\[ f(x) = \frac{1}{(2\pi)^d} \int_\R \hat{f}(\xi) e^{i\xi \cdot x} \,d\xi =
+  \hat{\hat{f}}(-x). \]
+\end{theorem}
+
+\paragraph{Préliminaires}
+On définit la gaussienne d'écart-type $\sigma > 0$ comme $g_\sigma : x \mapsto
+(\sigma\sqrt{2\pi})^{-1}\exp(-x^2/2\sigma^2)$. On a $g_\sigma \in \S(\R)$, donc
+elle est intégrable tout comme toutes ses dérivées.
+
+\begin{lemma}
+  (Admis !) Pour tout $f \in L^1(\R)$, $g_\sigma * f
+  \underset{\sigma \to 0}{\longrightarrow} f$ dans $L^1(\R)$.
+\end{lemma}
+Attention, convergence $L^p$ n'entraîne pas convergence presque partout ! Par
+contre, d'une suite qui converge dans $L^p$, on peut extraire une sous-suite qui
+converge vers la même limite presque partout, d'où :
+\begin{corollary}
+  Il existe une suite $\sigma_n$ décroissante tendant vers 0 telle que
+  $g_{\sigma_n} * f \rightarrow f$ p.p.
+\end{corollary}
+(Rappel : toute série absolument convergente dans $L^p$ converge p.p., ça
+sert dans la preuve de complétude.)
+
+\paragraph{Transformée de Fourier de la gaussienne}
+Avant d'attaquer le cas général, on commence par calculer explicitement
+$\widehat{g_\sigma}$.
+
+Une façon simple est d'utiliser le théorème de dérivation
+sous le signe intégral pour montrer que c'est une solution de l'équation
+différentielle $y' = -\sigma^2xy $. Comme $\widehat{g_\sigma}(0) = 1$ on peut
+parachuter la solution $\sqrt{2\pi}/\sigma \cdot g_{1/\sigma}$, Cauchy-Lipschitz
+linéaire assurant l'unicité.
+
+En itérant deux fois, on a bien $\widehat{\widehat{g_{\sigma}}} = 2\pi g_\sigma$
+(le signe moins a disparu car $g_\sigma$ est paire).
+
+\paragraph{Cas général} Soit $f \in L^1(\R)$ telle que $\hat{f} \in L^1(\R)$. On
+pose
+\[ F_\sigma(x) = \int_\R \widehat{g_\sigma}(\xi)\hat{f}(\xi)e^{i\xi x} d\xi \]
+Un calcul rapide (on écrit la formule intégrale pour $\hat{f}$, puis on utilise
+Fubini) entraîne que
+\[ F_\sigma(x) = \widehat{\widehat{g_\sigma}} * f(\xi) \]
+
+On observe que $\widehat{g_\sigma} \longrightarrow 1$ ponctuellement quand
+$\sigma \to 0$ ; en passant à la limite sur la suite $\sigma_n$ du lemme
+préliminaire, on trouve l'égalité presque partout de la formule d'inversion de
+Fourier. Pour ce faire on a besoin crucialement que $\hat{f} \in L^1(\R)$ pour
+que le théorème de convergence dominée s'applique.
+
+
+\subsection{Polynômes de Bernstein}
+
+Référence : Zuily-Quéffélec.
+
+\begin{theorem}[Bernstein]
+  Soit $f \in \Cf([0,1], \R)$.
+  
+  Pour $n \in \N$ et $x \in \R$, on pose $B_n(x) = \E[f(X)]$ où $X \sim
+  \textnormal{Binom}(n,x)$. Alors :
+  \begin{enumerate}
+  \item Pour tout $n \in \N$, $B_n : [0,1] \to \R$ est une fonction polynomiale.
+    ($B_n$ est appelé le $n$-ième polynôme de Bernstein de $f$.)
+  \item $\|B_n - f\|_\infty \underset{n \to \infty}{=} O\left(
+      \omega_f(n^{-1/2}) \right)$.
+  \end{enumerate}
+\end{theorem}
+
+On rappelle que
+\[ \omega_f(h) = \sup_{|x-y| \leq h} |f(x) - f(y)| \]
+est le \emph{module de continuité uniforme} de $f$.
+
+\begin{corollary}[Weierstrass]
+  Les fonctions polynomiales sont denses dans $\Cf([0,1])$.
+\end{corollary}
+
+Le corollaire découle directement du théorème de Heine, le point 1 du théorème
+est trivial en écrivant la formule de l'espérance.
+
+Démonstration du théorème :
+\begin{enumerate}
+\item À $x$ fixé, écrire $|B_n(x) - f(x)|$ comme une espérance, qu'on majore en
+  utilisant $\omega_f$
+\item Astuce : utiliser $\omega_f(\lambda h) \leq \lceil \lambda \rceil
+  \omega_f(h)$ pour obtenir $\omega_f(n^{-1/2})$ fois un facteur probabiliste
+\item Majorer l'espérance de ce facteur en faisant intervenir la variance
+  (dépendante de $x$, paramètre de la loi binomiale)…
+\item puis indépendamment de $x$, et c'est fini !
+\end{enumerate}
+
+Il faut bien connaître le théorème de Stone-Weierstrass plus général pour
+répondre aux questions sur le développement.
+
+\subsection{Méthode de Newton (lol)}
+
+\subsection{Lemme de Morse}
+
+Pour avoir une application aux formules de Taylor.
+
+\section{Informatique}
+
+\subsection{Minimisation par double renversement (avec complexité)}
+
+Source : Sakarovitch.
+
+Notons $D$ la déterminisation d'un automate, prenant en entrée un AFN et
+renvoyant un AFDC, partie accessible de l'automate des parties. Notons $T$ la
+transposition d'un automate, obtenue en renversant le sens des flèches. La
+transposée d'un automate reconnaissant $L$ reconnaît $\tilde{L}$, langage miroir
+de $L$.
+
+\begin{algo}[Calcul d'un AFDC minimal à partir d'un AFN]
+  Si $\mathcal{A}$ est un automate reconnaissant le langage $L$, $D \circ T
+  \circ D \circ T(\mathcal{A})$ est un AFDC minimal reconnaissant $L$.
+\end{algo}
+
+Comme la dernière opération est une déterminisation, la sortie est bien un AFDC.
+Le langage reconnu est préservé puisque $D$ le préserve et $T$ prend le miroir,
+ce qui est involutif. Reste à prouver la minimalité.
+
+\begin{lemma}[Brzozowski]
+  Soit $\mathcal{B}$ un automate reconnaissant $L$, \emph{co-déterministe} et
+  \emph{co-accessible} (autrement dit, dont la transposée est un AFD
+  accessible). Soient $u$ et $v$ vérifiant $u^{-1}L = v^{-1}L$. Alors tout état
+  atteignable en lisant $u$ l'est en lisant $v$.
+\end{lemma}
+\begin{proof}
+  Soit $q$ atteignable à partir de $u$, $q$ est co-accessible donc il existe $w$
+  atteignant l'unique état final à partir de $q$. $uw \in L$ donc $vw \in L$, et
+  le seul chemin acceptant pour $vw$ doit passer par $q$ après avoir lu $v$ par
+  co-déterminisime… Faire un dessin !
+\end{proof}
+
+Appliquons maintenant le lemme à $\mathcal{B} = T \circ D \circ T(\mathcal{A})$.
+Si deux mots ont même résiduels, ils atteignent le même état dans l'automate des
+parties de $\mathcal{B}$ en vertu du lemme. Il y a autant d'états que de
+résiduels dans $D(\mathcal{B})$, ce dernier est donc minimal.
+
+\begin{proposition}
+  La complexité de cet algorithme est simplement exponentielle en le nombre
+  d'états de l'automate d'entrée.
+\end{proposition}
+
+Pour une raison simple : la première fois qu'on déterminise, on peut avoir une
+explosion exponentielle ; la seconde fois, c'est impossible puisque la taille de
+la sortie est connue pour être celle d'un AFDC minimal !
+
+TODO : réfléchir à la complexité précise de la déterminisation (avec taille de
+l'alphabet en paramètre).
+
+Pour avoir une minoration correspondante, on considère $L = X^{n-1}aX*$ où $X =
+\{a,b\}$ est l'alphabet. $L$ est reconnaissable par un AFD à $n+1$ états, et son
+miroir a $2^n$ résiduels ! La minimisation ne fait que \emph{rajouter} un état
+puits pour rendre l'automate complet.
+
+\subsection{Union-find avec compression de chemin}
+
+Trouvable sur CS Stack Exchange.
+
+\[ \Phi(x) = \lambda \sum_{i=1}^n \log_2 w_i \]
+
+On ne va étudier que Find (exercice : montrer que pour Union c'est bon).
+
+\subsection{Tri par tas}
+
+\subsection{Sélection en temps linéaire}
+
+Avec une astuce pour rendre le truc plus rapide, merci Jill-Jênn !
+
+\subsection{Réduction de 2SAT à la connexité forte}
+
+\subsection{Rationalité des témoins en arithmétique de Presburger}
+
+Soit $\phi(x_1,\ldots,x_k)$ une formule à $k$ variables libres de l'arithmétique
+de Presburger, c'est-à-dire formée à partir des symboles $0$, $1$, $+$, $=$.
+Soit $S_\phi$ son ensemble de témoins d'existence : $S_\phi = \{ (n_1, \ldots,
+n_k) \in \N^k \mid \N \models \phi(n_1, \ldots, n_k) \}$. Définissons maintenant
+le langage suivant :
+
+\[ L_\phi = \left\{  \right\}\]
+C'est compliqué à écrire formellement, mais ça représente juste des $k$-uplets
+d'entiers codés en binaire. Comme la taille des entiers est non bornée et $k$
+est fixe, on \enquote{transpose} les listes de listes de bits représentant
+naturellement ces $k$-uplets pour avoir des mots sur un alphabet fini.
+
+$L_\phi$ est un langage sur l'alphabet $\{0,1\}^k$.
+
+\begin{proposition}
+  $L_\phi$ est un langage rationnel, et de plus, on dispose d'une procédure
+  effective pour construire un automate reconnaissant $L_\phi$ à partir de
+  $\phi$.
+\end{proposition}
+
+\begin{corollary}
+  L'arithmétique de Presburger est décidable.
+\end{corollary}
+
+\subsection{}
+
+
+
+\section{Idées exclues}
+
+\subsection{Unicité de la topologie de $\R$-EVT séparé en dimension finie}
+
+(EVT = \emph{espace vectoriel topologique}, c'est-à-dire espace vectoriel muni
+d'une topologie rendant continues les lois de compositions interne et externe.)
+
+Évidemment, $\R$ est considéré avec sa topologie usuelle, et ça marche aussi
+pour les $\C$-EVT.
+
+\begin{theorem}
+  Le $\R$-espace vectoriel $\R^n$ n'admet qu'une seule topologie de $\R$-EVT
+  séparé, qui est la topologie produit.
+\end{theorem}
+
+\begin{remark}
+  Les topologies non séparées sont obtenues comme topologie initiale d'une
+  projection sur un quotient séparé et sont donc en bijection avec les
+  sous-espaces vectoriels (prendre l'adhérence de $\{0\}$).
+\end{remark}
+
+Un résultat qui généralise l'équivalence des normes et clôt la question. Fait
+dans les premières pages de Bourbaki, \emph{Espaces vectoriels topologiques},
+dans le cadre général des corps valués non discrets.
+
+\subsection{Lemme de Hensel, ou méthode de Newton $p$-adique}
+
+Violemment hors-programme, dommage, c'est plus original que la méthode de Newton
+usuelle et c'est de la jolie algèbre en plus… Un PDF de Keith Conrad raconte ça
+super bien.
+
+\begin{definition}
+  On appelle \emph{entier $p$-adique} une suite $(a_n)_{n \in \N^*}$
+  avec $a_n \in \Z/p^n\Z$ et $\pi_n(a_{n+1}) = a_n$ pour $n \in \N^*$,
+  où $\pi_n : \Z/p^{n+1}\Z \to \Z/p^n\Z$ est la projection canonique.
+\end{definition}
+\begin{proposition}
+  Les entiers $p$-adiques forment un sous-anneau de
+  $\prod_{n \in \N^*} \Z/p^n\Z$, de caractéristique nulle. Cet anneau
+  est noté $\Z_p$.
+\end{proposition}
+
+\begin{definition}
+  Le \emph{corps des nombres $p$-adiques} $\Q_p$ est le complété de
+  $\Q$ pour la distance $d_p(x,y) = p^{-v_p(x-y)}$.
+\end{definition}
+\begin{proposition}
+  La boule fermée de centre 0 et de rayon 1 dans $\Q_p$ est un
+  sous-anneau isomorphe à $\Z_p$.
+\end{proposition}
+
+\begin{lemma}[Hensel]
+  Soient $f \in \Z_p[X]$ et $a \in \Z/p\Z$ tels que dans $\Z/p\Z$, on
+  ait $f(a) = 0$ et $f'(a) \neq 0$. Alors il existe un unique
+  $\alpha \in \Z_p$ tel que $f(\alpha) = 0$ et dont la classe dans
+  $\Z/p\Z$ soit $a$.
+\end{lemma}
+
+\begin{corollary}
+  Soient $f \in \Z[X]$ et $a \in \Z$ tels que $f(a) \equiv 0 \mod p$
+  et $f'(a) \not\equiv 0 \mod p$. Alors pour tout $n \in \N^*$, il
+  existe $\alpha \in \Z$ tel que $f(\alpha) \equiv 0 \mod p^n$ et
+  $\alpha \equiv a \mod p$.
+\end{corollary}
+
+On a deux procédés d'itération légèrement différents pour relever des solutions
+dans un $\Z/p^n\Z$ plus grand : l'un est la méthode de Newton, l'autre ressemble
+à la preuve du théorème d'inversion locale.
+
+\subsection{Une application du déterminant de Cayley-Menger}
+
+On trouvera des détails sur ce fameux déterminant, qui généralise la formule de
+Héron, dans le Zavidovique. L'application suivante est tirée d'un petit article
+de recherche (TODO ajouter référence) et a été posée aux oraux de l'ENS Lyon en
+2015.
+
+\begin{theorem}
+  Soit $n \in \N^*$. Il existe $n+2$ points à distances entières impaires dans
+  $\R^n$ si et seulement si $n \equiv -2 \; (\mod\,16)$.
+\end{theorem}
+
+\subsection{Les fonctions monotones sont dérivables presque partout}
+
+Suggéré par le rapport de jury d'agrég, infaisable en 15 minutes. Ingrédient
+principal : l'inégalité maximale de Hardy-Littlewood. C'est fait sur le blog de
+Terence Tao, et on peut le retrouver dans l'un de ses bouquins si l'on tient à
+avoir une référence utilisable le jour de l'oral.
+
+\subsection{Schéma de réflexion de Kreisel}
+
+\begin{theorem}[Kreisel]
+  Soit $T$ un sous-système fini de l'arithmétique de Peano. Pour toute formule
+  close $F$, AP prouve : \enquote{$F \text{ prouvable dans } T \Rightarrow F$}.
+\end{theorem}
+Note : dans la formule $\phi$ dont il est affirmé que $AP \vdash \phi$, à gauche
+de $\Rightarrow$, on a un prédicat de prouvabilité appliqué au code de Gödel de
+$F$, et à droite, on a vraiment $F$.
+\begin{corollary}
+  L'arithmétique de Peano prouve la cohérence de ses sous-systèmes finis, et
+  n'est donc pas finiment axiomatisable.
+\end{corollary}
+
+D'abord, on peut se ramener au cas où $T = \emptyset$. Ensuite, essentiellement,
+on veut montrer naïvement que $F$ prouvable $\Rightarrow$ $F$ vraie par
+induction sur les règles logiques, qui préservent la vérité. Comme les formules
+apparaissant dans une preuve sans coupures de $F$ sont de complexité logique
+bornée par celle de $F$, on peut définir un prédicat de vérité borné qui fait
+marcher ça, et de sorte que \enquote{$F$ vraie} soit équivalent à $F$.
+
+Souci majeur : les détails sont impossibles à expliciter en 15 minutes, et la
+preuve repose sur la possibilité de raisonner de façon interne dans AP, ce
+pourquoi il faut déjà avoir une bonne intuition de quels principes logiques y
+sont autorisés (les fonctions récursives sont définissables, l'induction
+structurelle est valide…) car cela devient imbuvable sans un recours intensif à
+l'agitage de mains.
+
+Je ne connais pas d'autre référence \enquote{livre de cours} que Le Point
+aveugle pour ce théorème…
+
+\subsection{Algorithme de Hirschberg}
+
+Une superbe astuce qui consiste à utiliser un diviser-pour-régner afin de
+baisser la complexité spatiale d'un algorithme de programmation dynamique,
+appliquée au problème de la distance d'édition. On utilise la programmation
+dynamique pour calculer le point de délimitation entre les deux sous-problèmes
+récursifs.
+
+C'est parfaitement au programme de l'agrégation, mais c'est trop long…
+
+\end{document}
