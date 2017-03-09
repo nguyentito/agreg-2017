@@ -191,9 +191,217 @@ rupture. Trouvable dans le poly de Pellerin. Utilise l'inversion de Möbius.
 
 \section{Analyse}
 
-\subsection{Théorème du minimax}
+\subsection{Les fonctions monotones sont dérivables presque partout}
 
-Dans \emph{Techniques of Variational Analysis}.
+Un joli résultat suggéré par le rapport de jury d'agrég, dont on peut notamment
+déduire que la dérivation est bien l'opération inverse de l'intégrale de
+Lebesgue (presque partout, évidemment). Ce qui suit est une tentative de
+démonstration qui s'inspire princpalement des \emph{Leçons d'analyse
+  fonctionnelle} de Riesz \& Szokefalvi-Nagy, la fin étant tirée de \emph{Real
+  Analysis}, Royden (ou Royden \& Fitzpatrick pour la dernière édition). On
+pourra aussi consulter \emph{An introduction to measure theory} de Terence Tao
+pour plus de détails sur les théorèmes de dérivation presque partout.
+
+Je ne suis pas du tout convaincu que ça rentre en 15 minutes, on peut commencer
+à attaquer la preuve principale en admettant les lemmes (mais en dessinant les
+rayons du soleil et en agitant les mains), puis les démontrer à la fin si le
+temps permet, ce qui devrait être bon.
+
+Pour éviter le recours au lemme de recouvrement de Vitali ou de Besicovitch, on
+va se contenter de montrer :
+\begin{theorem}
+  Soit $f : \R \to \R$ une fonction \textnormal{continue} croissante. Alors $f$ est
+  dérivable presque partout.
+\end{theorem}
+L'hypothèse de continuité était d'ailleurs présente dans la démonstration de ce
+théorème par Lebesgue en 1904.
+
+Attention, la version générale ne s'en déduit pas immédiatement en se
+restreignant à des intervalles de continuité ; reste le cas des \emph{fonctions
+  de saut}, qui peuvent avoir des discontinuités denses. Exemple : $x \mapsto
+\sum_{n \in \N} 2^{-n} \Indic_{[x \geq q_n]}$ où $(q_n)_{n \in \N}$ est une
+énumération des rationnels. (Note : on sait qu'une fonction monotone a un nombre
+au plus dénombrable de points de discontinuité.)
+
+\paragraph{Résultats préliminaires} Commençons par deux petites propositions.
+Pour $U \subseteq \R$ un ouvert, notons $CC(U)$ l'ensemble de ses composantes
+connexes.
+\begin{proposition}
+  Les composantes connexes de $U$ sont des intervalles ouverts disjoints,
+  en nombre au plus dénombrable, dont la réunion est égale à $U$.
+\end{proposition}
+\begin{proof}
+  Admis, mais c'est classique et facile, donc à savoir démontrer sans hésiter.
+\end{proof}
+\begin{proposition}
+  Soit $f : [a,b] \to \R$ croissante et $U \subset [a,b]$ ouvert dans $\R$.
+  Alors
+  \[ \sum_{]c,d[ \in CC(U)} (f(d)-f(c)) \leq f(b) - f(a) \]
+  les termes de la somme étant positifs.
+  Autrement dit, la \textnormal{variation totale} de $f$ sur $[a,b]$ est
+  $f(b) - f(a)$.
+\end{proposition}
+\begin{proof}
+  
+  Supposons dans un premier temps $|CC(U)| < \infty$, soit $CC(U) =
+  \{]c_1,d_1[,\ldots,]c_n,d_n[\}$ avec $c_1 < d_1 \leq c_2 < \ldots \leq d_n$.
+  Alors pour tout $i$, $f(d_i) \leq f(c_{i+1})$ car $f$ croissante, donc
+  \[ \sum_{i=1}^n (f(d_i) - f(c_i)) = - f(c_1) + (f(d_1) - f(c_2)) + \ldots +
+    (f(d_{n-1}) - f(c_n)) + f(d_n) \leq f(d_n) - f(c_1) \]
+  Dans le cas $CC(U)$ dénombrable, il suffit de passer à la limite sur les
+  sous-familles finies.
+\end{proof}
+
+Le lemme qui suit est fondamental dans la preuve du théorème.
+
+\begin{lemma}[des rayons du soleil]
+  Soit $f : [a,b] \to \R$ continue et soit $\alpha \in \R$. Posons
+  \[ U = \left\{ x \in ]a,b[ | \exists y \in ]x,b[\,/\,
+      \frac{f(y)-f(x)}{y-x} > \alpha \right\}
+    \quad
+    \text{ et }
+    \quad
+    V = \left\{ x \in ]a,b[ | \exists y \in ]a,x[\,/\,
+      \frac{f(x)-f(y)}{x-y} < \alpha \right\}
+  \]
+  Alors $U$ et $V$ sont ouverts dans $\R$ et
+  \begin{enumerate}
+  \item Pour tout $]c,d[ \in CC(U)$, $\displaystyle \frac{f(d)-f(c)}{d-c} \geq
+    \alpha$.
+  \item Pour tout $]c',d'[ \in CC(V)$, $\displaystyle \frac{f(d')-f(c')}{d'-c'}
+    \leq \alpha$.
+  \end{enumerate}
+(Noter que $f$ est définie sur $[a,b]$ et $U,V \subseteq ]a,b[$.)
+\end{lemma}
+Il faut \textit{\textbf{faire un dessin}} pour voir ce qui se passe :
+l'hypographe de $f$ est éclairé par un faisceau de rayons parallèles de pente
+$\alpha$ provenant de la droite dans le cas 1, la gauche dans le cas 2. On peut
+constater visuellement qu'il y a en fait égalité sauf éventuellement pour
+$c = a$ ou $d' = b$, mais nous n'aurons pas besoin de le prouver formellement.
+
+Remarquons que (2) découle de (1) appliqué à $x \mapsto -f(-x)$, et qu'on peut
+se ramener à $\alpha = 0$ quitte à soustraire une fonction linéaire. Ce dernier
+cas est celui généralement énoncé dans la littérature sous le nom de
+\enquote{rising sun lemma} (en effet, $\alpha = 0$ revient à placer le soleil à
+l'horizon(tale), et les rayons viennent de la droite i.e. de l'est).
+
+\begin{proof}[Démonstration du lemme du soleil levant]
+  $U$ est ouvert car les inégalités strictes de fonctions continues sont des
+  inégalités ouvertes, et une projection linéaire d'un ouvert est un
+  ouvert\footnote{Banach--Schauder en dimension finie !}.
+
+  Soit $]c,d[ \in CC(U)$, on veut maintenant montrer que $f(d) - f(c) \geq 0$.
+  Fixons $\varepsilon > 0$. Par compacité, $f$ atteint son maximum sur
+  $[c+\varepsilon, d]$ en un point $x$. En particulier $f(x) \geq f(d)$. Or
+  $f(d) \geq f(z)$ pour tout $z > d$ car $d \not\in U$. Ainsi $f(x) \geq f(y)$
+  pour tout $y > x$, bref, aucun point ne peut faire de l'ombre à $x$ : $x
+  \not\in U$. Or $[c+\varepsilon,d[ \subset U$, donc $x = d$. Autrement dit le
+  maximum est atteint en l'unique point $d$, d'où $f(c+\varepsilon) < f(d)$, et
+  en passant à la limite $f(c) \leq f(d)$.
+\end{proof}
+
+Ceci étant établi, c'est parti pour le résultat principal.
+
+\paragraph{Stratégie d'attaque du théorème}
+Soit $f : \R \to \R$ continue croissante. Posons pour $h \neq 0$
+\[ \Delta f(x,h) = \frac{f(x+h) - f(x)}{h} \]
+et définissons les \emph{dérivées de Dini}
+\[ D^+f(x) = \limsup_{h \to 0^+} \Delta f(x,h) \qquad
+  D^-f(x) = \limsup_{h \to 0^-} \Delta f(x,h) \]
+\[  D_+f(x) = \liminf_{h \to 0^+} \Delta f(x,h) \qquad
+  D_-f(x) = \liminf_{h \to 0^+} \Delta f(x,h) \]
+
+$f$ est dérivable en un point $x$ si et seulement si ces quatre limites (1)
+coïncident et (2) sont finies. Nous allons établir que c'est le cas presque
+partout.
+
+\begin{proof}[(1) Existence p.p. de la limite]
+Montrons dans un premier temps que $D^+f \leq D_-f$ presque partout. Pour cela,
+fixons $\alpha < \beta$ quelconques et posons
+\[ S_{\alpha,\beta} = \{ x \in \R \mid D_-f(x) < \alpha < \beta < D^+f \} \]
+On veut montrer que $S'_{\alpha,\beta}$ est de mesure nulle ; il suffit de le
+vérifier pour $S'_{\alpha,\beta} = S_{\alpha,\beta} \cap E_0$ quelque soit
+l'intervalle ouvert borné $E_0$,
+
+En partant de $E_0$, nous allons définir par récurrence deux suites de parties
+de $\R$ : pour $n \in \N$,
+\[ F_n = \bigcup_{I \in CC(E_n)} \left\{ x \in I \mid \exists y \in I \,/\, y <
+    x \text{ et } \frac{f(x) - f(y)}{x - y} < \alpha  \right\} \]
+\[ E_{n+1} = \bigcup_{I \in CC(F_n)} \left\{ x \in I \mid \exists y \in I \,/\, y >
+    x \text{ et } \frac{f(y) - f(x)}{y - x} > \beta  \right\} \]
+
+On a $E_0 \supset F_0 \supset E_1 \ldots$ et le lemme des rayons du soleil (à
+l'aide une récurrence triviale) garantit que ce sont des ouverts. En regardant
+droit dans les yeux les limsup et liminf des dérivées de Dini, on se rend compte
+que l'inégalité sur $D_-$ entraîne $S'_{\alpha,\beta} \subset E_n \Rightarrow
+S'_{\alpha,\beta} \subset F_n$, et celle sur $D^+$ entraîne $S'_{\alpha,\beta}
+\subset F_n \Rightarrow S'_{\alpha,\beta} \subset E_{n+1}$. Donc
+$S'_{\alpha,\beta} \subset \bigcap_{n \in \N} E_n$.
+
+Soit $n \in \N$. Soit $]a,b[ \in CC(F_n)$, le cas 2 du lemme nous dit que
+$f(b) - f(a) \leq \alpha(b-a)$. Si maintenant $]c,d[ \in CC(E_{n+1} \cap
+]a,b[)$, alors le cas 1 du lemme donne $f(d)-f(c) \geq \beta(d-c)$. En sommant
+et en appliquant notre majoration de la variation totale, on a :
+\[ \beta\mu(E_{n+1} \cap ]a,b[) = \sum_{]c,d[} \beta\mu(]c,d[) \leq \sum_{]c,d[}
+  (f(d) - f(c)) \leq f(b) - f(a) \leq \alpha\mu(]a,b[) \]
+\[ \mu(E_{n+1}) \leq \frac{\alpha}{\beta} \sum_{]a,b[} \mu(]a,b[) =
+  \frac{\alpha}{\beta} \mu(F_n) \leq \frac{\alpha}{\beta} \mu(E_n) \] où $\mu$
+est la mesure de Lebesgue. Comme $\alpha/\beta < 1$ et $E_0$ a été pris borné,
+donc de mesure finie,
+\[ \mu(S'_{\alpha,\beta}) \leq \mu \left( \bigcap_{n=0}^\infty E_n \right)
+  \leq \lim_{n \to \infty} \left( \frac{\alpha}{\beta} \right)^n \mu(E_0) = 0 \]
+pour tout choix de $E_0$, d'où $\mu(S_{\alpha,\beta}) = 0$, puis
+\[ \mu\left( \{x \in \R \mid  D^+f(x) > D_-f(x) \} \right)
+  = \mu\left( \bigcup_{\alpha, \beta \in \Q} S_{\alpha,\beta} \right)
+  = 0 \]
+De façon analogue on peut montrer que $D^-f \leq D_+f$ p.p., ce qui suffit à
+obtenir l'égalité p.p. des quatre dérivées de Dini : en effet, on sait que
+$\liminf \leq \limsup$ donc $D_+ \leq D^+$ et $D_- \leq D^-$.
+\end{proof}
+
+Notons $f'(x)$ cette limite commune qui existe pour tout $x$ hors d'un ensemble
+de mesure nulle : on définit ainsi une fonction $f'$, qu'on étend arbitrairement
+à $\R$. $f'$ est à valeurs dans $\R_+ \cup \{+\infty\}$. En effet, $f$ étant
+croissante, ses taux d'accroissements sont positifs ; et rien ne garantit a
+priori que la limite de ces taux d'accroissements soit finie. Reste à montrer :
+
+\begin{proof}[(2) Finitude p.p. de la dérivée]
+Calculons d'abord :
+\[
+  \int_a^b \frac{f(x+h) - f(x)}{h}dx =
+    \frac{1}{h} \int_b^{b+h} f(x)\,dx - \frac{1}{h} \int_a^{a+h} f(x)\,dx
+    \underset{h \to 0^+}{\longrightarrow} f(b) - f(a)
+\]
+où la dernière égalité est vraie par continuité de $f$. Comme $f'$ est mesurable
+(en tant que limite de fonctions mesurables) et positive, on peut l'intégrer et
+le lemme de Fatou nous donne
+\[ \int_a^b f'(x)\,dx \leq \lim_{h \to 0^+} \int_a^b \frac{f(x+h) - f(x)}{h}dx =
+  f(b)- f(a) < +\infty \] 
+Ainsi, $f'$ est localement intégrale, elle est donc finie presque partout.
+\end{proof}
+
+\paragraph{Conclusion} En excluant d'abord les points où le taux d'accroissement
+n'a pas de limite, puis ceux où la limite est $+\infty$, on ne s'est privé que
+d'en semble de mesure nulle, donc : $f$ est dérivable presque partout !
+
+Remarquons qu'en utilisant la majoration de la variation totale et le lemme des
+rayons du soleil, on peut aussi démontrer (et ça a presque été fait dans la
+preuve ci-dessus) que
+\[ \mu\left( \left\{ x \in ]a,b[ \mid D^+f(x) \geq \beta \right\} \right)
+  \leq \frac{f(b)-f(a)}{\beta} \]
+ce qui aurait pu permettre de traiter la partie finitude (exercice pour la
+lectrice). Ce résultat est à comparer avec le suivant :
+\begin{theorem}[Inégalité maximale de Hardy-Littlewood]
+  Soit $f \in L^1(\R)$, et soit $\beta > 0$. Alors
+  \[ \mu\left( \left\{ x \in \R \mid \sup_{h > 0} \frac{1}{h} \int_x^{x+h}
+        |f(t)|\,dt \geq \beta \right\} \right)
+    \leq \frac{1}{\beta} \int_\R |f(t)|\,dt \]
+\end{theorem}
+
+
+\subsection{Théorème du minimax et dualité lagrangienne}
+
+Première partie dans \emph{Techniques of Variational Analysis}.
 
 \subsection{Théorème du point fixe de Schauder}
 
@@ -297,9 +505,10 @@ coordonnées polaires et le théorème de Tonelli donnent
   r^{d-3}\,dr \]
 Ce qui est infini exactement quand $d < 3$, CQFD.
 
-\paragraph{Si le temps permet…} On expliquera pourquoi $\E[N] = +\infty$ est
-équivalent à presque sûrement repasser par l'origine au moins une fois. (C'est
-une propriété générale des chaînes de Markov.)
+\paragraph{Si le temps permet…} On expliquera pourquoi dans une chaîne de Markov
+irréductible, un état est récurrent si et seulement si tous le sont, et que dans
+ce cas, tous les états sont presque sûrement atteints. Ainsi, on a montré qu'un
+ivrogne qui se déplace dans le plan peut être sûr de rentrer chez lui.
 
 
 \subsection{Théorème de bornitude uniforme et série de Fourier divergente}
@@ -594,13 +803,6 @@ de recherche (TODO ajouter référence) et a été posée aux oraux de l'ENS Lyo
   Soit $n \in \N^*$. Il existe $n+2$ points à distances entières impaires dans
   $\R^n$ si et seulement si $n \equiv -2 \; (\mod\,16)$.
 \end{theorem}
-
-\subsection{Les fonctions monotones sont dérivables presque partout}
-
-Suggéré par le rapport de jury d'agrég, infaisable en 15 minutes. Ingrédient
-principal : l'inégalité maximale de Hardy-Littlewood. C'est fait sur le blog de
-Terence Tao, et on peut le retrouver dans l'un de ses bouquins si l'on tient à
-avoir une référence utilisable le jour de l'oral.
 
 \subsection{Schéma de réflexion de Kreisel}
 
