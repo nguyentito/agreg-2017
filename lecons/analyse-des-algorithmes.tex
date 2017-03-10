@@ -1,0 +1,351 @@
+\documentclass[a5paper, 10pt]{article}
+
+\usepackage[frenchb]{babel}
+\usepackage{csquotes} % guillemets
+
+\usepackage{amssymb,amsthm,amsmath}
+\usepackage{algorithm,caption}
+\usepackage{algpseudocode}
+\usepackage{proof}
+\usepackage{multicol}
+%\usepackage{stmaryrd,icomma}
+\usepackage{url}
+\usepackage{pgfpages}
+\pgfpagesuselayout{2 on 1}[a4paper,landscape]
+\usepackage[hmargin=1cm,vmargin=1.5cm]{geometry}
+
+\usepackage{unicode-math}
+
+% TeX Gyre Pagella = URW Palladio (free Palatino) extended
+\setmainfont[Mapping=tex-text]{TeX Gyre Pagella}
+\setmathfont{Asana Math}
+
+
+\theoremstyle{definition}
+% http://tex.stackexchange.com/questions/59278/can-i-disable-italics-in-the-body-text-of-a-theorem-without-amsthm-ntheorem
+\newtheorem{definition}[equation]{Définition}
+\newtheorem*{definition*}{Définition}
+\newtheorem{example}[equation]{Exemple}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{theorem}[equation]{Théorème}
+\newtheorem{application}[equation]{Application}
+\newtheorem{algo}[equation]{Algorithme}
+\newtheorem{lemma}[equation]{Lemme}
+\newtheorem{remark}[equation]{Remarque}
+\newtheorem{corollary}[equation]{Corollaire}
+\newtheorem{code}[equation]{Code}
+\newcounter{n}
+\newtheorem{dev}[n]{Développement}
+
+\algtext*{EndProcedure}
+\algtext*{EndWhile}
+\algtext*{EndFor}
+\algtext*{EndIf}
+\algrenewcommand\algorithmicprocedure{\textbf{procédure}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{alors}}
+\algrenewcommand\algorithmicelse{\textbf{sinon}}
+\algrenewcommand\algorithmicfor{\textbf{pour}}
+\algrenewcommand\algorithmicwhile{\textbf{tant que}}
+\algrenewcommand\algorithmicdo{\textbf{faire}}
+\algrenewcommand\algorithmicreturn{\textbf{renvoyer}}
+
+\newcommand\lesson[1]{{\noindent \LARGE \bfseries #1}\\[1pt]}
+%\def\authorship{{\null \vfill \hfill \small \@author{} -- \url{agreg-cachan.fr}}}
+\def\A{{\cal{A}}}
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\U{\mathbb{U}}
+\def\K{\mathbb{K}}
+\def\P{\mathbb{P}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\L{{\cal{L}}}
+\def\S{{\cal{S}}}
+\def\V{{\cal{V}}}
+\def\T{{\cal{T}}}
+\def\O{{\cal{O}}}
+\def\Fs{{\cal{F}}}
+\def\Ps{{\cal{P}}}
+\def\Cf{{\cal{C}}}
+\def\M{\mathcal{M}}
+\def\MnK{{\cal M}_n(\K)}
+\def\Tr{\textnormal{Tr}}
+\def\Sp{\textnormal{Sp}}
+\def\Re{\textnormal{Re}}
+\def\Vect{\textnormal{Vect}}
+\def\car{\textnormal{car}}
+\def\pgcd{\textnormal{pgcd}}
+\def\ppcm{\textnormal{ppcm}}
+\def\Sigmap{\mathfrak{S}}
+\def\prog{\texttt{prog}}
+\renewcommand\vector[1]{\left(\begin{array}{c}#1\end{array}\right)}
+\newcommand\enonce[3]{\{#1\}\ #2\ \{#3\}}
+\newcommand\hoare[1]{\State $\textcolor{gray}{\{#1\}}$}
+
+% J'aime pas la logique
+\def\bv{\textnormal{bv}}
+\def\fv{\textnormal{fv}}
+\def\dom{\textnormal{dom}}
+\newcommand\sem[1]{\llbracket #1 \rrbracket}
+\def\seq{\longrightarrow}
+\def\LK{\textbf{LK}}
+
+\begin{document}
+
+\author{\textsc{Nguyễn} Lê Thành Dũng}
+
+\lesson{926 -- Analyse des algorithmes, complexité. Exemples.}
+
+\section{Mesures de complexité en temps et en espace}
+
+\begin{definition}
+  Un \emph{algorithme} (déterministe) est un procédé effectif pour calculer une
+  fonction. Il spécifie de façon non ambigüe la succession d'étapes de calcul à
+  effectuer et termine en un nombre fini d'étapes.
+\end{definition}
+
+\begin{remark}
+  Nous ne définirons pas plus formellement la notion d'algorithme. Nous ferons
+  surtout attention de distinguer un algorithme, la fonction qu'il calcule, et
+  son implémentation dans un langage de programmation particulier.
+\end{remark}
+
+\begin{definition}
+  La \emph{complexité en temps} d'un algorithme est le nombre d'étapes de calcul
+  (on dira aussi d'\emph{opérations élémentaires}) exécutées avant terminaison
+  sur une entrée donnée.
+\end{definition}
+\begin{definition}
+  La \emph{complexité en espace} d'un algorithme est le nombre d'emplacements en
+  mémoire distincts utilisés lors de son exécution.
+\end{definition}
+
+\begin{remark}
+  Ces mesures dépendent du \emph{modèle machine} considéré. Par exemple :
+  \begin{itemize}
+  \item on se place généralement dans un modèle RAM où l'affectation d'une case
+    mémoire est une opération élémentaire ;
+  \item si chaque case mémoire peut stocker un bit, la représentation binaire
+    d'un entier $n$ prend un espace $\lceil \log_2 (n+1) \rceil$.
+  \end{itemize}
+\end{remark}
+
+\begin{example}
+  Les algorithmes \emph{en place} utilisent un espace constant en dehors de
+  celui dédié au stockage de l'entrée.
+\end{example}
+
+\begin{remark}
+  La complexité (en temps ou espace) d'un algorithme est souvent exprimée en
+  fonction de paramètres de l'entrée. Un paramètre souvent considéré est la
+  \emph{taille} de l'entrée, notée $|\cdot|$, qui est l'espace utilisé pour l'écrire.
+\end{remark}
+
+\begin{definition}
+  Si $c : \{\text{entrées}\} \to \N$ est la complexité d'un algorithme, on
+  définit alors la complexité \emph{dans le pire cas} comme
+  \[c_{\mathrm{max}}(n) = \max_{|x| = n} c(x) \]
+\end{definition}
+
+\begin{definition}[Notations de Landau]
+  Soient $f, g : \N \to \N$. On écrit
+  \begin{itemize}
+  \item $f(n) = O(g(n))$ lorsque $\exists c > 0 \,/\, \exists N \in \N \,/\, \forall
+    n \geq N,\, f(n) \leq cg(n)$ ;
+  \item $f(n) = \Omega(g(n))$ lorsque $g(n) = O(f(n))$ ;
+  \item $f(n) = \Theta(g(n))$ lorsque $f(n) = O(g(n))$ et $f(n) = \Omega(g(n))$
+  \end{itemize}
+\end{definition}
+
+\begin{example}
+  Le calcul du PGCD de $a$ et $b$ par l'algorithme d'Euclide nécessite
+  $\Theta(\log b)$ divisions euclidiennes dans le pire cas. Le cas favorable où
+  $b$ divise $a$ se traite quant à lui en temps $O(1)$ (qu'on appelle temps
+  constant).
+\end{example}
+
+\section{Analyse de complexité des algorithmes récursifs}
+
+\subsection{Complexité temporelle}
+
+\begin{remark}
+  Déterminer la complexité en temps d'un algorithme récursif se ramène souvent à
+  résoudre une \emph{relation de récurrence}.
+\end{remark}
+
+\begin{theorem}[Théorème général sur les récurrences de partitions]
+  Soient $a \geq 1$, $b > 1$, et $f : \N \to \N$. Supposons que $T : \N \to \N$
+  vérifie la récurrence
+  \[ T(n) = a T( \lceil n / b \rceil) + f(n) \]
+  Alors (pour $\varepsilon > 0$ quelconque)
+  \begin{itemize}
+  \item si $f(n) = O\left( n^{\log_b a - \varepsilon} \right)$,
+    alors $T(n) = \Theta\left(n^{\log_b a}\right)$ ;
+  \item si $f(n) = \Theta\left( n^{\log_b a} \right)$,
+    alors $T(n) = \Theta\left(n^{\log_b a} \log n\right)$ ;
+  \item si $f(n) = \Omega\left( n^{\log_b a + \varepsilon} \right)$, et si
+    $a f( \lceil n / b \rceil) = O(f(n))$, alors $T(n) =
+    \Theta\left(f(n)\right)$.
+  \end{itemize}
+\end{theorem}
+
+\begin{example}
+  Le tri fusion d'une liste de taille $n$ a une complexité temporelle de
+  $\Theta(n \log n)$.
+\end{example}
+\begin{example}
+  L'algorithme de Strassen multiplie deux matrices de taille $n \times n$ en
+  temps $\Theta\left(n^{\log_2 7}\right)$.
+\end{example}
+\begin{dev}
+  Le $k$-ième plus grand élément d'un tableau de taille $n$ peut être calculé en
+ temps $\Theta(n)$ par l'algorithme \enquote{médiane des médianes}.
+\end{dev}
+
+\subsection{Complexité spatiale}
+
+\begin{remark}
+  Pour évaluer la complexité spatiale d'un algorithme récursif, il est
+  nécessaire de prendre en compte la \emph{pile d'exécution}, dont la taille
+  dépend de la profondeur maximale d'appels récursifs imbriqués.
+\end{remark}
+
+\begin{example}
+  On peut résoudre le problème d'accessibilité dans un graphe orienté à $n$
+  sommets en espace $O(\log^2 n)$.
+\end{example}
+
+\begin{corollary}[Théorème de Savitch]
+  Soit $f : \N \to \N$ telle que $f(n) = \Omega(\log n)$. On a alors
+  $\mathrm{NSPACE}(f(n)) \subseteq \mathrm{DSPACE}(f(n)^2)$.
+\end{corollary}
+
+\section{Complexité temporelle moyenne et randomisée}
+
+\begin{definition}
+  La complexité temporelle \emph{en moyenne} d'un algorithme de complexité $c$
+  est définie comme
+  \[c_{\mathrm{moy}}(n) = \mathbb{E}[c(x) \mid |x| = n]\]
+  Elle dépend de la loi de probabilité considérée sur $\{x \mid |x| = n\}$.  
+\end{definition}
+\begin{example}
+  La recherche naïve d'un motif dans un texte de taille $n$ se fait en temps
+  $O(n)$ en moyenne si les lettres sont prises indépendamment et uniformément
+  dans l'alphabet.
+\end{example}
+\begin{example}
+  L'algorithme de tri rapide (ou \emph{quicksort}) a une complexité temporelle
+  en moyenne de $\Theta(n \log n)$ (contre $\Theta(n^2)$ dans le pire cas), pour une loi
+  uniforme sur les permutations possibles de l'ordre de la liste en entrée.
+\end{example}
+\begin{remark}
+  On en déduit un algorithme randomisé efficace pour le tri : permuter
+  aléatoirement la liste avant de la trier.
+\end{remark}
+
+\begin{definition}
+  Un \emph{algorithme de Las Vegas} est un algorithme pouvant tirer des
+  variables aléatoires, qui termine presque sûrement et renvoie toujours dans ce
+  cas une réponse correcte. Sa \emph{complexité espérée} en temps est
+  l'espérance de sa complexité temporelle sur une entrée fixée.
+\end{definition}
+\begin{example}
+  Le tri rapide précédé d'une permutation aléatoire et le tri rapide avec choix
+  de pivot aléatoire sont deux algorithmes de Las Vegas de complexité temporelle
+  espérée $\Theta(n \log n)$.
+\end{example}
+
+\section{Complexité amortie}
+
+\begin{definition}
+  Considérons une structure de données munie de certaines opérations. L'analyse
+  amortie vise à assigner un \emph{coût amorti} à chaque opération de sorte que,
+  pour toute suite de $n$ opérations appliquées sur une même structure, on ait
+  \[ \sum_{i=1}^n c_i \leq \sum_{i=1}^n \tilde{c}_i  \]
+  où $c_i$ (resp. $\tilde{c}_i$) est la complexité temporelle (resp. le coût
+  amorti) de la $i$-ème opération.
+\end{definition}
+\begin{remark}
+  Le coût amorti d'une opération n'est pas défini en soi de façon unique, il
+  dépend du schéma d'amortissement considéré.
+\end{remark}
+
+\begin{example}
+  L'ajout d'un élément dans un tableau redimensionnable peut être implémenté
+  avec une complexité de $O(1)$ amortie.
+\end{example}
+
+\begin{proposition}[Méthode du potentiel]
+  Soit $\Phi$ une fonction des états de la structure de données dans $\R$,
+  appelée \emph{potentiel}. Supposons que $\Phi$ reste toujours plus grande que
+  sa valeur à l'état initial lorsqu'on applique une suite d'opérations. Alors on
+  peut définir des coûts amortis comme suit :
+  \[ \tilde{c} = c + \Phi(\text{état après l'opération}) - \Phi(\text{état avant})\]
+\end{proposition}
+
+\begin{dev}
+  L'implémentation suivante d'une structure de classes d'équivalence d'un
+  ensemble de $n$ éléments (Union-Find) admet une complexité amortie $O(\log n)$
+  pour ses opérations \textsc{Find} et \textsc{Union}.
+\end{dev}
+
+\begin{algorithm}
+\caption*{\textbf{Implémentation} de la structure Union-Find}
+\begin{algorithmic}
+\Procedure{Init}{$n$}
+\State $T \gets $ nouveau tableau de taille $n$
+\For{$i \gets 1, \ldots, n$}
+\State $T[i] \gets i$
+\EndFor
+\State \textbf{renvoyer} $T$
+\EndProcedure
+\Procedure{Find}{$T,x$}
+\If{$T[x] \neq x$}
+$T[x] \gets $ \Call{Find}{$T, t[x]$}
+\EndIf
+\State \textbf{renvoyer} $T[x]$
+\EndProcedure
+\Procedure{Union}{$T, x, y$}
+\State $T[\text{\Call{Find}{$x$}}] \gets T[\text{\Call{Find}{$y$}}]$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{application}
+  Une implémentation de l'algorithme de Kruskal utilisant la structure ci-dessus
+  tourne en temps $O(m \log m)$ sur un graphe à $m$ arêtes. En général, les
+  analyses amorties de structures de données permettent d'établir de
+  \enquote{vraies} bornes sur les algorithmes qui les utilisent.
+\end{application}
+
+\begin{proposition}
+  En ajoutant l'optimisation d'\emph{union par rang}, on obtient une
+  implémentation de la structure Union-Find avec des opérations en temps
+  $O(\alpha(n))$ amorti, où $\alpha$ est la réciproque de la fonction
+  d'Ackermann. (La borne sera affirmée sans démonstration.)
+\end{proposition}
+
+\section*{Références}
+
+\begin{itemize}
+\item Cormen, Leiserson, Rivest et Stein, \emph{Algorithmique} (incontournable)
+\item Erickson, \emph{Algorithms, etc.} (excellentes notes de cours, non
+  publiées en livre malheureusement)
+\item Mehlhorn, \emph{Algorithms and Data Structures: The Basic Toolbox}
+  (contient la complexité de l'union-find sans union par rang)
+\end{itemize}
+
+\subsection*{Ressources complémentaires}
+
+\begin{itemize}
+\item Pourquoi les preuves du CLRS sont parfois fausses : Howell, \emph{On Asymptotic
+    Notation with Multiple Variables}
+\item Tentatives de définition formelle d'un algorithme : Moschovakis, \emph{On
+    founding the theory of algorithms} ; Gurevich, \emph{What is an algorithm?}
+\end{itemize}
+
+
+\end{document}
