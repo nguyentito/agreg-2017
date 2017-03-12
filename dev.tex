@@ -82,6 +82,7 @@
 
 \subsection{Sous-espace de dimension finie de $\Cf(\R)$ stables par translation}
 
+Classique.
 
 \subsection{Fonction tangente et permutations zigzag}
 
@@ -93,10 +94,123 @@ alterné, nous parlerons ici de \emph{permutation zigzag}.
 La série génératrice des permutations haut-bas est $tan(z)+sec(z)$.
 \end{theorem}
 
-Merci à Paul Melotti, cf. son PDF.
+Merci à Paul Melotti, c'est fait dans son PDF.
 
 
 \section{Algèbre}
+
+\subsection{Points à distances impaires, avec le déterminant de Gram}
+
+Le résultat suivant est tiré d'un petit article : \emph{Are there $n+2$ points
+  in $E^n$ with odd integral distances}, Graham, Rothschild \& Straus. Il a été
+posé comme exercice à l'oral de l'ENS Lyon en 2015.
+\begin{theorem}
+  Soit $n \in \N^*$. Il existe $n+2$ points distincts à distances entières
+  impaires dans $\R^n$ si et seulement si $n+2 \equiv 0 \mod 16$.
+\end{theorem}
+
+La preuve originale utilise le \emph{déterminant de Cayley-Menger}, qui permet
+de calculer le volume de simplexes et généralise ainsi la formule de Héron. On
+trouvera des détails sur ce fameux déterminant dans le Zavidovique. Nous allons
+utiliser ici le déterminant de Gram, plus connu, pour éviter des calculs avec
+des opérations élémentaires sur les lignes et les colonnes.
+
+\paragraph{Preuve du sens direct}
+
+Soit $n \in \N$ et $x_0, \ldots, x_{n+1}$ des points dans $\R^n$ tels que pour
+tout $i \neq j$, $\|x_i - x_j\| \in 2\Z + 1$. Quitte à translater, on peut
+prendre $x_0 = 0$.
+
+Notons $G = (\langle x_i, x_j \rangle)_{1 \leq i,j \leq n+1}$ la matrice de Gram
+de $x_1, \ldots, x_{n+1}$, $J$ la matrice carrée de taille $n+1$ dont tous les
+coefficients valent 1, et $A = (a_{ij})_{1 \leq i,j \leq n+1} = I+J$.
+
+\begin{proposition}
+  $\det G = 0$.
+\end{proposition}
+\begin{proof}
+  Le déterminant de Gram d'une famille liée est toujours nul, et les $x_1,
+  \ldots, x_{n+1}$ sont dans $\R^n$ donc sont liés. En effet, si $M$ est la
+  matrice des $(x_i)$ dans une base orthonormale (de taille $n \times (n+1)$),
+  alors $G = M^T M$ a un rang majoré par celui de $M$, qui est le rang de la
+  famille de vecteurs.
+\end{proof}
+
+\begin{proposition}
+  $\det A = n+2$.
+\end{proposition}
+\begin{proof}
+  $J$ est de rang 1 donc a pour valeur propre 0 avec multiplicité $n$. On
+  vérifie que $(1,\ldots,1)$ est vecteur propre pour la valeur propre $n+1$, ce
+  qui achève de déterminer le spectre de $J$. Les valeurs propres de $A = I+J$
+  sont donc $1, \ldots, 1, n+2$, leur produit vaut donc $n+2$.
+\end{proof}
+
+On va prouver $\det 2G \equiv \det A \mod 16$, ce qui suffira à conclure avec
+les deux propositions ci-dessus. Pour cela, regardons ce qu'on peut dire sur
+$2G$ modulo 16.
+
+\begin{remark}
+  Si $m$ est impair, $m^2 \equiv 1 \mod 8$ et $2m^2 \equiv 2 \mod 16$.
+\end{remark}
+\begin{proof}
+  Facile à vérifier à la main ; le second résultat se déduit du premier, pas
+  besoin d'examiner 8 classes de congruence.
+\end{proof}
+
+Ainsi, l'identité de polarisation $2 \langle x_i, x_j \rangle = \|x_i\|^2 +
+\|x_i\|^2 - \|x_i - x_j\|^2$ entraîne que les coefficients non diagonaux de $2G$
+sont congrus à 1 modulo 8 (remarquer que $\|x_i\|^2 = \|x_i - x_0\|^2$ est bien
+le carré d'un nombre impair). Quant aux coefficients diagonaux, de la forme
+$2\|x_i\|^2$, ils sont congrus à 2 modulo 16. Ainsi
+\[ 2G \equiv A + B \mod 16, \qquad B = (b_{ij})_{1 \leq i,j \leq n+1} \in
+  S_{n+1}(\Z),\; b_{ii} = 0,\; b_{ij} \in \{0,8\} \]
+Donc $\det 2G \equiv \det(A+B) \mod 16$ car le déterminant est un polynôme à
+coefficients entiers en les coefficients de la matrice. Reste à prouver
+$\det(A+B) \equiv \det A \mod 16$.
+
+Écrivons la formule de Leibniz :
+\[ \det(A+B) = \sum_{\sigma \in \Sigmap_{n+1}} \varepsilon(\sigma) T_\sigma,
+  \quad T_\sigma = \prod_{i=1}^{n+1} (a_{i \sigma(i)} + b_{i \sigma(i)}) \]
+Il est clair que
+\[ T_\sigma \equiv \prod_{i=1}^{n+1} a_{i \sigma(i)} \mod 8 \quad \text{donc}
+  \quad T_\sigma + T_{\sigma^{-1}} = 2 T_\sigma \equiv 2 \prod_{i=1}^{n+1} a_{i
+    \sigma(i)} \mod 16 \]
+
+On peut ainsi regrouper les termes de la somme dans $\det(A+B)$ par deux pour
+montrer la congruence voulue… à l'exception des termes pour $\sigma =
+\sigma^{-1}$, c'est à dire $\sigma$ involutif.
+
+Fixons $\sigma$ une involution et développons $T$. Étudions les termes
+comportant au moins un facteur $b_i$. S'il y en a deux, alors le terme est
+divisible par 64, donc congru à 0 mod 16. Donc
+\[ T_\sigma \equiv \prod_{i=1}^{n+1} a_{i \sigma(i)} + \sum_{i=1}^{n+1} t_i
+   \mod 16 \qquad t_i = b_{i \sigma(i)} \prod_{j \neq i} a_{j \sigma(j)} \]
+Pour $i \in \{1, \ldots, n+1\}$, alors :
+\begin{itemize}
+\item si $i$ est un point fixe de $\sigma$, alors $b_{i \sigma(i)} = b_{ii} = 0$
+  donc $t_i = 0$ ;
+\item sinon, $\sigma$ transpose $i$ et $\sigma(i)$, et $t_i = t_{\sigma(i)}$ par
+  symétrie.
+\end{itemize}
+Finalement, on peut toujours regrouper les termes non nuls par deux, et obtenir
+que
+\[ T_\sigma \equiv \prod_{i=1}^{n+1} a_{i \sigma(i)} \mod 16. \]
+
+En fin de compte, on a :
+\[ \det(A+B) \equiv \sum_{\sigma \in \Sigmap_{n+1}} \varepsilon(\sigma)
+  \prod_{i=1}^{n+1} a_{i \sigma(i)} \equiv \det A \mod 16 \]
+
+\paragraph{Preuve du sens réciproque}
+
+Soit $n = 16m - 2$, $m \in \N^*$. TODO.
+
+
+\subsection{Constructibilité des polygones réguliers}
+
+TODO. Utiliser un élément primitif pour borner le nombre d'automorphismes fixant
+une extension intermédiaire d'un corps cyclotomique, ce qui évite d'avoir à
+prouver un sens du lemme d'Artin.
 
 \subsection{Automorphisme exceptionnel de $\Sigmap_6$}
 
@@ -155,12 +269,6 @@ il faut transférer par un choix arbitraire et non canonique de bijection. Ça
 m'embête parce que c'est pas pratique pour s'assurer de la fonctorialité de la
 procédure qui a un ensemble associe $E = \Sigmap_6/H$ correspondant.
 
-
-\subsection{Théorèmes de Sylow}
-
-Pour aller vite, utiliser la démonstration due à Serre, qu'on trouvera dans le
-Perrin. C'est beaucoup plus laborieux (mais moins astucieux) dans \emph{Algebra}
-de Lang.
 
 \subsection{Réciprocité quadratique par les coniques}
 
@@ -256,39 +364,39 @@ Le lemme qui suit est fondamental dans la preuve du théorème.
 
 \begin{lemma}[des rayons du soleil]
   Soit $f : [a,b] \to \R$ continue et soit $\alpha \in \R$. Posons
-  \[ U = \left\{ x \in ]a,b[ | \exists y \in ]x,b[\,/\,
+  \[ O_g(]a,b[,\alpha)  = \left\{ x \in ]a,b[ | \exists y \in ]a,x[\,/\,
+      \frac{f(x)-f(y)}{x-y} < \alpha \right\} \]
+  \[ O_d(]a,b[,\alpha) = \left\{ x \in ]a,b[ | \exists y \in ]x,b[\,/\,
       \frac{f(y)-f(x)}{y-x} > \alpha \right\}
-    \quad
-    \text{ et }
-    \quad
-    V = \left\{ x \in ]a,b[ | \exists y \in ]a,x[\,/\,
-      \frac{f(x)-f(y)}{x-y} < \alpha \right\}
   \]
-  Alors $U$ et $V$ sont ouverts dans $\R$ et
+  Alors $O_g(]a,b[,\alpha)$ et $O_d(]a,b[,\alpha)$ sont ouverts dans $\R$ et
   \begin{enumerate}
-  \item Pour tout $]c,d[ \in CC(U)$, $\displaystyle \frac{f(d)-f(c)}{d-c} \geq
-    \alpha$.
-  \item Pour tout $]c',d'[ \in CC(V)$, $\displaystyle \frac{f(d')-f(c')}{d'-c'}
-    \leq \alpha$.
+  \item Pour tout $]c',d'[ \in CC(O_g(]a,b[,\alpha))$,
+    $\displaystyle \frac{f(d)-f(c)}{d-c} \leq \alpha$.
+  \item Pour tout $]c,d[ \in CC(O_d(]a,b[,\alpha))$,
+    $\displaystyle \frac{f(d')-f(c')}{d'-c'} \geq \alpha$.
   \end{enumerate}
-(Noter que $f$ est définie sur $[a,b]$ et $U,V \subseteq ]a,b[$.)
 \end{lemma}
 Il faut \textit{\textbf{faire un dessin}} pour voir ce qui se passe :
 l'hypographe de $f$ est éclairé par un faisceau de rayons parallèles de pente
-$\alpha$ provenant de la droite dans le cas 1, la gauche dans le cas 2. On peut
-constater visuellement qu'il y a en fait égalité sauf éventuellement pour
-$c = a$ ou $d' = b$, mais nous n'aurons pas besoin de le prouver formellement.
+$\alpha$ provenant de la gauche dans le cas 1, la droite dans le cas 2, et les
+ensembles définis sont les zones à l'ombre (la lumière passant à travers les
+points de tangence). On peut constater visuellement qu'il y a en fait égalité
+sauf éventuellement pour $d = b$ ou $c' = a$, mais nous n'aurons pas besoin de
+le prouver formellement.
 
-Remarquons que (2) découle de (1) appliqué à $x \mapsto -f(-x)$, et qu'on peut
-se ramener à $\alpha = 0$ quitte à soustraire une fonction linéaire. Ce dernier
-cas est celui généralement énoncé dans la littérature sous le nom de
-\enquote{rising sun lemma} (en effet, $\alpha = 0$ revient à placer le soleil à
-l'horizon(tale), et les rayons viennent de la droite i.e. de l'est).
+Remarquons que (1) découle de (2) appliqué à $x \mapsto -f(-x)$, et qu'on peut
+se ramener à $\alpha = 0$ quitte à soustraire une fonction linéaire. (Et en
+considérant $-f$, on peut obtenir deux autres cas, consistant à éclairer
+l'épigraphe au lieu de l'hypographe.) Ce dernier cas est celui généralement
+énoncé dans la littérature sous le nom de \enquote{rising sun lemma} (en effet,
+$\alpha = 0$ revient à placer le soleil à l'horizon(tale), et les rayons
+viennent de la droite i.e. de l'est).
 
 \begin{proof}[Démonstration du lemme du soleil levant]
   $U$ est ouvert car les inégalités strictes de fonctions continues sont des
-  inégalités ouvertes, et une projection linéaire d'un ouvert est un
-  ouvert\footnote{Banach--Schauder en dimension finie !}.
+  inégalités ouvertes, et une projection linéaire d'un ouvert sur une coordonnée
+  est un ouvert\footnote{Banach--Schauder en dimension finie !}.
 
   Soit $]c,d[ \in CC(U)$, on veut maintenant montrer que $f(d) - f(c) \geq 0$.
   Fixons $\varepsilon > 0$. Par compacité, $f$ atteint son maximum sur
@@ -325,10 +433,8 @@ l'intervalle ouvert borné $E_0$,
 
 En partant de $E_0$, nous allons définir par récurrence deux suites de parties
 de $\R$ : pour $n \in \N$,
-\[ F_n = \bigcup_{I \in CC(E_n)} \left\{ x \in I \mid \exists y \in I \,/\, y <
-    x \text{ et } \frac{f(x) - f(y)}{x - y} < \alpha  \right\} \]
-\[ E_{n+1} = \bigcup_{I \in CC(F_n)} \left\{ x \in I \mid \exists y \in I \,/\, y >
-    x \text{ et } \frac{f(y) - f(x)}{y - x} > \beta  \right\} \]
+\[ F_n = \bigcup_{I \in CC(E_n)} O_g(I, \alpha) \qquad
+   E_{n+1} = \bigcup_{I \in CC(F_n)} O_d(I, \beta) \]
 
 On a $E_0 \supset F_0 \supset E_1 \ldots$ et le lemme des rayons du soleil (à
 l'aide une récurrence triviale) garantit que ce sont des ouverts. En regardant
@@ -338,9 +444,9 @@ S'_{\alpha,\beta} \subset F_n$, et celle sur $D^+$ entraîne $S'_{\alpha,\beta}
 \subset F_n \Rightarrow S'_{\alpha,\beta} \subset E_{n+1}$. Donc
 $S'_{\alpha,\beta} \subset \bigcap_{n \in \N} E_n$.
 
-Soit $n \in \N$. Soit $]a,b[ \in CC(F_n)$, le cas 2 du lemme nous dit que
+Soit $n \in \N$. Soit $]a,b[ \in CC(F_n)$, le cas 1 du lemme nous dit que
 $f(b) - f(a) \leq \alpha(b-a)$. Si maintenant $]c,d[ \in CC(E_{n+1} \cap
-]a,b[)$, alors le cas 1 du lemme donne $f(d)-f(c) \geq \beta(d-c)$. En sommant
+]a,b[)$, alors le cas 2 du lemme donne $f(d)-f(c) \geq \beta(d-c)$. En sommant
 et en appliquant notre majoration de la variation totale, on a :
 \[ \beta\mu(E_{n+1} \cap ]a,b[) = \sum_{]c,d[} \beta\mu(]c,d[) \leq \sum_{]c,d[}
   (f(d) - f(c)) \leq f(b) - f(a) \leq \alpha\mu(]a,b[) \]
@@ -791,18 +897,6 @@ super bien.
 On a deux procédés d'itération légèrement différents pour relever des solutions
 dans un $\Z/p^n\Z$ plus grand : l'un est la méthode de Newton, l'autre ressemble
 à la preuve du théorème d'inversion locale.
-
-\subsection{Une application du déterminant de Cayley-Menger}
-
-On trouvera des détails sur ce fameux déterminant, qui généralise la formule de
-Héron, dans le Zavidovique. L'application suivante est tirée d'un petit article
-de recherche (TODO ajouter référence) et a été posée aux oraux de l'ENS Lyon en
-2015.
-
-\begin{theorem}
-  Soit $n \in \N^*$. Il existe $n+2$ points à distances entières impaires dans
-  $\R^n$ si et seulement si $n \equiv -2 \; (\mod\,16)$.
-\end{theorem}
 
 \subsection{Schéma de réflexion de Kreisel}
 
