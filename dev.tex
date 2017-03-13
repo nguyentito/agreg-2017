@@ -531,7 +531,91 @@ lectrice). Ce résultat est à comparer avec le suivant :
 
 \subsection{Théorème du minimax et dualité lagrangienne}
 
-Première partie dans \emph{Techniques of Variational Analysis}.
+Un joli résultat venu du merveilleux monde de la recherche opérationnelle ! La
+première partie est une généralisation d'un célèbre résultat de von Neumann en
+théorie des jeux, la preuve étant tirée de \emph{Techniques of Variational
+  Analysis} (TODO : auteurs). La seconde l'applique à l'optimisation convexe,
+c'est du fait maison mais dont les techniques ne surprendront personne qui soit
+habitué au domaine : on retrouve la relaxation lagrangienne et les conditions de
+Karush--Kuhn--Tucker, mais ces dernières seraient normalement traitées dans le
+cas général non convexe pour des extrema locaux dans un vrai cours
+d'optimisation. Je me demande si on peut raccourcir les preuves ou affaiblir les
+hypothèses pour cette dernière partie…
+
+\paragraph{Théorème du minimax de Sion} TODO.
+
+
+\paragraph{Application : dualité lagrangienne (cas convexe)} Considérons une
+\emph{fonction objectif} $f \in \Cf^0(\R^n, \R)$ et des \emph{contraintes}
+$g_1, \ldots, g_k \in \Cf^0(\R^n, \R)$, toutes convexes, définissant le problème
+(primal) de minimisation
+\[ p = \inf_{x \in F} f(x) \qquad F = \left\{ x \in \R^n \mid
+  g_i(x) \leq 0,\; i = 1,\ldots,k \right\} \]
+où $F$ est l'ensemble des \emph{solutions réalisables}.
+Définissons le \emph{lagrangien} $\L : \R^n \times \R_+^k$ et le problème dual
+associé par
+\[ \L(x, \mu) = f(x) + \sum_{i=1}^k \mu_i g_i(x) \qquad
+  d = \sup_{\mu \in \R_+^k} \inf_{x \in \R^n} \L(x,\mu) \]
+
+On va supposer $d > -\infty$ ainsi que la \emph{condition de Slater} : il existe
+$x_O \in \R^n$ \emph{strictement réalisable}, soit $g_i(x) < 0$ pour tout $i$.
+Sous ces hypothèses, nous allons établir un théorème de dualité forte $p = d$,
+ainsi que des conditions d'atteinte de l'optimum commun.
+
+Fixons $R > 0$ et posons $\bar{B}_R = \bar{B}(x_0,R)$, qui est convexe compact.
+Soit
+\[ p_R = \min_{x \in \bar{B}_R} \sup_{\mu \in \R_+^k} \L(x,\mu)
+       = \sup_{\mu \in \R_+^k} \min_{x \in \bar{B}_R} \L(x,\mu) \]
+l'égalité résultant du théorème du minimax.
+\begin{remark}
+  À $x$ fixé, $\displaystyle \sup_{\mu \in \R_+^k} \L(x,\mu) = $ TODO typesetting.
+\end{remark}
+On en déduit que $p_R = \min_{x \in F \cap B_R} f(x)$ (l'ensemble étant non vide
+puisque $x_0$ y est).
+
+D'autre part, par la seconde expression, $p_R \geq d$. Comme $x_0$ est
+strictement réalisable, quand $\|\mu\| \to +\infty$ en restant dans $\R_+^k$,
+$\L(x_0, \mu) \to +\infty$ . Il existe donc un compact $K \subset \R_+^k$ tel
+que $\forall \mu \in \R_+^k \setminus K,\; \L(x_0, \mu) < d \leq p_R$ (et $K$
+est indépendant de $R$, c'est important !). D'où
+\[ p_R = \max_{\mu \in K} \min_{x \in \bar{B}_R} \L(x,\mu) =
+  \min_{x \in \bar{B}_R} \max_{\mu \in K} \L(x,\mu) \]
+Quand $R \to +\infty$, on trouve
+\[ \inf_{x \in F} f(x) = \inf_{x \in \R^n} \max_{\mu \in K} \L(x,\mu) 
+  = \max_{\mu \in K} \inf_{x \in \R^n} \L(x,\mu)  \]
+où, cette fois-ci, on a utilisé la compacité de $K$ pour appliquer le théorème
+du minimax à $-\L$ ! Tout ceci fonctionnant encore avec n'importe quel convexe
+compact $K' \supseteq K$, en épuisant $\R_+^k$ avec des compacts, on a
+finalement $p = d$, et de plus, on sait qu'une solution duale optimale $\mu^*$
+existe.
+
+S'il reste du temps, on enchaîne avec la suite.
+
+\paragraph{Caractérisation au premier ordre} On suppose maintenant que $f$ et
+$g_1, \ldots, g_k$ sont $\Cf^1$, et on veut caractériser les solutions primales
+optimales. Soit $x^*$ tel que $f(x^*) = p$. Alors
+\[ f(x^*) = p = d \leq \L(x^*, \mu^*) = f(x^*) + \sum_{i=0}^k \mu^*_i
+  g_i(x^*) \]
+Comme $g_i(x^*) \leq 0$ et $\mu^*_i \geq 0$ pour tout $i$, ce qui entraîne
+l'inégalité réciproque, on a en fait $\mu^*_i g_i(x^*) = 0$ pour tout $i$.
+Ainsi, en $x^*$, $\L(-, \mu^*)$ atteint la valeur $d$ qui est son minimum, son
+gradient s'annule donc. Soit :
+\[ \nabla f(x^*) + \sum_{i=0}^k \mu^*_i \nabla g_i(x^*) = 0 \]
+et on constate que les $\mu_i$ sont des \emph{multiplicateurs de Lagrange} pour
+des contraintes d'\emph{inégalité} !
+
+Réciproquement, soient $x \in F$ et $\mu \in R_+^k$ vérifiant cette condition du
+premier ordre ainsi que $\mu_i g_i(x) = 0$ pour tout $i$. Alors, comme
+$\L(-,\mu)$ est convexe, ses points stationnaires sont ses minima globaux, donc
+elle atteint son minimum en $x$. On peut vérifier, grâce à la seconde condition,
+que cette valeur minimale est $f(x)$ ; puis on en déduit que $x$ est optimal
+pour le primal et $\mu$ est optimal pour le dual.
+
+TODO : voir si on peut pas boucher les trous
+dans la disjonction de cas de la dualité forte, avec un argument d'hyperplan
+séparateur.
+
+
 
 \subsection{Théorème du point fixe de Schauder}
 
@@ -746,9 +830,11 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
     \frac{1}{2\pi} \int_\R \hat{f}(\xi) \phi_n(\xi)\, d\xi
   \]
   où l'on a interverti espérance et intégrale par le théorème de Fubini (à
-  justifier). On peut faire le même calcul pour $\E[f(X)]$, puis comme $|\phi_n|
-  \leq 1$ et $\hat{f} \in L^1(\R)$, le théorème de convergence dominée et notre
-  hypothèse de convergence des $\phi_n$ nous donnent
+  justifier). (Au fond, on n'a fait que constater que la transformation de
+  Fourier préserve le produit scalaire.) On peut faire le même calcul pour
+  $\E[f(X)]$, puis comme $|\phi_n| \leq 1$ et $\hat{f} \in L^1(\R)$, le théorème
+  de convergence dominée et notre  hypothèse de convergence des $\phi_n$ nous
+  donnent
   \[ \E[ f(X_n) ] \underset{n \to \infty}{\longrightarrow}
     \frac{1}{2\pi} \int_\R \hat{f}(\xi) \phi(\xi)\, d\xi = \E[f(X)].  \]
 \end{proof}
@@ -855,7 +941,7 @@ la sortie est connue pour être celle d'un AFDC minimal !
 TODO : réfléchir à la complexité précise de la déterminisation (avec taille de
 l'alphabet en paramètre).
 
-Pour avoir une minoration correspondante, on considère $L = X^{n-1}aX*$ où $X =
+Pour avoir une minoration correspondante, on considère $L = X^{n-1}aX^*$ où $X =
 \{a,b\}$ est l'alphabet. $L$ est reconnaissable par un AFD à $n+1$ états, et son
 miroir a $2^n$ résiduels ! La minimisation ne fait que \emph{rajouter} un état
 puits pour rendre l'automate complet.
