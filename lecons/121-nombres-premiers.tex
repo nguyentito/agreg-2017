@@ -307,41 +307,6 @@ Dans toute cette section, $p$ est un nombre premier fixé.
   \item Si $p = 2$ est impair, ${(\Z/2^n\Z)}^\times \simeq \Z/2\Z \times \Z/2^{n-2}\Z$.
   \end{itemize}
 \end{proposition}
-\begin{definition}
-  On appelle \emph{entier $p$-adique} une suite $(a_n)_{n \in \N^*}$
-  avec $a_n \in \Z/p^n\Z$ et $\pi_n(a_{n+1}) = a_n$ pour $n \in \N^*$,
-  où $\pi_n : \Z/p^{n+1}\Z \to \Z/p^n\Z$ est la projection canonique.
-\end{definition}
-\begin{proposition}
-  Les entiers $p$-adiques forment un sous-anneau de
-  $\prod_{n \in \N^*} \Z/p^n\Z$, de caractéristique nulle. Cet anneau
-  est noté $\Z_p$.
-\end{proposition}
-
-\begin{definition}
-  Le \emph{corps des nombres $p$-adiques} $\Q_p$ est le complété de
-  $\Q$ pour la distance $d_p(x,y) = p^{-v_p(x-y)}$.
-\end{definition}
-\begin{proposition}
-  La boule fermée de centre 0 et de rayon 1 dans $\Q_p$ est un
-  sous-anneau isomorphe à $\Z_p$.
-\end{proposition}
-
-\begin{lemma}[Hensel]
-  Soient $f \in \Z_p[X]$ et $a \in \Z/p\Z$ tels que dans $\Z/p\Z$, on
-  ait $f(a) = 0$ et $f'(a) \neq 0$. Alors il existe un unique
-  $\alpha \in \Z_p$ tel que $f(\alpha) = 0$ et dont la classe dans
-  $\Z/p\Z$ soit $a$.
-\end{lemma}
-\begin{remark}
-  Il s'agit de l'analogue $p$-adique de la méthode de Newton sur $\R$.
-\end{remark}
-\begin{corollary}
-  Soient $f \in \Z[X]$ et $a \in \Z$ tels que $f(a) \equiv 0 \mod p$
-  et $f'(a) \not\equiv 0 \mod p$. Alors pour tout $n \in \N^*$, il
-  existe $\alpha \in \Z$ tel que $f(\alpha) \equiv 0 \mod p^n$ et
-  $\alpha \equiv a \mod p$.
-\end{corollary}
 
 \section{Théorie des nombres analytique et répartition}
 
