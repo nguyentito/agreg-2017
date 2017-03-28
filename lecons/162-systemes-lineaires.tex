@@ -1,0 +1,373 @@
+\documentclass[11pt,a4paper,twocolumn]{article}
+
+\usepackage[frenchb]{babel}
+\usepackage{csquotes} % guillemets
+
+\usepackage{amssymb,amsthm,amsmath}
+\usepackage{algorithm,caption}
+\usepackage{algpseudocode}
+\usepackage{proof}
+\usepackage{multicol}
+%\usepackage{stmaryrd,icomma}
+\usepackage{url}
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[a4paper,landscape,border shrink=0mm]
+
+\usepackage[landscape, margin=2cm]{geometry}
+
+\usepackage{fontspec}
+
+\theoremstyle{definition}
+% http://tex.stackexchange.com/questions/59278/can-i-disable-italics-in-the-body-text-of-a-theorem-without-amsthm-ntheorem
+\newtheorem{definition}[equation]{Définition}
+\newtheorem*{definition*}{Définition}
+\newtheorem{example}[equation]{Exemple}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{theorem}[equation]{Théorème}
+\newtheorem{application}[equation]{Application}
+\newtheorem{algo}[equation]{Algorithme}
+\newtheorem{lemma}[equation]{Lemme}
+\newtheorem{remark}[equation]{Remarque}
+\newtheorem{corollary}[equation]{Corollaire}
+\newtheorem{code}[equation]{Code}
+\newcounter{n}
+\newtheorem{dev}[n]{Développement}
+
+\algtext*{EndProcedure}
+\algtext*{EndWhile}
+\algtext*{EndFor}
+\algtext*{EndIf}
+\algrenewcommand\algorithmicprocedure{\textbf{procédure}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{alors}}
+\algrenewcommand\algorithmicelse{\textbf{sinon}}
+\algrenewcommand\algorithmicfor{\textbf{pour}}
+\algrenewcommand\algorithmicwhile{\textbf{tant que}}
+\algrenewcommand\algorithmicdo{\textbf{faire}}
+\algrenewcommand\algorithmicreturn{\textbf{renvoyer}}
+
+\newcommand\lesson[1]{{\noindent \LARGE \bfseries #1}\\[1pt]}
+%\def\authorship{{\null \vfill \hfill \small \@author{} -- \url{agreg-cachan.fr}}}
+\def\A{{\cal{A}}}
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\U{\mathbb{U}}
+\def\K{\mathbb{K}}
+\def\P{\mathbb{P}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\L{{\cal{L}}}
+\def\S{{\cal{S}}}
+\def\V{{\cal{V}}}
+\def\T{{\cal{T}}}
+\def\O{{\cal{O}}}
+\def\Fs{{\cal{F}}}
+\def\Ps{{\cal{P}}}
+\def\Cf{{\cal{C}}}
+\def\M{\mathcal{M}}
+\def\MnK{{\cal M}_n(\K)}
+\def\Tr{\textnormal{Tr}}
+\def\Sp{\textnormal{Sp}}
+\def\Re{\textnormal{Re}}
+\def\Vect{\textnormal{Vect}}
+\def\car{\textnormal{car}}
+\def\pgcd{\textnormal{pgcd}}
+\def\ppcm{\textnormal{ppcm}}
+\def\Sigmap{\mathfrak{S}}
+\def\prog{\texttt{prog}}
+\renewcommand\vector[1]{\left(\begin{array}{c}#1\end{array}\right)}
+\newcommand\enonce[3]{\{#1\}\ #2\ \{#3\}}
+\newcommand\hoare[1]{\State $\textcolor{gray}{\{#1\}}$}
+
+% J'aime pas la logique
+\def\bv{\textnormal{bv}}
+\def\fv{\textnormal{fv}}
+\def\dom{\textnormal{dom}}
+\newcommand\sem[1]{\llbracket #1 \rrbracket}
+\def\seq{\longrightarrow}
+\def\LK{\textbf{LK}}
+
+\author{\textsc{Nguyễn} Lê Thành Dũng}
+
+\def\supp{\textnormal{supp }}
+\def\F{\mathcal{F}}
+\def\iF{\overline{\mathcal{F}}}
+\def\hf{\hat{f}}
+\def\hg{\hat{g}}
+\def\T{\mathbb{T}}
+
+\begin{document}
+\lesson{162. Systèmes d'équations linéaires…}
+\textit{…opérations élémentaires, aspects algorithmiques et conséquences théoriques.}\\
+
+Dans toute cette leçon, $K$ désigne un corps, dont les éléments sont appelés
+scalaires, et $m, n \in \N^*$. On note $\M_{m,n}(K)$ l'ensemble des matrices à
+$m$ lignes et $n$ colonnes à coefficients dans $K$, et $\M_n(K) = \M_{m,n}(K)$.
+
+\section{Premières considérations théoriques}
+
+Soient $A = (a_{ij}) \in \M_{m,n}(K)$ et $b = (b_i) \in K^m$. On cherche à
+trouver $x \in K^n$ vérifiant $Ax = b$, ce qui s'écrit aussi
+\begin{align*} 
+  a_{11} x_1 + \cdots + a_{1n} x_n &= b_1 \\
+  \vdots \qquad & \\
+  a_{m1} x_1 + \cdots + a_{mn} x_n &= b_m \\
+\end{align*}
+\begin{definition}
+  Un système d'équations de cette forme est appelé \emph{système linéaire}. On
+  dit que le système est \emph{homogène} si $b = 0$.
+\end{definition}
+
+\begin{proposition}
+  L'ensemble des solutions du système linéaire homogène $Ax = 0$ est l'espace
+  vectoriel $\textnormal{Ker}(A)$, qui contient toujours $0$. L'ensemble des
+  solutions du système linéaire inhomogène $Ax = b$ est soit vide, soit un
+  espace affine dirigé par $\textnormal{Ker}(A)$. Il est non vide si et
+  seulement si $b \in \textnormal{Im}(A)$.
+\end{proposition}
+
+\begin{theorem}[Règle de Cramer]
+  Si $m = n$ et $\det A \neq 0$, la solution est unique et donnée par
+  \[ \forall j \in \{1, \ldots, n\},\;
+    x_j = \frac{\det (c_1, \ldots, c_{j-1}, b, c_{j+1}, \ldots c_n)}{\det A} \]
+  où les $(c_j)$ sont les colonnes de $A$.
+\end{theorem}
+\begin{corollary}
+  Si $m = n$,
+  $\det A \neq 0 \Leftrightarrow A \in GL_n(K)$, et dans ce cas, on a
+  $A^{-1} = (\det A)^{-1}\textnormal{Com}(A)^T$.
+\end{corollary}
+\begin{remark}
+  On peut traiter le cas d'une matrice rectangulaire en regardant les mineurs de $A$.
+\end{remark}
+
+\section{Opérations élémentaires et algorithme de Gauss}
+
+Le but de cette section est d'obtenir un algorithme de résolution exacte
+efficace en pratique (l'intérêt de la règle de Cramer étant surtout
+théorique).
+
+\begin{definition}
+  $A$ est une \emph{matrice échelonnée} quand $\min \{j \mid a_{ij} \neq 0\}$ croît
+  strictement en fonction de $i$. On dit alors que $Ax = b$ est un \emph{système
+    échelonné}.
+\end{definition}
+\begin{proposition}
+  Un système échelonné de taille $m \times n$ peut être résolu en $O(mn)$
+  opérations sur des scalaires.
+\end{proposition}
+\begin{definition}
+  Soit $\lambda \in K^*$. Une \emph{dilatation} est une matrice de la forme
+  $\textnormal{Diag}(1,\ldots, 1, \lambda, 1 \ldots, 1)$. Une
+  \emph{transvection} est une matrice de la forme $I_m + \lambda E_{ij}$. Une
+  \emph{transposition} (dans ce contexte) est une matrice de permutation
+  associée à une transposition de $\Sigmap_m$. Toutes ces matrices sont appelées
+  \emph{matrices élémentaires}.
+\end{definition}
+\begin{proposition}
+  Les matrices élémentaires sont dans $GL_m(K)$.
+\end{proposition}
+\begin{definition}
+  On appelle \emph{opération élémentaire sur les lignes} la multiplication d'une
+  matrice $A$ où des deux côtés d'une égalité $Ax = b$ par une dilatation, une
+  transvection ou une transposition, à gauche. Ce qui s'interprète
+  respectivement comme multiplier une ligne par un scalaire, ajouter un multiple
+  d'une ligne à une autre, ou échanger deux lignes.
+\end{definition}
+\begin{remark}
+  On définit de même les opérations élémentaires sur les colonnes par
+  multiplication à droite.
+\end{remark}
+\begin{proposition}
+  L'ensemble des solutions d'un système linéaire est invariant par opérations
+  élémentaires.
+\end{proposition}
+
+\begin{algo}[Pivot de Gauss]
+  En appliquant successivement des opérations élémentaires à un système
+  linéaire, on peut se ramener à un système échelonné équivalent, en $O(m^2 n)$
+  opérations sur des scalaires.
+\end{algo}
+\begin{corollary}
+  Toute matrice s'écrit comme le produit d'une matrice carrée inversible,
+  elle-même produit de matrices élémentaires, avec une matrice échelonnée.
+\end{corollary}
+\begin{application}
+  L'algorithme de Gauss permet également de calculer le rang d'une matrice, le
+  déterminant d'une matrice carrée, et son inverse si elle existe.
+\end{application}
+
+\begin{proposition}
+  Les dilatations et les transvections engendrent $GL_n(K)$.
+\end{proposition}
+
+\begin{proposition}[Opérations élémentaires par blocs]
+Pour $A \in GL_p(K)$, $B \in \M_{p,q}(K)$, $C \in \M_{q,p}(K)$, $D \in M_q(K)$,
+\[
+  \left[\begin{matrix} I_p & 0 \\ -CA^{-1} & I_q \end{matrix}\right] \times
+  \left[\begin{matrix} A & B \\ C & D \end{matrix}\right] =
+  \left[\begin{matrix} A & B \\ 0 & D - CA^{-1}B \end{matrix}\right].
+\]
+$D - CA^{-1}B$ est appelé \emph{complément de Schur}. On a une identité analogue
+pour les opérations sur les colonnes.
+\end{proposition}
+\begin{corollary}
+  $\displaystyle \det \left[\begin{matrix} A & B \\ C & D \end{matrix}\right] =
+  \det(A) \det (D - CA^{-1}B)$.
+\end{corollary}
+
+\section{Factorisations de matrices}
+
+\begin{theorem}[Factorisation LU]
+  Si $A \in GL_n(K)$, alors il existe $L$ triangulaire inférieure avec des 1 sur
+  la diagonale et $U$ triangulaire supérieure telles que $A = LU$ si et
+  seulement si les mineurs principaux de $A$ sont non nuls. Dans ce cas, $L$ et
+  $U$ sont uniques.
+\end{theorem}
+\begin{theorem}[Factorisation de Cholesky]
+  Si $A \in \M_n(\R)$ est symétrique définie positive, alors il existe une
+  unique matrice triangulaire inférieure à coefficients diagonaux strictement
+  positifs telle que $A = L^T L$.
+\end{theorem}
+\begin{proposition}
+  Ces deux factorisations peuvent être calculées par une variante du pivot de
+  Gauss en $O(n^3)$ opérations.
+\end{proposition}
+\begin{theorem}[Factorisation QR]
+  Si $A \in GL_n(\R)$ est symétrique définie positive, alors il existe une
+  unique matrice unitaire et une unique matrice triangulaire supérieure à
+  coefficients diagonaux positifs telles que $A = QR$.
+\end{theorem}
+\begin{remark}
+  Ces factorisations de matrices permettent de résoudre de nombreux systèmes
+  linéaires avec la même matrice de façon peu coûteuse. Ceci est généralement
+  préférable au calcul de l'inverse de la matrice.
+\end{remark}
+
+\section{Méthodes itératives de résolution}
+
+On cherche maintenant à calculer une solution \emph{approchée} rapidement.
+On suppose ici $A \in GL_n(\R)$.
+
+\begin{definition}
+  Une \emph{méthode itérative} construit à partir de $A$, $b$, et de $x^0 \in
+  \R^n$ quelconque, une suite $(x^k) \in (\R^n)^\N$. Elle est \emph{convergente}
+  si pour tous $b$ et $x^0$, $x^k \longrightarrow A^{-1}b$ quand $k \to
+  +\infty$.
+\end{definition}
+
+\subsection{Méthodes de Jacobi et de Gauss-Seidel}
+
+\begin{algo}
+  On choisit $M \in GL_n(\R)$ et $N \in M_n(\R)$ telles que $A = M - N$, puis on
+  construit par récurrence $x^{k+1}$ ($k \in \N$) comme unique solution de
+  $Mx^{k+1} = Nx^k + b$.
+\end{algo}
+\begin{theorem}
+  Cette méthode converge si et seulement si le rayon spectral de $M^{-1}N$ est
+  strictement inférieur à 1.
+\end{theorem}
+\begin{algo}[Méthode de Jacobi]
+  On prend $M = \textnormal{Diag}(a_{11}, \ldots, a_{nn})$, $N = M - A$.
+\end{algo}
+\begin{algo}[Méthode de Gauss--Seidel]
+  On prend $M$ triangulaire inférieure et $N$ triangulaire supérieure stricte.
+\end{algo}
+\begin{remark}
+  Ces choix pour $M$ permettent de résoudre rapidement le système linéaire à
+  chaque itération ($O(n^2)$ opérations pour une matrice dense, éventuellement
+  moins pour une matrice creuse).
+\end{remark}
+\begin{proposition}
+  Ces deux méthodes convergent quand $A$ est à diagonale strictement dominante.
+\end{proposition}
+
+\subsection{Autres méthodes}
+
+\begin{algo}[Méthode de Kaczmarz]
+  Soient $(l_1, \ldots, l_n)$ les lignes de $A$, et $p_i$ le projecteur
+  orthogonal sur l'hyperplan affine d'équation $l_i x = b_i$. On construit par
+  récurrence $x^{k+1} = p_{(k+1 \mod n)}(x^{k})$.
+\end{algo}
+\begin{dev}
+  La méthode de Kaczmarz converge quelle que soit $A$.
+\end{dev}
+
+\begin{proposition}
+  Si $A$ est symétrique définie positive, l'unique solution de $Ax = b$ est
+  exactement l'unique point minimisant la fonction strictement convexe $J : x
+  \mapsto \frac{1}{2} \langle Ax | x \rangle - \langle b | x \rangle$.
+\end{proposition}
+\begin{corollary}
+  On peut approcher la solution dans ce cas par une descente de gradient.
+\end{corollary}
+
+\section{Pivot de Gauss sur un anneau principal}
+
+Dans cette section, $R$ est un anneau principal. On suppose maintenant $A \in
+\M_{m,n}(R)$.
+
+\begin{proposition}
+  Si $m = n$, $A \in GL_n(R) \Leftrightarrow \det A$ inversible dans $R$. Dans
+  ce cas, la règle de Cramer s'applique.
+\end{proposition}
+
+\begin{proposition}
+  Mis à part les dilatations de facteur non inversible, les matrices
+  élémentaires sont dans $GL_n(R)$.
+\end{proposition}
+
+\begin{dev}[Forme normale de Smith]
+  Il existe $P \in GL_m(R)$, $Q \in GL_n(R)$, ainsi que $D \in M_{m,n}(R)$
+  quasi-diagonale dont les coefficients diagonaux $(d_1, d_2, \ldots)$ vérifient
+  $d_1 \mid d_2 \mid \ldots$, telles que $M = PDQ$. Cette décomposition peut
+  être calculée par une variante de l'algorithme de Gauss.
+\end{dev}
+\begin{proposition}
+  Les scalaires $(d_1, d_2, \ldots)$ sont uniquement déterminés par $A$ aux
+  inversibles près, et sont appelés les \emph{facteurs invariants} de $A$.
+\end{proposition}
+\begin{remark}
+  Si $R$ est un corps, les facteurs invariants peuvent être pris dans $\{0,1\}$
+  et la multiplicité de $1$ est alors le rang de $A$.
+\end{remark}
+
+\begin{proposition}
+  Si $R$ est un anneau euclidien, $GL_n(R)$ est engendré par les matrices
+  élémentaires.
+\end{proposition}
+
+\begin{definition}
+  Les \emph{invariants de similitude} d'une matrice $A \in \M_n(K)$ sont les
+  facteurs invariants de $XI_n - A$ sur l'anneau $K[X]$.
+\end{definition}
+
+\begin{theorem}[Th. des facteurs invariants]
+  Deux matrices sont semblables si et seulement si elles ont les mêmes
+  invariants de similitude.
+\end{theorem}
+\begin{remark}
+  On dispose donc d'un algorithme pour déterminer si deux matrices sont
+  semblables sur un corps.
+\end{remark}
+\begin{remark}
+  Ce théorème permet de démontrer les réductions de Frobenius et de Jordan d'un
+  endomorphisme.
+\end{remark}
+
+\section*{Développements}
+
+\begin{enumerate}
+\item Méthode de Kaczmarz
+\item Forme normale de Smith
+\end{enumerate}
+
+\section*{Références}
+
+\begin{itemize}
+\item \emph{Les Matrices : théorie et pratique}, Denis Serre
+\end{itemize}
+
+\end{document}

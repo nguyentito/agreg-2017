@@ -1,0 +1,565 @@
+\documentclass[a4paper, 11pt, twocolumn]{article}
+
+\usepackage[frenchb]{babel}
+\usepackage{csquotes} % guillemets
+
+\usepackage{amssymb,amsthm,amsmath}
+\usepackage{algorithm,caption}
+\usepackage{algpseudocode}
+\usepackage{proof}
+\usepackage{multicol}
+%\usepackage{stmaryrd,icomma}
+\usepackage{url}
+\usepackage{pgfpages}
+% \pgfpagesuselayout{2 on 1}[a4paper,landscape]
+% \usepackage[hmargin=1cm,vmargin=1.5cm]{geometry}
+
+\usepackage[landscape, margin=2cm]{geometry}
+
+\usepackage{fontspec}
+
+\theoremstyle{definition}
+% http://tex.stackexchange.com/questions/59278/can-i-disable-italics-in-the-body-text-of-a-theorem-without-amsthm-ntheorem
+\newtheorem{definition}[equation]{Définition}
+\newtheorem*{definition*}{Définition}
+\newtheorem{example}[equation]{Exemple}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{theorem}[equation]{Théorème}
+\newtheorem{application}[equation]{Application}
+\newtheorem{algo}[equation]{Algorithme}
+\newtheorem{lemma}[equation]{Lemme}
+\newtheorem{remark}[equation]{Remarque}
+\newtheorem{corollary}[equation]{Corollaire}
+\newtheorem{code}[equation]{Code}
+\newcounter{n}
+\newtheorem{dev}[n]{Développement}
+
+\algtext*{EndProcedure}
+\algtext*{EndWhile}
+\algtext*{EndFor}
+\algtext*{EndIf}
+\algrenewcommand\algorithmicprocedure{\textbf{procédure}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{alors}}
+\algrenewcommand\algorithmicelse{\textbf{sinon}}
+\algrenewcommand\algorithmicfor{\textbf{pour}}
+\algrenewcommand\algorithmicwhile{\textbf{tant que}}
+\algrenewcommand\algorithmicdo{\textbf{faire}}
+\algrenewcommand\algorithmicreturn{\textbf{renvoyer}}
+
+\newcommand\lesson[1]{{\noindent \LARGE \bfseries #1}\\[1pt]}
+%\def\authorship{{\null \vfill \hfill \small \@author{} -- \url{agreg-cachan.fr}}}
+\def\A{{\cal{A}}}
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\U{\mathbb{U}}
+\def\K{\mathbb{K}}
+\def\P{\mathbb{P}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\L{{\cal{L}}}
+\def\S{{\cal{S}}}
+\def\V{{\cal{V}}}
+\def\T{{\cal{T}}}
+\def\O{{\cal{O}}}
+\def\Fs{{\cal{F}}}
+\def\Ps{{\cal{P}}}
+\def\Cf{{\cal{C}}}
+\def\M{\mathcal{M}}
+\def\MnK{{\cal M}_n(\K)}
+\def\Tr{\textnormal{Tr}}
+\def\Sp{\textnormal{Sp}}
+\def\Re{\textnormal{Re}}
+\def\Vect{\textnormal{Vect}}
+\def\car{\textnormal{car}}
+\def\pgcd{\textnormal{pgcd}}
+\def\ppcm{\textnormal{ppcm}}
+\def\Sigmap{\mathfrak{S}}
+\def\prog{\texttt{prog}}
+\renewcommand\vector[1]{\left(\begin{array}{c}#1\end{array}\right)}
+\newcommand\enonce[3]{\{#1\}\ #2\ \{#3\}}
+\newcommand\hoare[1]{\State $\textcolor{gray}{\{#1\}}$}
+
+% J'aime pas la logique
+\def\bv{\textnormal{bv}}
+\def\fv{\textnormal{fv}}
+\def\dom{\textnormal{dom}}
+\newcommand\sem[1]{\llbracket #1 \rrbracket}
+\def\seq{\longrightarrow}
+\def\LK{\mathbf{LK}}
+
+% Arbres de preuves de séquents
+\usepackage{bussproofs}
+
+\def\MM{\mathfrak{M}}
+\def\mgu{\textnormal{mgu}}
+
+\begin{document}
+
+\author{\textsc{Nguyễn} Lê Thành Dũng}
+
+\lesson{918 -- Systèmes formels de preuve en logique du premier ordre. Exemples.}
+
+\paragraph{Introduction} Il s'agit d'étudier en tant qu'objets mathématiques les
+démonstrations mathématiques, les énoncés à prouver étant formulés dans le
+langage de la logique du premier ordre. Le caractère syntaxique formel des
+preuves ainsi définies permet donc d'obtenir des théorèmes (méta)mathématiques,
+mais conduit également à des applications en informatique : semi-décidabilité
+théorique, démonstration automatique, assistants de preuve… Le principe étant
+que l'existence d'une preuve pour une formule doit être équivalente à la
+validité universelle de cette dernière, on établira à cette fin des théorèmes de
+correction et complétude sur les systèmes de preuve.\\
+
+On se fixe, dans toute cette leçon, un ensemble dénombrable de variables
+$\mathcal{V}$ et un langage $\L$ composé pour chaque $k \in \N$ d'un ensemble
+$\mathcal{F}_k$ et d'un ensemble $\mathcal{R}_k$ de symboles de fonctions (resp.
+relations) d'arité $k$. On suppose connues les notions de terme, formule,
+théorie et modèle en logique du premier ordre.
+
+\section{Cadre général}
+
+
+% \subsection{Rappels de logique du premier ordre}
+
+% \begin{definition}
+%   L'ensemble des \emph{termes} sur $\L$ est inductivement et librement engendré
+%   par les variables et les symboles de fonctions. On appelle \emph{formule
+%     atomique} (ou atome) une expression $P(t_1, \ldots, t_k)$ où $P \in
+%   \mathcal{R}_k$ et $t_1, \ldots, t_k$ sont des termes. Les \emph{formules} sont
+%   inductivement et librement engendrées par les atomes et les connecteurs
+%   logiques $\land$, $\lor$, $\lnot$, $\forall$, $\exists$. Une \emph{théorie}
+%   est un ensemble de formules.
+% \end{definition}
+
+% \begin{definition}
+%   Une $\L$-structure ou \emph{modèle} $\MM$ est la donnée d'un ensemble $M$ et
+%   d'une interprétation des symboles de fonctions (resp. relations) d'arité $k$
+%   comme applications de $M^k$ dans $M$ (resp. relations $k$-aires sur $M$). Ceci
+%   permet de définir inductivement, pour une formule $A$, la satisfaction de
+%   $A$ par $M$, notée $\MM \models A$.
+% \end{definition}
+
+% \begin{definition}
+%   Une formule $A$ est dite (universellement) \emph{valide} lorsque $\forall
+%   \MM,\; \MM \models A$.
+% \end{definition}
+
+% \subsection{Systèmes de preuve}
+
+\begin{definition}
+  Supposons qu'on ait défini un ensemble de \emph{jugements}. Une \emph{règle
+    d'inférence} spécifie que certaines jugements sont déductibles à partir
+  d'autres : on écrit
+  \begin{prooftree}
+    \AxiomC{$A_1 \quad \ldots \quad A_n$}
+    \UnaryInfC{$B$}
+  \end{prooftree}
+  lorsque le jugement $B$ se déduit à partir de $A_1, \ldots, A_n$. (On peut
+  avoir $n = 0$, dans ce cas $B$ est un axiome.)
+\end{definition}
+
+\begin{definition}
+  Un \emph{système de preuve} consiste en une définition des jugements ainsi que
+  d'une famille de règles d'inférences associées. Une \emph{preuve} d'un
+  jugement $J$ est alors un arbre dont les nœuds sont des inférences et la
+  racine est $J$ ; ainsi, les jugements prouvables sont inductivement engendrés
+  par les règles d'inférence. Si $J$ exprime que la formule $A$ est vraie, on
+  dira également qu'il s'agit d'une preuve de $A$, et lorsqu'une telle preuve
+  existe, $A$ est dite \emph{prouvable}.
+\end{definition}
+
+\begin{definition}
+  Un système de preuve est dit :
+  \begin{itemize}
+  \item \emph{cohérent} si $\bot$ n'est pas prouvable ;
+  \item \emph{correct} si toute formule prouvable est valide ;
+  \item \emph{complet} si toute formule valide est prouvable ;
+  \item \emph{récursif} si la vérification d'une inférence est décidable.
+  \end{itemize}
+\end{definition}
+
+\begin{remark}
+  Il suffit que les axiomes soient valides et que la validité soit stable par
+  inférence, pour une notion de validité d'un jugement généralisant celle d'une
+  formule, pour qu'un système de preuve soit correct. La complétude est souvent
+  plus diffile à établir.
+\end{remark}
+
+\begin{proposition}
+  Si un système de preuve est récursif, l'ensemble des preuves est récursif et
+  l'ensemble des formules prouvables est récursivement énumérable.
+\end{proposition}
+
+\begin{corollary}
+  À partir de l'existence d'un système de preuve correct, complet et récursif, on montre
+  que l'ensemble des formules valides est récursivement énumérable.
+\end{corollary}
+
+\begin{proposition}
+  Cependant, la validité d'une formule n'est pas décidable.
+\end{proposition}
+
+\section{Préliminaires sémantiques}
+
+Les résultats de cette section serviront à démontrer des théorèmes de
+complétude. On suppose ici que $\L$ contient des constantes, c'est-à-dire
+$\mathcal{F}_0 \neq \emptyset$.
+
+\begin{definition}
+  On appelle \emph{univers de Herbrand} l'ensemble des termes clos (i.e. sans
+  variables).
+\end{definition}
+
+\begin{proposition}
+  Toute partie de l'ensemble des atomes clos définit un modèle sur l'univers de
+  Herbrand qui satisfait exactement ces formules, appelé \emph{modèle de
+    Herbrand}.
+\end{proposition}
+
+\begin{theorem}
+  Soit $A = \exists x_1 \ldots \exists x_n\, B$ une formule existentielle ($B$
+  sans quantificateur). Alors $A$ est valide si et seulement si elle est
+  satisfaite par tout modèle de Herbrand.
+\end{theorem}
+
+\begin{theorem}[Théorème de Herbrand sémantique]
+  Si $A = \exists x_1 \ldots \exists x_n\, B$ est une formule existentielle,
+  elle est valide si et seulement s'il existe un entier $k$ et $k$ instances $B
+  \sigma_1, \ldots, B \sigma_k$ de $B$ telles que $B \sigma_1 \lor \ldots \lor B
+  \sigma_k$ soit valide.
+\end{theorem}
+
+\begin{dev}
+  Démonstration des deux théorèmes précédents.
+\end{dev}
+
+\begin{proposition}
+  Soit $A$ une formule, alors on peut construire à partir de $A$, en ajoutant
+  des symboles de fonction au langage, les formules :
+  \begin{itemize}
+  \item (Skolemisation) $A^S$, universelle, qui est satisfaisable ssi $A^S$
+    l'est ;
+  \item (Herbrandisation) $A^H$, existentielle, qui est valide ssi $A$ l'est.
+  \end{itemize}
+\end{proposition}
+
+% \section{Déduction naturelle}
+
+% \begin{definition}[Déduction naturelle minimale]
+%   Il s'agit d'un système de preuve dont les jugements sont de la forme $\Gamma
+%   \vdash A$, où $\Gamma = \Gamma_1, \ldots, \Gamma_k$ est une liste de
+%   formules et $A$ est une formule. Interprétation : la conjonction des
+%   $\Gamma_i$ entraîne $A$. Les règles d'inférence sont :
+%   \begin{center}
+%     \AxiomC{}
+%     \RightLabel{(Ax)}
+%     \UnaryInfC{$\Gamma, A \vdash A$}
+%     \DisplayProof
+%     \qquad
+%     \AxiomC{$\Gamma, A \vdash B$}
+%     \RightLabel{$\Rightarrow$I}
+%     \UnaryInfC{$\Gamma \vdash A \Rightarrow B$}      
+%     \DisplayProof
+%   \end{center}
+
+% \end{definition}
+
+\section{Calcul des séquents}
+
+\begin{definition}
+  Le \emph{calcul des séquents}, noté $\LK$, est un système de preuves dont les
+  jugements sont de la forme $\Gamma \vdash \Delta$, où $\Gamma = \Gamma_1,
+  \ldots, \Gamma_n$ et $\Delta = \Delta_1, \ldots, \Delta_m$ sont des ensembles
+  de formules. Interprétation : la conjonction des $\Gamma_i$ entraîne la
+  disjonction des $\Delta_j$. Les règles d'inférence sont les règles
+  \emph{axiome} et \emph{coupure}
+  \begin{center}
+    \AxiomC{}
+    \RightLabel{(Axiome)}
+    \UnaryInfC{$\Gamma, A \vdash A, \Delta$}
+    \DisplayProof
+    \qquad
+    \AxiomC{$\Gamma \vdash A, \Delta$}
+    \AxiomC{$\Gamma', A \vdash \Delta'$}
+    \RightLabel{(Coupure)}
+    \BinaryInfC{$\Gamma, \Gamma' \vdash \Delta, \Delta'$}
+    \DisplayProof
+  \end{center}
+  ainsi que des \emph{règles logiques} permettant d'introduire les connecteurs
+  logiques (cf. annexe).
+\end{definition}
+
+\begin{example}[Paradoxe du buveur]
+  La formule $\exists x . (P(x) \Rightarrow \forall y . P(y))$ est prouvable
+  dans $\LK$ (preuve en annexe).
+\end{example}
+
+\begin{proposition}
+  $\LK$ est correct et récursif.
+\end{proposition}
+
+\begin{definition}
+  On appelle \emph{preuve sans coupure} une preuve n'utilisant pas la règle de
+  coupure. Le calcul des séquents sans cette règle est noté $\LK^{-}$.
+\end{definition}
+
+\begin{proposition}[Propriété de la sous-formule]
+  Toute formule apparaissant à l'intérieur une preuve sans coupure peut être
+  obtenue par substitution d'une sous-formule d'une formule apparaissant dans la
+  conclusion de la preuve.
+\end{proposition}
+
+\begin{theorem}[Élimination des coupures]
+  Si $\Gamma \vdash_{\LK} \Delta$, alors $\Gamma \vdash_{\LK^{-}} \Delta$. De
+  plus, on peut obtenir une preuve sans coupures à partir d'une preuve avec
+  coupures par un algorithme effectif (système de réécriture fortement
+  normalisant).
+\end{theorem}
+
+\begin{remark}
+  Ceci permet de réduire l'espace de recherche des preuves dans les procédures
+  de semi-décision pour la logique du premier ordre.
+\end{remark}
+
+\begin{corollary}
+  $\LK$ est cohérent.
+\end{corollary}
+
+\begin{theorem}[Théorème de Herbrand syntaxtique]
+  Si $A$ est sans quantificateur, $\exists x_1 \ldots \exists x_n\, A$ est
+  prouvable dans $\LK$ si et seulement s'il existe un entier $k$ et $k$
+  instances $A \sigma_1, \ldots, A \sigma_k$ de $A$ telles que $A \sigma_1 \lor
+  \ldots \lor A \sigma_k$ soit prouvable dans $\LK$.
+\end{theorem}
+
+\begin{lemma}
+  $A$ est prouvable dans $\LK$ ssi son herbrandisée $A^H$ l'est.
+\end{lemma}
+
+\begin{theorem}
+  $\LK$ est complet.
+\end{theorem}
+
+\section{Résolution et programmation logique}
+
+Dans cette section, on suppose connue la théorie de l'unification syntaxique de
+termes. On rappelle que si deux termes $t$ et $u$ sont unifiables, alors il
+existe un unificateur le plus général, noté $\mgu(t,u)$.
+
+\begin{definition}
+  Un \emph{littéral} est un atome ou une négation d'un atome. Une \emph{clause}
+  est une disjonction de littéraux, sans quantificateurs. Elle est implicitement
+  universellement quantifiée sur ses variables libres.
+\end{definition}
+
+\begin{definition}
+  La \emph{résolution} est un système de preuve dont les jugements sont des
+  clauses et les règles sont la \emph{résolution} et la \emph{factorisation}
+  \begin{center}
+    \AxiomC{$C \lor L$}
+    \AxiomC{$\lnot L' \lor C'$}
+    \RightLabel{Résolution}
+    \BinaryInfC{$C\sigma \lor C'\sigma$}
+    \DisplayProof
+    \quad
+    \AxiomC{$C \lor L \lor L'$}
+    \RightLabel{Factorisation}
+    \UnaryInfC{$C\sigma \lor L\sigma$}
+    \DisplayProof
+  \end{center}
+  ($L$, $L'$ littéraux, et $\sigma = \mgu(L, L')$ pour les deux règles) ainsi
+  qu'une règle d'échange correspondant à l'associativité et la commutativité de
+  $\lor$.
+\end{definition}
+
+\begin{example}
+  La réfutation de $(P(x,a) \lor P(a,x)) \land (P(y,a) \lor P(a,y))$ (cf.
+  annexe) nécessite la règle de factorisation.
+\end{example}
+
+\begin{proposition}[Correction]
+  Si $C$ est déduite de $C_1, \ldots, C_n$ par résolution, alors $C_1 \land
+  \ldots \land C_n \models C$. En particulier, si $C$ est la clause vide $\bot$,
+  alors $C_1 \land \ldots \land C_n$ est insatisfaisable.
+\end{proposition}
+
+\begin{lemma}[de relèvement]
+  Si $C$ et $C'$ sont des clauses, $\hat{C}$ et $\hat{C}'$ des instances avec
+  des termes clos, et $\hat{D}$ est obtenue à partir de $\hat{C}$ et $\hat{C}'$
+  par la règle de résolution \emph{propositionnelle}, alors il existe $D$ dont 
+  $\hat{D}$ est une instance et qui découle de $C$ et $C'$ par la règle de
+  résolution au premier ordre.
+\end{lemma}
+
+\begin{theorem}[Complétude réfutationnelle]
+  Si $C_1, \ldots, C_n$ est insatisfaisable, alors il est possible d'obtenir
+  $\bot$ par résolution à partir de $C_1, \ldots, C_n$.
+\end{theorem}
+
+\begin{dev}
+  Preuve de la complétude réfutationnelle, utilisant les modèles de Herbrand
+  ainsi que le \emph{lemme de König faible} : tout arbre binaire sans branche
+  infinie est fini.
+\end{dev}
+
+\begin{definition}
+  Une \emph{clause de Horn} est une clause avec 0 ou 1 littéral positif. On
+  parle de \emph{but} dans le premier cas, \emph{règle} dans le second cas. On
+  appelle aussi \emph{fait} une clause sans littéral négatif (consistant
+  uniquement d'un littéral positif).
+\end{definition}
+
+\begin{proposition}
+  Les clauses de Horn sont stables par résolution.
+\end{proposition}
+
+\begin{algo}[Résolution SLD]
+  On souhaite réfuter un \emph{programme logique}, composé de règles et d'un but
+  $C$. Pour cela, on cherche à construire par résolution une suite de clauses de
+  but $C = C_1, \ldots, C_n = \bot$, de sorte que pour tout $i$, $C_{i+1}$ soit
+  obtenue par résolution de $C_i$ et d'une des clauses de règles, sur son unique
+  littéral positif. L'algorithme est paramétré par une fonction de
+  \emph{sélection} qui dit sur quel atome tenter d'effectuer une résolution à
+  chaque étape.
+\end{algo}
+
+\begin{proposition}
+  La résolution SLD est correcte et réfutationnellement complète sur les clauses
+  de Horn.
+\end{proposition}
+
+\begin{theorem}
+  Si $A$ est une formule existentielle, l'exécution d'un programme logique de
+  but $\lnot A$ trouve une preuve par résolution qui fournit des témoins
+  d'existence de $A$, ce qui permet de calculer des fonctions. C'est le principe
+  du langage de programmation Prolog.
+\end{theorem}
+
+\begin{theorem}
+  La programmation logique est Turing-complète : toute fonction récursive peut
+  être encodée par des clauses de Horn.
+\end{theorem}
+
+\section*{Développements}
+
+\begin{enumerate}
+\item Théorème de Herbrand sémantique
+\item Complétude de la méthode de résolution
+\end{enumerate}
+
+\newpage
+
+\section*{Annexes}
+
+\subsection*{Règles du calcul des séquents}
+
+\subsubsection*{Connecteurs binaires}
+
+\begin{center}
+
+\AxiomC{$\Gamma, A \vdash \Delta$}
+\UnaryInfC{$\Gamma, A \land B \vdash \Delta$}
+\DisplayProof
+\,
+\AxiomC{$\Gamma, B \vdash \Delta$}
+\UnaryInfC{$\Gamma, A \land B \vdash \Delta$}
+\DisplayProof
+\qquad
+\AxiomC{$\Gamma \vdash A, \Delta$}
+\AxiomC{$\Gamma \vdash B, \Delta$}
+\BinaryInfC{$\Gamma \vdash A \land B, \Delta$}
+\DisplayProof
+
+\vspace{3mm}
+
+\AxiomC{$\Gamma, A \vdash \Delta$}
+\AxiomC{$\Gamma, B \vdash \Delta$}
+\BinaryInfC{$\Gamma, A \lor B \vdash \Delta$}
+\DisplayProof
+\qquad
+\AxiomC{$\Gamma \vdash A, \Delta$}
+\UnaryInfC{$\Gamma \vdash A \lor B, \Delta$}
+\DisplayProof
+\,
+\AxiomC{$\Gamma \vdash B, \Delta$}
+\UnaryInfC{$\Gamma \vdash A \lor B, \Delta$}
+\DisplayProof
+\vspace{3mm}
+
+\AxiomC{$\Gamma \vdash A, \Delta$}
+\AxiomC{$\Gamma, B \vdash \Delta$}
+\BinaryInfC{$\Gamma, A \Rightarrow B \vdash \Delta$}
+\DisplayProof
+\quad
+\AxiomC{$\Gamma, A \vdash B, \Delta$}
+\UnaryInfC{$\Gamma \vdash A \Rightarrow B, \Delta$}
+\DisplayProof
+
+\end{center}
+
+\subsubsection*{Négation}
+
+\begin{center}
+\AxiomC{$\Gamma, A \vdash \Delta$}
+\UnaryInfC{$\Gamma \vdash \neg A, \Delta$}
+\DisplayProof
+\qquad
+\AxiomC{$\Gamma \vdash A, \Delta$}
+\UnaryInfC{$\Gamma, \neg A \vdash \Delta$}  
+\DisplayProof
+\end{center}
+
+\subsubsection*{Quantificateurs}
+
+\begin{center}
+
+\AxiomC{$\Gamma, A[t/x] \vdash \Delta$}
+\UnaryInfC{$\Gamma, \forall x A \vdash \Delta$}
+\DisplayProof
+\qquad
+\AxiomC{$\Gamma, A \vdash \Delta$}
+\RightLabel{($x$ non libre dans $\Gamma, \Delta$)}
+\UnaryInfC{$\Gamma, \exists x A \vdash \Delta$}
+\DisplayProof
+
+\vspace{3mm}
+
+\AxiomC{$\Gamma \vdash A, \Delta$}
+\RightLabel{($x$ non libre dans $\Gamma, \Delta$)}
+\UnaryInfC{$\Gamma \vdash \forall x A, \Delta$}
+\DisplayProof
+\qquad
+\AxiomC{$\Gamma \vdash A[t/x], \Delta$}
+\UnaryInfC{$\Gamma \vdash \exists x A, \Delta$}
+\DisplayProof
+
+\end{center}
+
+
+\subsection*{Paradoxe du buveur en calcul des séquents}
+
+\begin{prooftree}
+    \AxiomC{}
+    \UnaryInfC{$P(x), P(z) \vdash P(z), \forall y . P(y)$}
+    \UnaryInfC{$P(x) \vdash P(z), P(z) \Rightarrow \forall y . P(y)$}
+    \UnaryInfC{$P(x) \vdash P(z), \exists x (P(x) \Rightarrow \forall y . P(y))$}
+    \UnaryInfC{$P(x) \vdash \forall y . P(y), \exists x. (P(x) \Rightarrow \forall y . P(y))$}
+    \UnaryInfC{$\vdash P(x) \Rightarrow \forall y . P(y), \exists x . (P(x) \Rightarrow \forall y . P(y))$}
+    \UnaryInfC{$\vdash \exists x . (P(x) \Rightarrow \forall y . P(y)), \exists x (P(y) \Rightarrow \forall y . P(y))$}
+    \UnaryInfC{$\vdash \exists x . (P(x) \Rightarrow \forall y . P(y))$}
+  \end{prooftree}
+
+\subsection*{Exemple de preuve par résolution}
+
+\begin{prooftree}
+    \AxiomC{$P(x,a) \lor P(a,x)$}
+    \UnaryInfC{$P(a,a)$}
+    \AxiomC{$\lnot P(y,a) \lor \lnot P(a,y)$}
+    \UnaryInfC{$\lnot P(a,a)$}
+    \BinaryInfC{$\bot$}
+  \end{prooftree}
+
+
+\end{document}
