@@ -1,0 +1,127 @@
+104 : Groupes finis.
+Automorphismes de S6 / Base de Burnside / Groupes simples non isomorphes
+
+105 : Groupe des permutations d'un ensemble fini.
+Automorphismes de S6 / Boustrophédon
+
+106 : Groupe linéaire d'un espace vectoriel de dimension finie E, sous-groupes de GL(E).
+Lie-Kolchin / Enveloppe convexe de O(n) / Groupes simples non isomorphes
+
+108 : Exemples de parties génératrices d'un groupe.
+Base de Burnside / Groupe circulaire
+
+120 : Anneaux Z/nZ.
+Points à distances impaires / Réciprocité quadratique
+
+121 : Nombres premiers.
+Réciprocité quadratique / Constructibilité des polygones réguliers
+
+123 : Corps finis.
+Réciprocité quadratique / Algorithme de Berlekamp / Groupes simples non isomorphes
+
+141 : Polynômes irréductibles à une indéterminée. Corps de rupture.
+Algorithme de Berlekamp / Théorème de l'élément primitif / Constructibilité des polygones réguliers
+
+150 : Exemples d'actions de groupes sur les espaces de matrices.
+Réduction de Frobenius / Réciprocité quadratique / Groupes simples non isomorphes
+
+151 : Dimension d'un espace vectoriel (on se limitera au cas de la dimension finie). Rang.
+Base de Burnside / Constructibilité des polygones réguliers / Algorithme de Berlekamp
+
+152 : Déterminant.
+Points à distances impaires / Théorème de l'élément primitif
+
+153 : Polynômes d'endomorphisme en dimension finie. Réduction d'un endomorphisme en dimension finie.
+Réduction de Frobenius / Groupes simples non isomorphes
+
+157 : Endomorphismes trigonalisables. Endormorphismes nilpotents.
+Lie-Kolchin / Groupes simples non isomorphes
+
+159 : Formes linéaires et dualité en dimension finie.
+Réduction de Frobenius / Dualité lagrangienne (analyse)
+
+162 : Systèmes d'équations linéaires ; opératioins élémentaires, aspects algorithmiques et conséquences théoriques.
+Algorithme de Berlekamp / Méthode de Kaczmarz (hapax)
+
+170 : Formes quadratiques sur un espace vectoriel de dimension finie. Orthogonalité, isotropie. Applications.
+Réciprocité quadratique / Lemme de Morse (analyse)
+
+181 : Barycentres dans un espace affine réel de dimension finie, convexité. Applications.
+Enveloppe convexe de O(n) / Dualité lagrangienne (analyse)
+
+182 : Applications des nombres complexes à la géométrie
+Constructibilité des polygones réguliers / Groupe circulaire
+
+183 : Utilisation des groupes en géométrie.
+Constructibilité des polygones réguliers / Groupe circulaire
+
+190 : Méthodes combinatoires, problèmes de dénombrement.
+Réciprocité quadratique / Boustrophédon
+
+203 : Utilisation de la notion de compacité.
+Brouwer C^1 / Géodésiques
+
+208 : Espaces vectoriels normés, applications linéaires continues.
+Banach-Steinhaus et série de Fourier divergente / ?
+
+214 : Théorème d'inversion locale, théorème des fonctions implicites.
+Lemme de Morse / Brouwer C^1
+
+215 : Applications différentiables définies sur un ouvert de R^n.
+Dualité lagrangienne / Lemme de Morse
+
+218 : Applications des formules de Taylor.
+Lemme de Morse / Méthode de Newton pour les polynômes
+
+219 : Extremums : existence, caractérisation, recherche.
+Dualité lagrangienne / Géodésiques
+
+220 : Équations différentielles X' = f(t,X). Exemples d'étude des solutions en dimension 1 et 2.
+???
+
+221 : Équations différentielles linéaires. Systèmes d'équations différentielles linéaires.
+???
+
+223 : Suites numériques. Convergence, valeurs d'adhérence.
+Méthode de Newton pour les polynômes / 
+
+224 : Exemples de développements asymptotiques de suites et de fonctions.
+Méthode de Newton pour les polynômes / 
+
+226 : Suites vectorielles et réelles définies par une relation de récurrence u_{n+1} = f(u_n).
+Méthode de Newton pour les polynômes /
+
+228 : Continuité et dérivabilité des fonctions réelles d'une variable réelle.
+Polynômes de Bernstein / Dérivabilité des fonctions monotones
+
+228 : Fonctions monotones. Fonctions convexes
+Dérivabilité des fonctions monotones / Dualité lagrangienne
+
+230 : Séries de nombres réels ou complexes. Comportement des restes ou des sommes partielles des séries numériques.
+Taubérien fort / ?
+
+233 : Méthodes itératives en analyse numérique matricielle.
+NON.
+
+236 : Illustrer par des exemples quelques méthodes de calcul d'intégrales de fonctions d'une ou plusieurs variables.
+Inversion de Fourier / ?
+
+239 : Fonctions définies par une intégrale dépendant d'un paramètre.
+Inversion de Fourier / ?
+
+243 : Convergence des séries entières, propriété de la somme.
+Taubérien fort / Boustrophédon (algèbre)
+
+246 : Séries de Fourier.
+Banach-Steinhaus et série de Fourier divergente / Marche aléatoire
+
+250 : Transformation de Fourier.
+Inversion de Fourier / 
+
+260 : Espérance, variance et moments d'une variable aléatoire.
+Polynômes de Bernstein / ?
+
+264 : Variables aléatoires discrètes.
+Polynômes de Bernstein / Marche aléatoire
+
+
