@@ -6,11 +6,11 @@
 \usepackage{amssymb}
 \usepackage{stmaryrd}
 \usepackage{amsthm}
+\usepackage{tikz-cd}
 
 % Locale/encoding with XeTeX: UTF-8 by default, use fontspec
 \usepackage{unicode-math}
-\usepackage{polyglossia} % Modern replacement for Babel
-\setmainlanguage{french} % or {english}
+\usepackage[frenchb]{babel}
 \usepackage{csquotes} % guillemets
 
 % TeX Gyre Pagella = URW Palladio (free Palatino) extended
@@ -58,6 +58,9 @@
 \def\Var{\textnormal{Var}}
 \def\Ker{\textnormal{Ker}}
 \def\Indic{\mathbb{1}}
+\def\GL{\mathrm{GL}}
+\def\SL{\mathrm{SL}}
+\def\PSL{\mathrm{PSL}}
 
 \newtheorem*{definition}{Définition}
 \newtheorem*{example}{Exemple}
@@ -72,17 +75,167 @@
 \begin{document}
 
 \title{Mes développements d'agrég de math(-info)}
-\author{Nguyễn Lê Thành Dũng}
+\author{Nguyễn Lê Thành Dũng\\(ENS Ulm, département informatique, promo 2012)}
 \date{Préparation à l'agrégation de l'ENS Paris-Saclay, 2016--2017}
 \maketitle
 
 \tableofcontents
 
-\section{Algèbre et analyse}
+\newpage
 
-\subsection{Sous-espace de dimension finie de $\Cf(\R)$ stables par translation}
+\section{Algèbre/géométrie et analyse}
 
-Classique.
+\subsection{Dualité lagrangienne et extrema liés en optimisation convexe}
+
+On montre ici un théorème fondamental en recherche opérationnelle, variante du
+théorème des extrema liés où :
+\begin{itemize}
+\item on a des multiplicateurs de Lagrange \emph{positifs} correspondant à des
+  contraintes d'\emph{inégalité} (on ne pourra donc pas invoquer les
+  sous-variétés) ;
+\item les conditions nécessaires du premier ordre sont également
+  \emph{suffisantes} grâce à la convexité.
+\end{itemize}
+Soient $f,g_1,\ldots,g_k : \R^n \to \R$ des fonctions \emph{convexes}.
+On considère le problème de minimisation
+\[ p = \inf_{x \in F} f(x) \qquad F = \left\{ x \in \R^n \mid
+  g_i(x) \leq 0,\; i = 1,\ldots,k \right\} \]
+(Vocabulaire : $f$ est la \emph{fonction objectif}, les $g_i$ sont des
+\emph{contraintes}, $F$ est l'ensemble des \emph{solutions réalisables}).
+
+On appelle \emph{condition de Slater} l'existence d'un $x_0 \in \R^n$
+\emph{strictement réalisable}, c'est-à-dire tel que $g_i(x_0) < 0$ pour tout
+$i$.
+
+\begin{theorem}[Karush--Kuhn--Tucker]
+  On suppose ici que $f, g_1, \ldots, g_k$ sont $\Cf^1$, et que la condition de
+  Slater est vérifiée. Alors pour tout $x \in \F$, $f(x) = p$ si et seulement
+  s'il existe $\mu_1, \ldots, \mu_k \geq 0$ tels que
+  \[ \nabla f(x) + \sum_{i=0}^k \mu_i \nabla g_i(x) = 0 \quad \text{et} \quad
+    \mu_i g_i(x) = 0\; \forall i
+  \]
+\end{theorem}
+
+Afin de montrer cela, introduisons le \emph{lagrangien} $\L : \R^n \times
+\R_+^k$ et le problème dual associé :
+\[ \L(x, \mu) = f(x) + \sum_{i=1}^k \mu_i g_i(x) \qquad
+  d = \sup_{\mu \in \R_+^k} \inf_{x \in \R^n} \L(x,\mu) \]
+
+\begin{remark} $\displaystyle p = \inf_{x \in \R^n} \sup_{\mu \in \R_+^k}
+  \L(x,\mu)$.
+\end{remark}
+\begin{proof}
+  En effet, si $x \not\in F$, alors il existe $i$ tel que $g_i(x) > 0$.
+  $\L(x,(0, \ldots, \mu_i, \ldots, 0)) \to +\infty$ quand $\mu_i \to
+  +\infty$. Donc $\sup_{\mu \in \R_+^k} \L(x,\mu) = +\infty$ dès que $x \not\in
+  F$, et si $x \in F$, le sup est atteint pour $\mu = 0$ soit $\L(x,\mu) =
+  f(x)$.
+\end{proof}
+\begin{corollary}[Dualité faible]
+  $d \leq p$.
+\end{corollary}
+\begin{proof}
+  Il s'agit simplement de voir que pour tout $x, \mu$,
+  \[ \inf_{y} \L(y, \mu) \leq \L(x,\mu) \leq \sup_{\nu} \L(x,\nu) \]
+  puis de prendre le sup sur $\mu$ à gauche et l'inf sur $x$ à droite.
+\end{proof}
+
+\begin{theorem}[Dualité forte]
+  On suppose seulement que $f, g_1, \ldots, g_k$, et que la condition de Slater
+  est satisfaite. Alors $p = d$ et le supremum dual est atteint.
+\end{theorem}
+\begin{proof}
+  Si $p = -\infty$, la dualité faible permet de conclure directement que $d =
+  -\infty$.
+  
+  Sinon, il suffit de montrer $p \leq d$, donc de trouver $\mu_1, \ldots, \mu_k
+  \geq 0$ tels que pour tout $x \in \R^n$, $\L(x,\mu) \geq p$.
+
+  Posons $A, B \subset \R^{k+1}$ définis par
+  \[ A = \{ (y_1, \ldots, y_k, z) \mid \exists x \in \R^n\,/\,
+    y_i \geq g_i(x),\; z \geq f(x) \}
+    \qquad B = \{ (y_1, \ldots, y_k, z) \mid y_i < 0,\;z < p\}\]
+
+  Si $(y_1,\ldots,y_k,z) \in A \cap B$, alors il existe $x$ tel que $g_i(x) \leq
+  y_i < 0$ pour tout $x$, donc $x \in F$, et $f(x) \leq z < p$. C'est impossible
+  par définition de $p$. Ainsi, $A$ et $B$ sont disjoints, avec $A$ ouvert.
+  
+  Donc il existe un hyperplan séparateur\footnote{Il faut faire attention aux
+    hypothèses topologiques de la version de Hahn-Banach qu'on utilise ici.
+    Sinon, on pourrait invoquer le théorème de séparation des convexes en
+    dimension finie de Minkowski, qui demande seulement que les deux convexes
+    soient disjoints.} i.e. une forme linéaire $\phi$ telle que $\phi(a) \geq
+  \phi(b)$ pour tout $a \in A$ et $b \in B$. En coordonnées, $\phi$ s'écrit
+  \[ \phi(y_1, \ldots, y_k, z) = \mu_1 y_1 + \ldots + \mu_k y_k + \nu z \]
+  
+  En prenant $a = (g_1(x), \ldots, g_k(x), f(x))$, et $b = (0, \ldots, 0, p) \in
+  \overline{B}$, on a
+  \[ \sum_{i=1}^k \mu_i g_i(x) + \nu f(x) \geq \nu p \]
+  Quand $g_i(x) < 0$ (il existe un tel $x$ par hypothèse), on a $\nu f(x) > \nu
+  p$, d'où $\nu > 0$. En divisant par $\nu$, on a finalement :
+  $\L(x, \mu_1/\nu, \ldots, \mu_k/\nu) \geq p$.
+\end{proof}
+
+Supposons maintenant que $f, g_1, \ldots, g_k$ sont $\Cf^1$. 
+\begin{proof}[Les conditions KKT sont nécessaires]
+  Fixons $\mu_1, \ldots, \mu_k$ maximisant le dual : $\inf_x \L(x, \mu) = d =
+  p$. Soit $x$ tel que $f(x) = p$. Alors
+  \[ f(x) = p = d \leq \L(x, \mu) = f(x) + \sum_{i=0}^k \mu_i g_i(x) \] Comme
+  $g_i(x) \leq 0$ et $\mu_i \geq 0$ pour tout $i$, ce qui entraîne l'inégalité
+  réciproque, on a en fait $\mu_i g_i(x) = 0$ pour tout $i$. Ainsi, en $x$,
+  $\L(-, \mu)$ atteint la valeur $d$ qui est son minimum, son gradient s'annule
+  donc. Ceci donne immédiatement la condition au premier ordre.
+\end{proof}
+
+\begin{proof}[Les conditions KKT sont suffisantes]
+Soient $x \in F$ et $\mu \in \R_+^k$ vérifiant ces conditions. Alors, comme
+$\L(-,\mu)$ est convexe, ses points stationnaires sont ses minima globaux, donc
+elle atteint son minimum en $x$. Comme $\mu_i g_i(x) = 0$ pour tout $i$, le
+lagrangien vaut $f(x)$ :
+\[ f(x) = \L(x,\mu) = \inf_{x'} \L(x',\mu) \leq \sup_{\mu'} \inf_{x'}
+  \L(x',\mu') = p
+\]
+donc $x$ minimise bien $f$ sur $F$.
+\end{proof}
+
+\paragraph{Ci-dessous, une tentative de prouver autrement la dualité forte…}
+comme corollaire du \emph{théorème du minimax de Sion}. L'intérêt étant de voir
+un lien entre condition de Slater et compacité.
+
+On a besoin comme hypothèse supplémentaire que $d > -\infty$ (comment s'en
+passer ?). On rappelle qu'un sup de fonctions semi-continues inférieurement
+l'est, et qu'une telle fonction admet un minimum sur tout compact.
+
+Fixons $R > 0$ et posons $\bar{B}_R = \bar{B}(x_0,R)$, qui est convexe compact.
+Soit
+\[ p_R = \min_{x \in \bar{B}_R} \sup_{\mu \in \R_+^k} \L(x,\mu)
+       = \sup_{\mu \in \R_+^k} \min_{x \in \bar{B}_R} \L(x,\mu) \]
+l'égalité résultant du théorème du minimax.
+
+La première expression donne $p_R = \min_{x \in F \cap \bar{B}_R} f(x)$
+(l'ensemble étant non vide puisque $x_0$ y est).
+
+D'autre part, par la seconde expression, $p_R \geq d$. Comme $x_0$ est
+strictement réalisable, quand $\|\mu\| \to +\infty$ en restant dans $\R_+^k$,
+$\L(x_0, \mu) \to +\infty$ . Il existe donc un compact $K \subset \R_+^k$ tel
+que $\forall \mu \in \R_+^k \setminus K,\; \L(x_0, \mu) < d \leq p_R$ (et $K$
+est indépendant de $R$, c'est important !). D'où
+\[ p_R = \max_{\mu \in K} \min_{x \in \bar{B}_R} \L(x,\mu) =
+  \min_{x \in \bar{B}_R} \max_{\mu \in K} \L(x,\mu) \]
+Quand $R \to +\infty$, on trouve
+\[ \inf_{x \in F} f(x) = \inf_{x \in \R^n} \max_{\mu \in K} \L(x,\mu) 
+  = \max_{\mu \in K} \inf_{x \in \R^n} \L(x,\mu)  \]
+où, cette fois-ci, on a utilisé la compacité de $K$ pour appliquer le théorème
+du minimax à $-\L$ ! Tout ceci fonctionnant encore avec n'importe quel convexe
+compact $K' \supseteq K$, en épuisant $\R_+^k$ avec des compacts, on a
+finalement $p = d$, et de plus, on sait qu'une solution duale optimale $\mu^*$
+existe.
+
+Question ouverte : peut-on montrer $d > -\infty$ sans utiliser un argument
+d'hyperplan séparateur ?
+
+
+\newpage
 
 \subsection{Fonction tangente et permutations zigzag}
 
@@ -96,14 +249,45 @@ La série génératrice des permutations haut-bas est $tan(z)+sec(z)$.
 
 Merci à Paul Melotti, c'est fait dans son PDF.
 
+\subsection{Méthode de Kaczmarz}
 
-\section{Algèbre}
+Référence : à trouver.
+
+Soient $A \in \GL_n(\R)$ et $b \in \R^n$. On veut résoudre $Ax = b$
+itérativement. Pour cela, on pose $(l_1, \ldots, l_n)$ les lignes de $A$, et
+$p_i$ le projecteur orthogonal sur l'hyperplan affine $H_i$ d'équation $l_ix =
+b_i$ ($i \in \{1, \ldots, n\}$). À partir de $x_0 \in \R^n$ quelconque, on
+définit par récurrence
+\[ x_{k+1} = p_{(k+1\, \textnormal{mod}\, n)}(x_k). \]
+
+Soit $x^* = A^{-1}b$ l'unique solution. $\bigcap_{i=1}^n H_i = \{x^*\}$, et
+c'est l'unique point fixe commun de $p_1, \ldots, p_n$. En posant $y_k = x_k -
+x^*$, on voit que
+\[ y_{k+1} = p_i(x_k) - x^* = p_i(x_k) - p_i(x^*) = \pi_i(y_k) \] où $\pi_i$ est
+la partie linéaire de $p_i$, soit la projection orthogonale sur $\Ker(l_i)$.
+
+Nous souhaitons maintenant montrer que $x_k \longrightarrow x^*$, soit $y_k
+\longrightarrow 0$. Pour cela, on va montrer que $\|\Pi\| < 1$ où $\Pi = \pi_n
+\circ \ldots \circ \pi_1$. Ensuite, comme $\|\pi_i\| = 1$, on aura $\|y_k\| \leq
+\|\Pi\|^{\lfloor p/n \rfloor} \|y_0\|$, d'où convergence linéaire.
+
+Soit $z \in \R^n$. On a $\|\pi_i(z)\| = \|z\|$ si et seulement si $\pi(z) = z$
+soit $z \in \Ker(l_i)$, et $\|\pi_i(z)\| < \|z\|$ sinon (par théorème de
+Pythagore…). Donc $\Pi(z) = z \Leftrightarrow z \in \bigcap_{i=1}^n \Ker(l_i) =
+\{0\}$ (car $A \in \GL_n(\R)$) : pour tout $z \neq 0$, $\|\Pi(z)\| < \|z\|$.
+Comme nous sommes en dimension finie, ceci implique que $\|\Pi\| < 1$ (par
+compacité de la sphère unité).
+
+\newpage
+
+\section{Algèbre (et géométrie)}
 
 \subsection{Points à distances impaires, avec le déterminant de Gram}
 
 Le résultat suivant est tiré d'un petit article : \emph{Are there $n+2$ points
   in $E^n$ with odd integral distances}, Graham, Rothschild \& Straus. Il a été
-posé comme exercice à l'oral de l'ENS Lyon en 2015.
+posé comme exercice à l'oral de l'ENS Lyon en 2015. (Peut-être se trouve-t-il
+dans l'un des Francinou--Gianella…)
 \begin{theorem}
   Soit $n \in \N^*$. Il existe $n+2$ points distincts à distances entières
   impaires dans $\R^n$ si et seulement si $n+2 \equiv 0 \mod 16$.
@@ -215,28 +399,154 @@ que $QP_i = Q'P_i = 6m - 1$ pour tout $i$ : on a bel et bien $n+2$ points à
 distances impaires.
 
 
-\subsection{Constructibilité des polygones réguliers}
+\newpage
 
-\[ \Q(\zeta_p) = K_m \supset K_{m-1} \supset \ldots \supset K_0 = \Q \]
-\[ \{0\} \hookrightarrow \Z/2\Z \hookrightarrow \ldots \hookrightarrow \Z/2^n\Z
-  \simeq (\Z/pZ)^* \simeq \textnormal{Gal}(\Q(\zeta_p)/\Q) \]
 
-TODO. Utiliser un élément primitif pour borner le nombre d'automorphismes fixant
-une extension intermédiaire d'un corps cyclotomique, ce qui évite d'avoir à
-prouver un sens du lemme d'Artin.
+\subsection{Étude des automorphismes extérieurs de $\Sigmap_6$}
 
-\subsection{Automorphisme exceptionnel de $\Sigmap_6$}
+(Inspiré d'un billet de blog de David Madore.)
 
-Référence : à trouver (c'est dans H2G2 paraît-il).
+Supposons qu'on ait prouvé l'existence d'un automorphisme extérieur (voir à la
+fin pour une construction). À quoi ressemble l'ensemble de ces automorphismes
+extérieurs ? Peut-on les décrire tous, de façon combinatoire ? On va présenter
+ici une description inspirée de celle faite par Sylvester vers 1844 ; au lieu de
+parler de synthèmes, on utilisera des triples transpositions, qui sont la même
+chose avec de la structure algébrique en plus.
 
-On veut montrer que $\Sigmap_6$ admet un automorphisme extérieur\footnote{Ou
-  encore que le groupoïde des ensembles de cardinal 6 admet un endofoncteur
-  pleinement fidèle qui n'est pas naturellement isomorphe à l'identité.}.
+Pour $x \in \{1, \ldots, 6\}$, on note $e(x) = (x\;y_1)\ldots(x\;y_5) \in
+\Sigmap_6$ où $\{ y_1, \ldots, y_5 \} = \{1, \ldots, 6\}\setminus\{x\}$. Les
+éléments la forme $e(x)$ sont appelés \emph{étoiles} et leur ensemble est noté
+$E$. $e$ réalise une bijection canonique entre $\{1, \ldots, 6\}$ et $E$.
+
+\begin{proposition}
+  Toute famille de 5 transpositions distinctes ne commutant pas deux à deux est
+  une étoile.
+\end{proposition}
+\begin{proof}
+  Soit $\{\tau_1, \ldots, \tau_5\}$ une telle famille. $\tau_1$ et $\tau_2$ ne
+  commutent pas donc $\tau_1 = (a\;b)$, $\tau_2 = (a\;c)$ avec $b \neq c$. De
+  même $\tau_3 = (a'\;b')$, $\tau_4 = (a'\;c')$ avec $b' \neq c'$. $\tau_1$ et
+  $\tau_3$ ne commutent pas non plus, et par l'absurde, si $a' = b$, alors on
+  trouve que $\tau_2$ et $\tau_3$ commutent, contradiction. De même on ne peut
+  pas avoir $a = b'$. Donc $a' = b$. Ainsi $\tau_1, \ldots, \tau_4$ ont un
+  élément commun, et on montre facilement que $\tau_5$ aussi. Donc $\{\tau_1,
+  \ldots, \tau_5\} = e(a) \in E$.
+\end{proof}
+
+\begin{corollary}
+  Tout automorphisme qui envoie les transpositions sur des transpositions est
+  intérieur.
+\end{corollary}
+\begin{proof}
+  Soit $\phi$ cet automorphisme. $\phi(E) = E$, car \enquote{ne pas commuter}
+  est préservé par automorphisme. Posons $g : x \mapsto e^{-1}(\phi(e(x)))$, $g
+  \in \Sigmap_6$, de sorte que $\phi(e(x)) = e(g(x))$. Pour tout $a \neq b$,
+  comme $\{(a\;b)\} = e(a) \cap e(b)$, on a $\phi((a\;b)) = (g(a)\;g(b))$.
+  $\phi$ coïncide donc avec $\sigma \mapsto g\sigma g^{-1}$ sur les
+  transpositions, qui engendrent $\Sigmap_6$, donc $\phi$ est intérieur.
+\end{proof}
+
+\begin{proposition}
+  Les automorphismes extérieurs de $\Sigmap_6$ échangent transpositions et
+  triples transpositions.
+\end{proposition}
+\begin{proof}
+  En effet, ce sont les seules classes de conjugaison d'ordre 2 dont les
+  permutations ont pour signature $-1$. (Les automorphismes stabilisent
+  $\mathfrak{A}_6$ car c'est le seul sous-groupe distingué non trivial.)
+\end{proof}
+
+On peut déjà en déduire que :
+
+\begin{theorem}
+  $\mathrm{Aut}(\Sigmap_6)/\mathrm{Int}(\Sigmap_6) \simeq \Z/2\Z$.
+\end{theorem}
+\begin{proof}
+  Si $\phi \in \mathrm{Aut}(\Sigmap_6) \setminus \mathrm{Int}(\Sigmap_6)$ et
+  $\tau$ est une transposition, $\phi(\tau)$ est une triple transposition et
+  $\phi^2(\tau)$ est une transposition. Ainsi, $\phi^2 \in
+  \mathrm{Int}(\Sigmap_6)$.
+\end{proof}
+
+En fait, on a même un produit semi-direct, mais on va s'intéresser à autre
+chose.
+
+Soit $F$ l'ensemble des familles de 5 triples transpositions qui ne commutent
+pas, qu'on appellera \emph{co-étoiles}. Alors $\widehat{\phi} : X \in E \mapsto
+\phi(X) \in F$ est une bijection.
+
+\begin{proposition}
+  Pour tout $g \in \Sigmap_6$, le diagramme suivant est commutatif :
+  \begin{center}
+  \begin{tikzcd}[column sep=large]
+    \{1,\ldots,6\} \ar[d, "g"] \ar[r, "e"] & E \ar[d, "g(-)g^{-1}"]
+    \ar[r, "\widehat{\phi}"] & F \ar[d, "\phi(g)(-)\phi(g)^{-1}"] \\
+    \{1,\ldots,6\} \ar[r, "e"] & E \ar[r, "\widehat{\phi}"] & F
+  \end{tikzcd}
+  \end{center}
+\end{proposition}
+\begin{proof}
+  Le carré de gauche signifie que la conjugaison sur les étoiles correspond à
+  l'action sur les points, ce qu'on a déjà vu précédemment.
+  
+  Dans le carré de droite, on veut prouver que $\phi(gXg^{-1}) =
+  \phi(g)\phi(X)\phi(g^{-1})$, où $X \in E$, donc $X \subset \Sigmap_6$. Mais
+  c'est simplement la propriété de morphisme.
+\end{proof}
+On en déduit ce diagramme :
+\begin{tikzcd}[column sep=large]
+  \{1,\ldots,6\} \ar[d, "g"] \ar[r, "\widehat{\phi^{-1}} \circ e"] 
+  & F \ar[d, "g(-)g^{-1}"] \\
+  \{1,\ldots,6\}\ar[r, "\widehat{\phi^{-1}} \circ e"] & F 
+\end{tikzcd}
+
+Ainsi, tout automorphisme extérieur peut s'écrire sous la forme $\phi(g)(x) =
+f^{-1}(gf(x)g^{-1})$ avec $f : \{1, \ldots, 6\} \xrightarrow{\sim} F$ bijective.
+Or, il y a autant d'automorphismes extérieurs qu'intérieurs
+(puisque\footnote{Une utilisation du théorème de Lagrange se cache ici. Il faut
+  bien voir que dans tout le développement, on utilise de la théorie des groupes
+  pour éviter d'avoir à faire des dénombrements \enquote{à la main}…} le
+quotient est $\Z/2\Z$), et $\mathrm{Int}(\Sigmap_6) \simeq \Sigmap_6$ (car on
+peut retrouver la permutation d'origine à partir de la conjugaison en agissant
+sur les étoiles !) : il y en a donc $6!$, autant que de bijections $\{1, \ldots,
+6\} \xrightarrow{\sim} F$. Donc :
+\begin{itemize}
+\item pour tout $f$, le $\phi$ ainsi défini est bien un automorphisme
+  extérieur~;
+\item pour tout $\phi$, le $f$ qui convient est unique.
+\end{itemize}
+
+\paragraph{Conclusion} Tout automorphisme extérieur de $\Sigmap_6$ se factorise
+en fait comme la composition de deux isomorphismes entre $\Sigmap_6$ et
+$\Sigmap(F)$ : l'action par conjugaison de $\Sigmap_6$ sur $F$, et un transfert
+de structure via une bijection. On a en fait un isomorphisme (qui n'est pas
+endo) tout à fait canonique entre deux groupes de permutations sur 6 éléments,
+mais dont les ensembles sous-jacents ne peuvent être identifiés que par un choix
+non canonique de bijection, induisant alors un automorphisme extérieur.
+
+En langage catégorique, on pourra résumer élégamment tout ceci en disant que
+l'endofoncteur du groupoïde des ensembles de cardinal 6 qui a tout ensemble $X$
+associe les co-étoiles de $\Sigmap(X)$ n'est pas naturellement isomorphe à
+l'identité.
+
+
+\paragraph{Une dernière remarque} Si deux triples transpositions partagent une
+transpositions, elles commutent. (En effet, dans $\mathfrak{A}_4$, les doubles
+transpositions et l'identité forment un sous-groupe isomorphe à $(\Z/2\Z)^2$,
+qui est abélien.) Ainsi, les co-étoiles correspondent aux partitions du graphe
+complet à 6 éléments en 5 triplets d'arêtes disjointes.
+
+\paragraph{Annexe : construction d'un automorphisme extérieur de $\Sigmap_6$} La
+construction présentée ici est tirée de Perrin, \emph{Cours d'algèbre},
+proposition I.8.11.
 
 \begin{remark}
-  Il revient au même trouver un isomorphisme $\phi : \Sigmap_6 \to \Sigmap(E)$
-  qui n'est induit par aucune bijection $\{1,\ldots,6\} \to E$.
+  Il revient au même trouver un isomorphisme $\phi : \Sigmap_6
+  \xrightarrow{\sim} \Sigmap(E)$ qui n'est induit par aucune bijection
+  $\{1,\ldots,6\} \to E$.
 \end{remark}
+(Et remarquons que plus haut, on a bien construit un tel isomorphisme, vers le
+groupe de permutation des co-étoiles !)
 \begin{proof}
   En effet, si $E = \{1,\ldots,6\}$, l'isomorphisme (automorphisme, donc)
   $\Sigmap_6 \to \Sigmap_6$ induit par une permutation $\sigma$ de
@@ -246,19 +556,31 @@ On veut montrer que $\Sigmap_6$ admet un automorphisme extérieur\footnote{Ou
 
   Réciproquement, si $\phi : \Sigmap_6 \to \Sigmap(E)$ n'est pas induit par une
   bijection, on a tout de même une égalité de cardinaux entraînant l'existence
-  d'une bijection $f : \{1,\ldots,6\} \to E$, et alors quelle que soit $f$,
-  $\phi \circ \Sigmap(f)^{-1}$ est un automorphisme extérieur. S'il s'agissait
-  de la conjugaison par $\sigma$, on aurait $\phi = \Sigmap(f \circ \sigma)$
-  (TODO vérifier si c'est pas $-1$).
+  d'une bijection $f : \{1,\ldots,6\} \to E$, et alors quelle que soit $f$, on
+  vérifie que $\phi \circ \Sigmap(f)^{-1}$ est un automorphisme extérieur.
 \end{proof}
 
-Nous allons construire une telle bijection à partir du lemme ci-dessous dont la
-démonstration sera renvoyée à la fin.
+Nous allons construire une telle bijection à partir du lemme ci-dessous.
 
 \begin{lemma}
   Il existe un sous-groupe $H < \Sigmap_6$ d'indice 6 agissant transitivement
   sur $\{1,\ldots,6\}$ (pour l'action canonique de $\Sigmap_6$, bien entendu).
 \end{lemma}
+En fait, la situation est la suivante : dans $\Sigmap_n$ pour $n \neq 6$, de
+tels sous-groupes n'existent pas et les sous-groupes d'indices $n$ sont ceux qui
+stabilisent un point. Dans $\Sigmap_6$, on a aussi ceux qui stabilisent une
+co-étoile. La vérification de tout ceci est laissée à la lectrice.
+
+Dans le but d'éviter les raisonnements circulaires, une autre construction de
+$H$ est présentée ci-dessous.
+\begin{proof}
+  Faisons agir $\Sigmap_5$ sur ses 5-Sylow par conjugaison. Ceci donne un
+  morphisme de $\Sigmap_5$ dans le groupe des permutations de ces 5-Sylow, qui
+  sont au nombre de 6. Le morphisme est injectif car son noyau ne peut être ni
+  $\Sigmap_5$, ni $\mathfrak{A}_5$ : $\Sigmap_5$ s'identifie donc à un
+  sous-groupe $H$ de $\Sigmap_6$, d'indice 6. La transitivité de l'action est
+  garantie par les théorèmes de Sylow.
+\end{proof}
 
 Posons maintenant $E = \Sigmap_6/H$ l'ensemble des classes à gauche. $\Sigmap_6$
 agit dessus par translation ce qui donne un morphisme $\phi : \Sigmap_6 \to
@@ -273,19 +595,103 @@ comme sous-groupe de $\Sigmap_6$, qui agit transitivement donc dont les élémen
 n'ont aucun point fixe commun. L'existence d'une telle $f$ est donc impossible.
 $\phi$ est donc un isomorphisme qui n'est pas induit par une bijection.
 
-\paragraph{Démonstration du lemme que nous avions délaissé} C'est assez bizarre
-comme truc : on fait agir $\Sigmap_5$ sur ses 5-Sylow (au nombre de 6) par
-conjugaison, c'est transitif (théorème de Sylow) et ça donne un morphisme
-(injectif) de $\Sigmap_5$ dans le groupe des permutations de ces six 5-Sylow.
-Sur un autre ensemble de 6 éléments (on avait dit $\{1,\ldots,6\}$ au départ),
-il faut transférer par un choix arbitraire et non canonique de bijection. Ça
-m'embête parce que c'est pas pratique pour s'assurer de la fonctorialité de la
-procédure qui a un ensemble associe $E = \Sigmap_6/H$ correspondant.
+\newpage
 
+\subsection{Non-isomorphisme exceptionnel (avec la réduction de Jordan)}
 
-\subsection{Réciprocité quadratique par les coniques}
+Dans H2G2 tome 1, ou encore dans le Perrin exercice IV.5.1. Le premier contient
+des erreurs et le second est un exercice sans correction…
 
-Dans H2G2 tome 1.
+Posons $G = \PSL_4(\F_2)$ et $H = \PSL_3(\F_4)$. On va montrer que :
+\begin{itemize}
+\item $|G| = |H| = 20160$ ;
+\item $G$ possède plusieurs classes de conjugaison d'éléments d'ordre 2 ;
+\item $H$ n'en possède qu'une seule.
+\end{itemize}
+En conséquence de ces deux derniers points, $G \not\simeq H$. De plus, on sait
+que :
+\begin{theorem}
+  $\PSL_n(\F_q)$ est simple sauf pour $n = 2$ et $q = 2,3$.
+\end{theorem}
+\begin{proof}
+  C'est long…
+\end{proof}
+Une fois que nous aurons démontré les affirmations précédentes, ce dernier
+théorème nous permettra de dire que $G$ et $H$ sont tous deux simples, de même
+cardinal, et pourtant non isomorphes.
+
+\paragraph{Comment compter les classes de conjugaison ?} Rappelons que sur tout
+corps (pas forcément algébriquement clos), les matrices nilpotentes sont
+classifiées à similitude près par la réduction de Jordan.
+
+\begin{lemma}
+  Les classes de similitudes de matrices nilpotentes d'indice 2 dans $\M_n(K)$
+  sont en bijection avec $\{1, \ldots, \lfloor n/2 \rfloor\}$.
+\end{lemma}
+\begin{proof}
+  Soit une telle classe, elle admet un unique représentant $N =
+  \mathrm{Diag}(J_1, \ldots, J_k)$ où les $J_i$ sont des blocs de Jordan, de
+  taille décroissante. $N^2 = 0$ signifie que $J_i^2 = 0$ pour tout $i$. Les
+  blocs de Jordan sont donc de taille 1 ou 2. On réalise donc la bijection en
+  comptant les blocs d'ordre 2 : il y en a forcément au moins un, sinon $N = 0$,
+  et il peut y en avoir n'importe quel nombre jusqu'à $\lfloor n/2 \rfloor$ ($N$
+  étant de taille $n$).
+\end{proof}
+\begin{corollary}
+  Si $K$ est de caractéristique 2, il y a $\lfloor n/2 \rfloor$ classes de
+  conjugaison d'ordre 2 dans $\GL_n(K)$.
+\end{corollary}
+\begin{proof}
+  Soit $A \in \GL_n(K)$. $A$ est d'ordre deux ssi $A \neq I$ et $A^2 = I$, ce
+  qui se réécrit aussi $A^2 - I = 0$ i.e. $(A-I)^2 = 0$ ($K[A]$ étant un anneau
+  commutatif de caractéristique 2), i.e. $A-I$ nilpotente d'indice 2. Et $A$ est
+  conjugué à $B$ (comme éléments du groupe) ssi $A-I$ est semblable à $B-I$
+  (comme matrices). On est donc ramenés au lemme précédent.
+\end{proof}
+On a en fait classifié des orbites pour la conjugaison dans $\GL_n(K)$ en
+prolongeant cette action de groupe à l'espace $\M_n(K)$…
+
+\paragraph{Étude de $G$}
+
+On a $G = \SL_4(\F_2)$ car $I$ est la seule homothétie, puis $G = \GL_4(\F_2)$
+car $\det A \neq 0 \Leftrightarrow \det A = 1$ (tout ceci parce que $\F_2^* =
+\{1\}$). Ainsi, 
+\[ |G| = (2^4 - 1)(2^4 - 2)(2^4 - 2^2)(2^4 - 2^3) = 20160. \]
+D'autre part, on peut directement appliquer le lemme précédent : il y a $\lfloor
+4/2 \rfloor = 2$ classes de conjugaison d'ordre 2.
+
+\paragraph{Étude de $H$}
+
+On a tout d'abord $\GL_3(\F_4)/\SL_3(\F_4) \simeq \F_4^*$, puis $H \simeq
+\SL_3(\F_4)/Z(\SL_3(\F_4))$ avec $Z(\SL_3(\F_4)) \simeq \F_4^*$. En effet,
+toutes les homothéties sont dans $\SL_3(\F_4)$ : pour tout $\lambda \in \F_4^*$,
+$\det \lambda I = \lambda^3 = 1$ car $\F_4^*$ est un groupe d'ordre 3. Le compte
+donne
+\[ |H| = \frac{(4^3 - 1)(4^3 - 4)(4^3 - 4^2)}{3^2} = 20160. \]
+
+Dans $\GL_3(\F_4)$, il y a $\lfloor 3/2 \rfloor = 1$ classe de conjugaison
+d'ordre 2. Si $A \in \SL_3(\F_4)$ est d'ordre 2, il est donc conjugué à la
+transvection
+\[ T = \left[\begin{matrix}
+      1 & 1 & 0 \\
+      0 & 1 & 0 \\
+      0 & 0 & 1
+    \end{matrix}\right] \]
+ce qui s'écrit $A = PTP^{-1}$ avec $P \in \GL_3(\F_4)$. Peut-on choisir $P$ dans
+$\SL_3(\F_4)$ ? Oui, quitte à la multiplier à droite par $\mathrm{Diag}(1,1,\det
+P^{-1})$. Tout élément d'ordre 2 est donc conjugué à $T$ dans $\SL_3(\F_4)$.
+
+Passons maintenant au quotient dans $H = \PSL_3(\F_4)$. Soit $A \in \SL_3(\F_4)$
+tel que $\overline{A}^2 = \overline{I}$ dans $H$, c'est-à-dire $A^2 \in
+Z(\SL_3(\F_4))$. Il existe donc $\lambda \in \F_4^*$ tel que $A^2 = \lambda I$.
+Soit $\mu$ une racine carrée de $\lambda$ ; il en existe (exactement) une car $x
+\mapsto x^2$ est un automorphisme (caractéristique 2 + finitude du corps). En
+posant $B = \mu^{-1}A$, on a $\overline{A} = \overline{B}$ dans $H$, et $B^2 =
+I$. $B$ est alors conjugué à $T$, et en projetant sur le quotient,
+$\overline{A}$ est conjugué à $\overline{T}$ : la classe de conjugaison de ce
+dernier est donc la seule, CQFD.
+
+\newpage
 
 \subsection{Théorème de l'élément primitif via le résultant}
 
@@ -302,17 +708,90 @@ $L = K(\alpha,\beta)$ avec $\alpha, \beta$ qui sont dans $L$ mais pas dans $K$.
 
 Notons $P$ et $Q$ sont les polynômes minimaux respectifs de $\alpha$ et $\beta$
 sur $K$. On cherche $\gamma$ tel que $L = K(\gamma)$, qu'on cherche de la forme
-$\gamma = \alpha + t\beta$. 
+$\gamma = \alpha + t\beta$.
+
+\newpage
+
+\subsection{Enveloppe convexe du groupe orthogonal}
+
+On considère $\R^n$ muni de sa norme euclidienne canonique $\|\cdot\|$, $O(n)$
+le groupe orthogonal, et $||| \cdot |||$ la norme subordonnée sur $\M_n(\R)$.
+Soit $B$ la boule unité \emph{fermée} de $\M_n(\R)$ pour $||| \cdot |||$.
+Alors :
+
+\begin{theorem}
+  $O(n)$ est l'ensemble des points extrêmes du convexe compact $B$, et $B$ est
+  l'enveloppe convexe de $O(n)$.\\
+  (On appelle \emph{point extrême} de $B$ un point de $B$ qui ne peut pas s'écrire
+  comme barycentre d'autres points.)
+\end{theorem}
+
+Tout d'abord, il est clair que les matrices orthogonales, étant des isométries,
+sont de norme 1, donc $O(n) \subset B$. $B$ étant convexe, il contient également
+l'enveloppe convexe de $O(n)$.
+
+\paragraph{Étude des points extrêmes} Soit $U \in O(n)$, montrons que c'est un
+point extrême de $B$.
+
+Posons $\phi : M \mapsto \Tr(U^{-1}M)$, forme linéaire sur $\M_n(\R)$. Pour tout
+$M \in B$, on a
+\[ \phi(M) = \Tr(U^{-1}M) = \sum_{i=1}^n \langle U^{-1}M e_i \mid e_i \rangle
+\leq \sum_{i=1}^n \| U^{-1}M e_i \| \cdot \| e_i \| \leq n \]
+puisque $\| U^{-1}M e_i \| \leq 1$, et on a égalité dans Cauchy-Schwarz si et
+seulement si, pour tout $i$,
+\begin{itemize}
+\item $\| U^{-1}M e_i \| = 1$
+\item $U^{-1}M e_i$ et $e_i$ sont positivement liés
+\end{itemize}
+soit $U^{-1}M e_i = e_i$ pour tout $i$, ce qui est équivalent à $U^{-1}M = I$ ou
+encore à $M = U$.
+
+Ainsi, d'une part $\phi(U) = n$, d'autre part, pour tout barycentre $G =
+\sum_{i=1}^k \alpha_i M_i$ avec $M_i \in B \setminus \{U\}$, on a $\phi(M_i) <
+n$ pour tout $i$ donc $\phi(G) < n$. Forcément $U \neq G$ : $U$ est un point
+extrême.
+
+Réciproquement, soit $U$ un point extrême. $U$ admet une décomposition en
+valeurs singulières : $U = VSW$ où $V, W \in O(n)$ et $S \in S_n^+(\R)$.
+Remarquons que $M \mapsto VMW$ est un isomorphisme affine de $\M_n(\R)$ qui
+induit une bijection de $B$ avec lui-même,
+
+pffffffffffffft
+
+\newpage
+
+\subsection{Constructibilité des polygones réguliers}
+
+\[ \Q(\zeta_p) = K_m \supset K_{m-1} \supset \ldots \supset K_0 = \Q \]
+\[ \{0\} \hookrightarrow \Z/2\Z \hookrightarrow \ldots \hookrightarrow \Z/2^n\Z
+  \simeq (\Z/pZ)^* \simeq \textnormal{Gal}(\Q(\zeta_p)/\Q) \]
+
+TODO. Utiliser un élément primitif pour borner le nombre d'automorphismes fixant
+une extension intermédiaire d'un corps cyclotomique, ce qui évite d'avoir à
+prouver un sens du lemme d'Artin.
+
+\subsection{Théorème de Lie-Kolchin}
+
+Un long exercice dans H2G2.
+
+\subsection{Quatre autres développements}
+
+\begin{itemize}
+\item Réciprocité quadratique par double comptage d'une conique sur $\F_p$ (trop
+  beau !) : dans H2G2 tome 1
+\item Sous-groupe de Frattini et théorème de la base de Burnside : problème 3
+  dans Zavidovique
+\item Algorithme de Berlekamp : cf. PDF de Jill-Jênn Vie
+\item Existence de la réduction de Frobenius (utilisant l'orthogonalité duale) :
+  fait en cours dans H2G2 tome 1
+\end{itemize}
 
 
-\subsection{Dénombrement des polynômes irréductibles de $\F_q$}
-
-Le résultat sur $\Z/p\Z$ permet de construire les corps finis comme corps de
-rupture. Trouvable dans le poly de Pellerin. Utilise l'inversion de Möbius.
+\newpage
 
 \section{Analyse}
 
-\subsection{Les fonctions monotones sont dérivables presque partout}
+\subsection{Les fonctions monotones sont dérivables presque partout (long !)}
 
 Un joli résultat suggéré par le rapport de jury d'agrég, dont on peut notamment
 déduire que la dérivation est bien l'opération inverse de l'intégrale de
@@ -332,13 +811,16 @@ p.p. ou l'un des lemmes.
 Pour éviter le recours au lemme de recouvrement de Vitali ou de Besicovitch, on
 va se contenter de montrer :
 \begin{theorem}
-  Soit $f : \R \to \R$ une fonction \textnormal{continue} croissante. Alors $f$ est
+  Soit $f : [0,1] \to \R$ une fonction \textnormal{continue} croissante. Alors $f$ est
   dérivable presque partout.
 \end{theorem}
 L'hypothèse de continuité était d'ailleurs présente dans la démonstration de ce
-théorème par Lebesgue en 1904.
+théorème par Lebesgue en 1904. Le fait de se restreindre à un intervalle fermé,
+lui, est pratique parce qu'il permet que $f(0)$ et $f(1)$ soient définis et
+bornent $f$ ; on passe au cas d'un intervalle quelconque par une suite
+exhaustive de compacts.
 
-Attention, la version générale ne s'en déduit pas immédiatement en se
+Par contre, attention, l'hypothèse de continuité ne peut pas être levée en se
 restreignant à des intervalles de continuité ; reste le cas des \emph{fonctions
   de saut}, qui peuvent avoir des discontinuités denses. Exemple : $x \mapsto
 \sum_{n \in \N} 2^{-n} \Indic_{[x \geq q_n]}$ où $(q_n)_{n \in \N}$ est une
@@ -392,10 +874,10 @@ Le lemme qui suit est fondamental dans la preuve du théorème.
   \]
   Alors $O_g(]a,b[,\alpha)$ et $O_d(]a,b[,\alpha)$ sont ouverts dans $\R$ et
   \begin{enumerate}
-  \item Pour tout $]c',d'[ \in CC(O_g(]a,b[,\alpha))$,
+  \item Pour tout $]c,d[ \in CC(O_g(]a,b[,\alpha))$,
     $\displaystyle \Delta f(c,d) \leq \alpha$.
-  \item Pour tout $]c,d[ \in CC(O_d(]a,b[,\alpha))$,
-    $\displaystyle \Delta f(c,d) \geq \alpha$.
+  \item Pour tout $]c',d'[ \in CC(O_d(]a,b[,\alpha))$,
+    $\displaystyle \Delta f(c',d') \geq \alpha$.
   \end{enumerate}
 \end{lemma}
 Il faut \textit{\textbf{faire un dessin}} pour voir ce qui se passe :
@@ -415,8 +897,8 @@ $\alpha = 0$ revient à placer le soleil à l'horizon(tale), et les rayons
 viennent de la droite i.e. de l'est).
 
 \begin{proof}[Démonstration du lemme du soleil levant]
-  $U$ est ouvert car les inégalités strictes de fonctions continues sont des
-  inégalités ouvertes, et une projection linéaire d'un ouvert sur une coordonnée
+  $U$ est ouvert car les inégalités strictes de fonctions continues définissent
+  des ouverts, et une projection linéaire d'un ouvert sur une coordonnée
   est un ouvert\footnote{Banach--Schauder en dimension finie !}.
 
   Soit $]c,d[ \in CC(U)$, on veut maintenant montrer que $f(d) - f(c) \geq 0$.
@@ -432,7 +914,8 @@ viennent de la droite i.e. de l'est).
 Ceci étant établi, c'est parti pour commencer à parler du théorème principal.
 
 \paragraph{Stratégie d'attaque du théorème}
-Soit $f : \R \to \R$ continue croissante. Définissons ses \emph{dérivées de Dini}
+Soit $f : [0,1] \to \R$ continue croissante.
+Définissons ses \emph{dérivées de Dini}
 \[ D^+f(x) = \limsup_{y \to x^+} \Delta f(x,y) \qquad
   D^-f(x) = \limsup_{y \to x^-} \Delta f(x,y) \]
 \[  D_+f(x) = \liminf_{y \to x^+} \Delta f(x,y) \qquad
@@ -457,22 +940,20 @@ On dispose enfin de tous les outils pour attaquer le cœur de la preuve !
 \begin{proof}[(1) Existence p.p. de la limite]
 Montrons dans un premier temps que $D^+f \leq D_-f$ presque partout. Pour cela,
 fixons $\alpha < \beta$ quelconques et posons
-\[ S_{\alpha,\beta} = \{ x \in \R \mid D_-f(x) < \alpha < \beta < D^+f \} \]
+\[ S_{\alpha,\beta} = \{ x \in ]0,1[ \mid D_-f(x) < \alpha < \beta < D^+f \} \]
 On veut montrer que $S_{\alpha,\beta}$ est de mesure nulle.
 
-Fixons un intervalle ouvert borné $E_0$ quelconque.
-En partant de $E_0$, nous allons définir par récurrence deux suites de parties
-de $\R$ : pour $n \in \N$,
+En partant de $E_0 = ]0,1[$, nous allons définir par récurrence deux suites de
+parties de $\R$ : pour $n \in \N$,
 \[ F_n = \bigcup_{I \in CC(E_n)} O_g(I, \alpha) \qquad
    E_{n+1} = \bigcup_{I \in CC(F_n)} O_d(I, \beta) \]
 On a $E_0 \supset F_0 \supset E_1 \ldots$ et le lemme des rayons du soleil (à
 l'aide une récurrence triviale) garantit que ce sont des ouverts. 
 
-Si $x \in S_{\alpha,\beta} \cap E_0$, la remarque établie plus haut nous dit
-que comme $D_-f(x) < \alpha$, $x \in F_0$, puis comme $D^+f(x) > \beta$, $x \in
-E_1$, et ainsi de suite… Au bout du compte, $S_{\alpha,\beta} \cap E_0 \subset
-\bigcap_{n \in \N} E_n$ et nous allons montrer que ce dernier ensemble est
-négligeable.
+Si $x \in S_{\alpha,\beta}$, la remarque établie plus haut nous dit que comme
+$D_-f(x) < \alpha$, $x \in F_0$, puis comme $D^+f(x) > \beta$, $x \in E_1$, et
+ainsi de suite… Au bout du compte, $S_{\alpha,\beta} \subset \bigcap_{n \in \N}
+E_n$ et nous allons montrer que ce dernier ensemble est négligeable.
 
 Soit $n \in \N$. Soit $]a,b[ \in CC(F_n)$, le cas 1 du lemme nous dit que
 $f(b) - f(a) \leq \alpha(b-a)$. Si maintenant $]c,d[ \in CC(E_{n+1} \cap
@@ -482,12 +963,11 @@ et en appliquant notre majoration de la variation totale, on a :
   (f(d) - f(c)) \leq f(b) - f(a) \leq \alpha\mu(]a,b[) \]
 \[ \mu(E_{n+1}) \leq \frac{\alpha}{\beta} \sum_{]a,b[} \mu(]a,b[) =
   \frac{\alpha}{\beta} \mu(F_n) \leq \frac{\alpha}{\beta} \mu(E_n) \] où $\mu$
-est la mesure de Lebesgue. Comme $\alpha/\beta < 1$ et $E_0$ a été pris borné,
-donc de mesure finie,
-\[ \mu(S_{\alpha,\beta} \cap E_0) \leq \mu \left( \bigcap_{n=0}^\infty E_n \right)
+est la mesure de Lebesgue. Comme $\alpha/\beta < 1$ et $E_0 = [0,1]$ est de
+mesure finie,
+\[ \mu(S_{\alpha,\beta}) \leq \mu \left( \bigcap_{n=0}^\infty E_n \right)
   \leq \lim_{n \to \infty} \left( \frac{\alpha}{\beta} \right)^n \mu(E_0) = 0 \]
-pour tout choix de $E_0$, d'où $\mu(S_{\alpha,\beta}) = 0$, puis
-\[ \mu\left( \{x \in \R \mid  D^+f(x) > D_-f(x) \} \right)
+\[ \mu\left( \{x \in ]0,1[ \mid  D^+f(x) > D_-f(x) \} \right)
   = \mu\left( \bigcup_{\alpha, \beta \in \Q} S_{\alpha,\beta} \right)
   = 0 \]
 De façon analogue on peut montrer que $D^-f \leq D_+f$ p.p., ce qui suffit à
@@ -502,7 +982,7 @@ croissante, ses taux d'accroissements sont positifs ; et rien ne garantit a
 priori que la limite de ces taux d'accroissements soit finie. Reste à montrer :
 
 \begin{proof}[(2) Finitude p.p. de la dérivée]
-Calculons d'abord :
+Calculons d'abord pour $0 < a < b < 1$ :
 \[
   \int_a^b \frac{f(x+h) - f(x)}{h}dx =
     \frac{1}{h} \int_b^{b+h} f(x)\,dx - \frac{1}{h} \int_a^{a+h} f(x)\,dx
@@ -526,7 +1006,8 @@ preuve ci-dessus) que
 \[ \mu\left( \left\{ x \in ]a,b[ \mid D^+f(x) \geq \beta \right\} \right)
   \leq \frac{f(b)-f(a)}{\beta} \]
 ce qui aurait pu permettre de traiter la partie finitude (exercice pour la
-lectrice). Ce résultat est à comparer avec le suivant :
+lectrice). Ce résultat est à comparer avec le suivant, utilisé pour démontrer
+des théorèmes de dérivation du même genre :
 \begin{theorem}[Inégalité maximale de Hardy-Littlewood]
   Soit $f \in L^1(\R)$, et soit $\beta > 0$. Alors
   \[ \mu\left( \left\{ x \in \R \mid \sup_{h > 0} \frac{1}{h} \int_x^{x+h}
@@ -534,103 +1015,7 @@ lectrice). Ce résultat est à comparer avec le suivant :
     \leq \frac{1}{\beta} \int_\R |f(t)|\,dt \]
 \end{theorem}
 
-
-\subsection{Théorème du minimax et dualité lagrangienne}
-
-Un joli résultat venu du merveilleux monde de la recherche opérationnelle ! La
-première partie est une généralisation d'un célèbre résultat de von Neumann en
-théorie des jeux, la preuve étant tirée de \emph{Techniques of Variational
-  Analysis} (TODO : auteurs). La seconde l'applique à l'optimisation convexe,
-c'est du fait maison mais dont les techniques ne surprendront personne qui soit
-habitué au domaine : on retrouve la relaxation lagrangienne et les conditions de
-Karush--Kuhn--Tucker, mais ces dernières seraient normalement traitées dans le
-cas général non convexe pour des extrema locaux dans un vrai cours
-d'optimisation. Je me demande si on peut raccourcir les preuves ou affaiblir les
-hypothèses pour cette dernière partie…
-
-\paragraph{Théorème du minimax de Sion} TODO.
-
-
-\paragraph{Application : dualité lagrangienne (cas convexe)} Considérons une
-\emph{fonction objectif} $f \in \Cf^0(\R^n, \R)$ et des \emph{contraintes}
-$g_1, \ldots, g_k \in \Cf^0(\R^n, \R)$, toutes convexes, définissant le problème
-(primal) de minimisation
-\[ p = \inf_{x \in F} f(x) \qquad F = \left\{ x \in \R^n \mid
-  g_i(x) \leq 0,\; i = 1,\ldots,k \right\} \]
-où $F$ est l'ensemble des \emph{solutions réalisables}.
-Définissons le \emph{lagrangien} $\L : \R^n \times \R_+^k$ et le problème dual
-associé par
-\[ \L(x, \mu) = f(x) + \sum_{i=1}^k \mu_i g_i(x) \qquad
-  d = \sup_{\mu \in \R_+^k} \inf_{x \in \R^n} \L(x,\mu) \]
-
-On va supposer $d > -\infty$ ainsi que la \emph{condition de Slater} : il existe
-$x_O \in \R^n$ \emph{strictement réalisable}, soit $g_i(x) < 0$ pour tout $i$.
-Sous ces hypothèses, nous allons établir un théorème de dualité forte $p = d$,
-ainsi que des conditions d'atteinte de l'optimum commun.
-
-Fixons $R > 0$ et posons $\bar{B}_R = \bar{B}(x_0,R)$, qui est convexe compact.
-Soit
-\[ p_R = \min_{x \in \bar{B}_R} \sup_{\mu \in \R_+^k} \L(x,\mu)
-       = \sup_{\mu \in \R_+^k} \min_{x \in \bar{B}_R} \L(x,\mu) \]
-l'égalité résultant du théorème du minimax.
-\begin{remark}
-  À $x$ fixé, $\displaystyle \sup_{\mu \in \R_+^k} \L(x,\mu) = $ TODO typesetting.
-\end{remark}
-On en déduit que $p_R = \min_{x \in F \cap B_R} f(x)$ (l'ensemble étant non vide
-puisque $x_0$ y est).
-
-D'autre part, par la seconde expression, $p_R \geq d$. Comme $x_0$ est
-strictement réalisable, quand $\|\mu\| \to +\infty$ en restant dans $\R_+^k$,
-$\L(x_0, \mu) \to +\infty$ . Il existe donc un compact $K \subset \R_+^k$ tel
-que $\forall \mu \in \R_+^k \setminus K,\; \L(x_0, \mu) < d \leq p_R$ (et $K$
-est indépendant de $R$, c'est important !). D'où
-\[ p_R = \max_{\mu \in K} \min_{x \in \bar{B}_R} \L(x,\mu) =
-  \min_{x \in \bar{B}_R} \max_{\mu \in K} \L(x,\mu) \]
-Quand $R \to +\infty$, on trouve
-\[ \inf_{x \in F} f(x) = \inf_{x \in \R^n} \max_{\mu \in K} \L(x,\mu) 
-  = \max_{\mu \in K} \inf_{x \in \R^n} \L(x,\mu)  \]
-où, cette fois-ci, on a utilisé la compacité de $K$ pour appliquer le théorème
-du minimax à $-\L$ ! Tout ceci fonctionnant encore avec n'importe quel convexe
-compact $K' \supseteq K$, en épuisant $\R_+^k$ avec des compacts, on a
-finalement $p = d$, et de plus, on sait qu'une solution duale optimale $\mu^*$
-existe.
-
-S'il reste du temps, on enchaîne avec la suite.
-
-\paragraph{Caractérisation au premier ordre} On suppose maintenant que $f$ et
-$g_1, \ldots, g_k$ sont $\Cf^1$, et on veut caractériser les solutions primales
-optimales. Soit $x^*$ tel que $f(x^*) = p$. Alors
-\[ f(x^*) = p = d \leq \L(x^*, \mu^*) = f(x^*) + \sum_{i=0}^k \mu^*_i
-  g_i(x^*) \]
-Comme $g_i(x^*) \leq 0$ et $\mu^*_i \geq 0$ pour tout $i$, ce qui entraîne
-l'inégalité réciproque, on a en fait $\mu^*_i g_i(x^*) = 0$ pour tout $i$.
-Ainsi, en $x^*$, $\L(-, \mu^*)$ atteint la valeur $d$ qui est son minimum, son
-gradient s'annule donc. Soit :
-\[ \nabla f(x^*) + \sum_{i=0}^k \mu^*_i \nabla g_i(x^*) = 0 \]
-et on constate que les $\mu_i$ sont des \emph{multiplicateurs de Lagrange} pour
-des contraintes d'\emph{inégalité} !
-
-Réciproquement, soient $x \in F$ et $\mu \in R_+^k$ vérifiant cette condition du
-premier ordre ainsi que $\mu_i g_i(x) = 0$ pour tout $i$. Alors, comme
-$\L(-,\mu)$ est convexe, ses points stationnaires sont ses minima globaux, donc
-elle atteint son minimum en $x$. On peut vérifier, grâce à la seconde condition,
-que cette valeur minimale est $f(x)$ ; puis on en déduit que $x$ est optimal
-pour le primal et $\mu$ est optimal pour le dual.
-
-TODO : voir si on peut pas boucher les trous
-dans la disjonction de cas de la dualité forte, avec un argument d'hyperplan
-séparateur.
-
-
-
-\subsection{Théorème du point fixe de Schauder}
-
-\begin{theorem}
-  Soit $K$ une partie compacte convexe d'un EVN, $f : K \to K$ continue. Alors
-  $f$ admet au moins un point fixe.
-\end{theorem}
-Application : théorème d'existence de Cauchy-Peano.
-
+\newpage
 
 \subsection{Récurrence d'une marche aléatoire via séries de Fourier}
 
@@ -730,11 +1115,7 @@ irréductible, un état est récurrent si et seulement si tous le sont, et que d
 ce cas, tous les états sont presque sûrement atteints. Ainsi, on a montré qu'un
 ivrogne qui se déplace dans le plan peut être sûr de rentrer chez lui.
 
-
-\subsection{Théorème de bornitude uniforme et série de Fourier divergente}
-
-Moralement : l'évaluation en 0 de la somme partielle de Fourier est un produit
-scalaire avec un noyau de Dirichlet, dont la norme tend vers $+\infty$.
+\newpage
 
 \subsection{Inversion de Fourier et théorème de continuité de Lévy (en dimension 1)}
 
@@ -846,6 +1227,11 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
 \end{proof}
 
 
+
+\subsection{Théorème du point fixe de Brouwer $\Cf^1$}
+
+\newpage
+
 \subsection{Polynômes de Bernstein}
 
 Référence : Zuily-Quéffélec.
@@ -897,6 +1283,10 @@ répondre aux questions sur le développement.
 Pour avoir une application aux formules de Taylor.
 
 \section{Informatique}
+
+\subsection{Théorème de Baker--Gill--Solovay}
+
+
 
 \subsection{Minimisation par double renversement (avec complexité)}
 
