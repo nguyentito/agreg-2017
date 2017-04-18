@@ -61,6 +61,7 @@
 \def\GL{\mathrm{GL}}
 \def\SL{\mathrm{SL}}
 \def\PSL{\mathrm{PSL}}
+\def\Aut{\mathrm{Aut}}
 
 \newtheorem*{definition}{Définition}
 \newtheorem*{example}{Exemple}
@@ -152,9 +153,9 @@ Afin de montrer cela, introduisons le \emph{lagrangien} $\L : \R^n \times
   \geq 0$ tels que pour tout $x \in \R^n$, $\L(x,\mu) \geq p$.
 
   Posons $A, B \subset \R^{k+1}$ définis par
-  \[ A = \{ (y_1, \ldots, y_k, z) \mid \exists x \in \R^n\,/\,
-    y_i \geq g_i(x),\; z \geq f(x) \}
-    \qquad B = \{ (y_1, \ldots, y_k, z) \mid y_i < 0,\;z < p\}\]
+  \[ A = \left\{ (y_1, \ldots, y_k, z) \mid \exists x \in \R^n\,/\,
+    y_i \geq g_i(x),\; z \geq f(x) \right\}
+    \qquad B = \left\{ (y_1, \ldots, y_k, z) \mid y_i < 0,\;z < p \right\}\]
 
   Si $(y_1,\ldots,y_k,z) \in A \cap B$, alors il existe $x$ tel que $g_i(x) \leq
   y_i < 0$ pour tout $x$, donc $x \in F$, et $f(x) \leq z < p$. C'est impossible
@@ -164,9 +165,9 @@ Afin de montrer cela, introduisons le \emph{lagrangien} $\L : \R^n \times
     hypothèses topologiques de la version de Hahn-Banach qu'on utilise ici.
     Sinon, on pourrait invoquer le théorème de séparation des convexes en
     dimension finie de Minkowski, qui demande seulement que les deux convexes
-    soient disjoints.} i.e. une forme linéaire $\phi$ telle que $\phi(a) \geq
-  \phi(b)$ pour tout $a \in A$ et $b \in B$. En coordonnées, $\phi$ s'écrit
-  \[ \phi(y_1, \ldots, y_k, z) = \mu_1 y_1 + \ldots + \mu_k y_k + \nu z \]
+    soient disjoints.} i.e. une forme linéaire $\varphi$ telle que $\varphi(a) \geq
+  \varphi(b)$ pour tout $a \in A$ et $b \in B$. En coordonnées, $\varphi$ s'écrit
+  \[ \varphi(y_1, \ldots, y_k, z) = \mu_1 y_1 + \ldots + \mu_k y_k + \nu z \]
   
   En prenant $a = (g_1(x), \ldots, g_k(x), f(x))$, et $b = (0, \ldots, 0, p) \in
   \overline{B}$, on a
@@ -438,12 +439,12 @@ $E$. $e$ réalise une bijection canonique entre $\{1, \ldots, 6\}$ et $E$.
   intérieur.
 \end{corollary}
 \begin{proof}
-  Soit $\phi$ cet automorphisme. $\phi(E) = E$, car \enquote{ne pas commuter}
-  est préservé par automorphisme. Posons $g : x \mapsto e^{-1}(\phi(e(x)))$, $g
-  \in \Sigmap_6$, de sorte que $\phi(e(x)) = e(g(x))$. Pour tout $a \neq b$,
-  comme $\{(a\;b)\} = e(a) \cap e(b)$, on a $\phi((a\;b)) = (g(a)\;g(b))$.
-  $\phi$ coïncide donc avec $\sigma \mapsto g\sigma g^{-1}$ sur les
-  transpositions, qui engendrent $\Sigmap_6$, donc $\phi$ est intérieur.
+  Soit $\varphi$ cet automorphisme. $\varphi(E) = E$, car \enquote{ne pas commuter}
+  est préservé par automorphisme. Posons $g : x \mapsto e^{-1}(\varphi(e(x)))$, $g
+  \in \Sigmap_6$, de sorte que $\varphi(e(x)) = e(g(x))$. Pour tout $a \neq b$,
+  comme $\{(a\;b)\} = e(a) \cap e(b)$, on a $\varphi((a\;b)) = (g(a)\;g(b))$.
+  $\varphi$ coïncide donc avec $\sigma \mapsto g\sigma g^{-1}$ sur les
+  transpositions, qui engendrent $\Sigmap_6$, donc $\varphi$ est intérieur.
 \end{proof}
 
 \begin{proposition}
@@ -459,12 +460,12 @@ $E$. $e$ réalise une bijection canonique entre $\{1, \ldots, 6\}$ et $E$.
 On peut déjà en déduire que :
 
 \begin{theorem}
-  $\mathrm{Aut}(\Sigmap_6)/\mathrm{Int}(\Sigmap_6) \simeq \Z/2\Z$.
+  $\Aut(\Sigmap_6)/\mathrm{Int}(\Sigmap_6) \simeq \Z/2\Z$.
 \end{theorem}
 \begin{proof}
-  Si $\phi \in \mathrm{Aut}(\Sigmap_6) \setminus \mathrm{Int}(\Sigmap_6)$ et
-  $\tau$ est une transposition, $\phi(\tau)$ est une triple transposition et
-  $\phi^2(\tau)$ est une transposition. Ainsi, $\phi^2 \in
+  Si $\varphi \in \Aut(\Sigmap_6) \setminus \mathrm{Int}(\Sigmap_6)$ et
+  $\tau$ est une transposition, $\varphi(\tau)$ est une triple transposition et
+  $\varphi^2(\tau)$ est une transposition. Ainsi, $\varphi^2 \in
   \mathrm{Int}(\Sigmap_6)$.
 \end{proof}
 
@@ -472,16 +473,16 @@ En fait, on a même un produit semi-direct, mais on va s'intéresser à autre
 chose.
 
 Soit $F$ l'ensemble des familles de 5 triples transpositions qui ne commutent
-pas, qu'on appellera \emph{co-étoiles}. Alors $\widehat{\phi} : X \in E \mapsto
-\phi(X) \in F$ est une bijection.
+pas, qu'on appellera \emph{co-étoiles}. Alors $\widehat{\varphi} : X \in E \mapsto
+\varphi(X) \in F$ est une bijection.
 
 \begin{proposition}
   Pour tout $g \in \Sigmap_6$, le diagramme suivant est commutatif :
   \begin{center}
   \begin{tikzcd}[column sep=large]
     \{1,\ldots,6\} \ar[d, "g"] \ar[r, "e"] & E \ar[d, "g(-)g^{-1}"]
-    \ar[r, "\widehat{\phi}"] & F \ar[d, "\phi(g)(-)\phi(g)^{-1}"] \\
-    \{1,\ldots,6\} \ar[r, "e"] & E \ar[r, "\widehat{\phi}"] & F
+    \ar[r, "\widehat{\varphi}"] & F \ar[d, "\varphi(g)(-)\varphi(g)^{-1}"] \\
+    \{1,\ldots,6\} \ar[r, "e"] & E \ar[r, "\widehat{\varphi}"] & F
   \end{tikzcd}
   \end{center}
 \end{proposition}
@@ -489,18 +490,18 @@ pas, qu'on appellera \emph{co-étoiles}. Alors $\widehat{\phi} : X \in E \mapsto
   Le carré de gauche signifie que la conjugaison sur les étoiles correspond à
   l'action sur les points, ce qu'on a déjà vu précédemment.
   
-  Dans le carré de droite, on veut prouver que $\phi(gXg^{-1}) =
-  \phi(g)\phi(X)\phi(g^{-1})$, où $X \in E$, donc $X \subset \Sigmap_6$. Mais
+  Dans le carré de droite, on veut prouver que $\varphi(gXg^{-1}) =
+  \varphi(g)\varphi(X)\varphi(g^{-1})$, où $X \in E$, donc $X \subset \Sigmap_6$. Mais
   c'est simplement la propriété de morphisme.
 \end{proof}
 On en déduit ce diagramme :
 \begin{tikzcd}[column sep=large]
-  \{1,\ldots,6\} \ar[d, "g"] \ar[r, "\widehat{\phi^{-1}} \circ e"] 
+  \{1,\ldots,6\} \ar[d, "g"] \ar[r, "\widehat{\varphi^{-1}} \circ e"] 
   & F \ar[d, "g(-)g^{-1}"] \\
-  \{1,\ldots,6\}\ar[r, "\widehat{\phi^{-1}} \circ e"] & F 
+  \{1,\ldots,6\}\ar[r, "\widehat{\varphi^{-1}} \circ e"] & F 
 \end{tikzcd}
 
-Ainsi, tout automorphisme extérieur peut s'écrire sous la forme $\phi(g)(x) =
+Ainsi, tout automorphisme extérieur peut s'écrire sous la forme $\varphi(g)(x) =
 f^{-1}(gf(x)g^{-1})$ avec $f : \{1, \ldots, 6\} \xrightarrow{\sim} F$ bijective.
 Or, il y a autant d'automorphismes extérieurs qu'intérieurs
 (puisque\footnote{Une utilisation du théorème de Lagrange se cache ici. Il faut
@@ -511,9 +512,9 @@ peut retrouver la permutation d'origine à partir de la conjugaison en agissant
 sur les étoiles !) : il y en a donc $6!$, autant que de bijections $\{1, \ldots,
 6\} \xrightarrow{\sim} F$. Donc :
 \begin{itemize}
-\item pour tout $f$, le $\phi$ ainsi défini est bien un automorphisme
+\item pour tout $f$, le $\varphi$ ainsi défini est bien un automorphisme
   extérieur~;
-\item pour tout $\phi$, le $f$ qui convient est unique.
+\item pour tout $\varphi$, le $f$ qui convient est unique.
 \end{itemize}
 
 \paragraph{Conclusion} Tout automorphisme extérieur de $\Sigmap_6$ se factorise
@@ -541,7 +542,7 @@ construction présentée ici est tirée de Perrin, \emph{Cours d'algèbre},
 proposition I.8.11.
 
 \begin{remark}
-  Il revient au même trouver un isomorphisme $\phi : \Sigmap_6
+  Il revient au même trouver un isomorphisme $\varphi : \Sigmap_6
   \xrightarrow{\sim} \Sigmap(E)$ qui n'est induit par aucune bijection
   $\{1,\ldots,6\} \to E$.
 \end{remark}
@@ -554,10 +555,10 @@ groupe de permutation des co-étoiles !)
   de la conjugaison sur la décomposition en cycles disjoints). On retrouve ainsi
   les automorphismes intérieurs.
 
-  Réciproquement, si $\phi : \Sigmap_6 \to \Sigmap(E)$ n'est pas induit par une
+  Réciproquement, si $\varphi : \Sigmap_6 \to \Sigmap(E)$ n'est pas induit par une
   bijection, on a tout de même une égalité de cardinaux entraînant l'existence
   d'une bijection $f : \{1,\ldots,6\} \to E$, et alors quelle que soit $f$, on
-  vérifie que $\phi \circ \Sigmap(f)^{-1}$ est un automorphisme extérieur.
+  vérifie que $\varphi \circ \Sigmap(f)^{-1}$ est un automorphisme extérieur.
 \end{proof}
 
 Nous allons construire une telle bijection à partir du lemme ci-dessous.
@@ -583,17 +584,17 @@ $H$ est présentée ci-dessous.
 \end{proof}
 
 Posons maintenant $E = \Sigmap_6/H$ l'ensemble des classes à gauche. $\Sigmap_6$
-agit dessus par translation ce qui donne un morphisme $\phi : \Sigmap_6 \to
-\Sigmap(E)$. $\Ker(\phi)$ est distingué dans $\Sigmap_6$, et d'indice au moins 6
-(taille d'une orbite), donc c'est $\{\textnormal{id}\}$. $\phi$ est ainsi
+agit dessus par translation ce qui donne un morphisme $\varphi : \Sigmap_6 \to
+\Sigmap(E)$. $\Ker(\varphi)$ est distingué dans $\Sigmap_6$, et d'indice au moins 6
+(taille d'une orbite), donc c'est $\{\textnormal{id}\}$. $\varphi$ est ainsi
 injective, et même bijective entre groupes de même cardinal.
 
-Si $f$ était telle que $\phi = \Sigmap(f)$, alors le stabilisateur de $H \in E$
-pour l'action $\phi$ serait le groupe des permutations ayant pour point fixe
+Si $f$ était telle que $\varphi = \Sigmap(f)$, alors le stabilisateur de $H \in E$
+pour l'action $\varphi$ serait le groupe des permutations ayant pour point fixe
 $f^{-1}(H) \in \{1,\ldots,6\}$. Or ici, le stabilisateur de $H$ contient $H$, vu
 comme sous-groupe de $\Sigmap_6$, qui agit transitivement donc dont les éléments
 n'ont aucun point fixe commun. L'existence d'une telle $f$ est donc impossible.
-$\phi$ est donc un isomorphisme qui n'est pas induit par une bijection.
+$\varphi$ est donc un isomorphisme qui n'est pas induit par une bijection.
 
 \newpage
 
@@ -733,9 +734,9 @@ l'enveloppe convexe de $O(n)$.
 \paragraph{Étude des points extrêmes} Soit $U \in O(n)$, montrons que c'est un
 point extrême de $B$.
 
-Posons $\phi : M \mapsto \Tr(U^{-1}M)$, forme linéaire sur $\M_n(\R)$. Pour tout
+Posons $\varphi : M \mapsto \Tr(U^{-1}M)$, forme linéaire sur $\M_n(\R)$. Pour tout
 $M \in B$, on a
-\[ \phi(M) = \Tr(U^{-1}M) = \sum_{i=1}^n \langle U^{-1}M e_i \mid e_i \rangle
+\[ \varphi(M) = \Tr(U^{-1}M) = \sum_{i=1}^n \langle U^{-1}M e_i \mid e_i \rangle
 \leq \sum_{i=1}^n \| U^{-1}M e_i \| \cdot \| e_i \| \leq n \]
 puisque $\| U^{-1}M e_i \| \leq 1$, et on a égalité dans Cauchy-Schwarz si et
 seulement si, pour tout $i$,
@@ -746,9 +747,9 @@ seulement si, pour tout $i$,
 soit $U^{-1}M e_i = e_i$ pour tout $i$, ce qui est équivalent à $U^{-1}M = I$ ou
 encore à $M = U$.
 
-Ainsi, d'une part $\phi(U) = n$, d'autre part, pour tout barycentre $G =
-\sum_{i=1}^k \alpha_i M_i$ avec $M_i \in B \setminus \{U\}$, on a $\phi(M_i) <
-n$ pour tout $i$ donc $\phi(G) < n$. Forcément $U \neq G$ : $U$ est un point
+Ainsi, d'une part $\varphi(U) = n$, d'autre part, pour tout barycentre $G =
+\sum_{i=1}^k \alpha_i M_i$ avec $M_i \in B \setminus \{U\}$, on a $\varphi(M_i) <
+n$ pour tout $i$ donc $\varphi(G) < n$. Forcément $U \neq G$ : $U$ est un point
 extrême.
 
 Réciproquement, soit $U$ un point extrême. $U$ admet une décomposition en
@@ -760,6 +761,89 @@ pffffffffffffft
 
 \newpage
 
+\subsection{Théorème de Lie-Kolchin}
+
+Un long exercice dans H2G2 tome 1, corrigé dans la nouvelle édition (p. 238).
+
+\begin{definition}
+  Le \emph{groupe dérivé} $D(G)$ d'un groupe $G$ est le sous-groupe engendré par
+  les commutateurs $[g,h]= ghg^{-1}h^{-1}$. $G$ est dit \emph{résoluble} s'il
+  existe $l$ tel que $D^l(G) = \{1\}$.
+\end{definition}
+\begin{proposition}
+  Pour tout $k \in \N$, $D^k(G) \trianglelefteq G$.
+\end{proposition}
+\begin{proof}
+  On montre par récurrence que $D^k(G)$ est stable par tout $\varphi \in
+  \Aut(G)$. Le cas de base $k=0$ est immédiat. Supposons que $\varphi(D^k(G)) =
+  D^k(G)$ ; alors $\varphi$ se restreint en un automorphisme de $D^k(G)$ et la
+  formule $\varphi([g,h]) = [\varphi(g),\varphi(h)]$ ($g,h \in D^k(G)$) montre
+  qu'il stabilise $D^{k+1}(G)$.
+
+  Il suffit pour conclure d'appliquer ceci à un automorphisme intérieur de $G$
+  (mais attention, l'automorphisme restreint sur $D^k(G)$ n'est pas forcément
+  intérieur, d'où la nécessité d'une hypothèse de récurrence plus forte que
+  $D^k(G) \trianglelefteq G$).
+\end{proof}
+
+\begin{proposition}
+  Le groupe dérivé d'un groupe connexe est connexe.
+\end{proposition}
+\begin{proof}
+  Admis.
+\end{proof}
+
+L'objectif est de montrer :
+
+\begin{theorem}[Lie--Kolchin]
+  Soit $G$ un sous-groupe résoluble connexe de $\GL_n(\C)$. Les matrices de $G$
+  sont cotrigonalisables. De façon équivalente, $G$ est conjugué à un
+  sous-groupe des matrices triangulaires inversibles.
+\end{theorem}
+
+Si $G$ est abélien, la conclusion est bien connue. Sinon, $n \geq 2$ et il
+suffit de montrer que $G$ admet un sous-espace stable non triviale : ainsi, on
+pourra trigonaliser par blocs et conclure par récurrence forte sur $n$.
+Attention, la récurrence nécessite d'utiliser le fait que l'extraction d'un bloc
+diagonal est un morphisme de groupes continu, et d'utiliser la propriété
+suivante (admise) :
+\begin{proposition}
+  L'image par un morphisme d'un groupe résoluble est résoluble.
+\end{proposition}
+
+Supposons donc $G$ non abélien. Soit $l$ minimal tel que $D^l(G) = \{1\}$, alors
+$l \geq 2$ et $H = D^{l-1}(G)$ est abélien.
+
+$H$ est donc cotrigonalisable, et admet donc un vecteur propre commun $v$. On
+pose $V = \Vect(Gv)$ où $Gv = \{Mv \mid M \in G\}$. C'est bien un sous-espace
+stable par $G$, et non réduit à $\{0\}$ ; reste à montrer que $V \neq \C^n$.
+
+Montrons que $H$ agit par homothéties sur $V$. Fixons $A \in H$. Pour tout $P
+\in G$, $P^{-1}AP \in A$ ($A = D^{l-1}(G) \triangleleft G$) ; $v$ étant vecteur
+propre commun $P^{-1}APv = \lambda_P v$ pour un certain $\lambda_P \in \C$, ce
+qui s'écrit aussi $APv = \lambda_P Pv$.
+
+Maintenant, $\lambda_P$ est une fonction continue de $P$ : en effet, elle
+s'écrit $\langle APv, Pv \rangle / \|Pv\|^2$ en utilisant le produit hermitien
+canonique. L'ensemble $\{ \lambda_P \mid P \in G \}$ est donc connexe puisque
+$G$ l'est. Or les $\lambda_P$ sont inclus dans le spectre de $A$, invariant par
+conjugaison, et discret. Donc $\lambda_P$ est constant. $A$ est donc une
+homothétie sur $Gv$, puis sur $V$.
+
+Si maintenant $V = \C^n$, alors $A \subseteq \C^*I$. Comme $A$ est un groupe
+dérivé (car $G$ non abélien !) et $\det\,[g,h] = 1$, $\det = 1$ sur $A$. D'où $A
+\subset \mathbb{U}_nI$, or $A$ est connexe, donc $A$ est le groupe trivial.
+Contradiction. Ainsi, $\{0\} \subsetneq V \subsetneq \C^n$, et on peut enchaîner
+sur la récurrence.
+
+Dans cette dernière étape, on a eu recours à la propriété suivante :
+\begin{proposition}
+  L'image par un morphisme d'un groupe résoluble est résoluble.
+\end{proposition}
+
+\newpage
+
+
 \subsection{Constructibilité des polygones réguliers}
 
 \[ \Q(\zeta_p) = K_m \supset K_{m-1} \supset \ldots \supset K_0 = \Q \]
@@ -770,9 +854,6 @@ TODO. Utiliser un élément primitif pour borner le nombre d'automorphismes fixa
 une extension intermédiaire d'un corps cyclotomique, ce qui évite d'avoir à
 prouver un sens du lemme d'Artin.
 
-\subsection{Théorème de Lie-Kolchin}
-
-Un long exercice dans H2G2.
 
 \subsection{Quatre autres développements}
 
@@ -982,18 +1063,19 @@ croissante, ses taux d'accroissements sont positifs ; et rien ne garantit a
 priori que la limite de ces taux d'accroissements soit finie. Reste à montrer :
 
 \begin{proof}[(2) Finitude p.p. de la dérivée]
-Calculons d'abord pour $0 < a < b < 1$ :
+Calculons d'abord, en prolongeant $f$ par $f(1)$ sur $]1,+\infty[$,
 \[
-  \int_a^b \frac{f(x+h) - f(x)}{h}dx =
-    \frac{1}{h} \int_b^{b+h} f(x)\,dx - \frac{1}{h} \int_a^{a+h} f(x)\,dx
-    \underset{h \to 0^+}{\longrightarrow} f(b) - f(a)
+  \int_0^1 \frac{f(x+h) - f(x)}{h}dx =
+    \frac{1}{h} \int_1^{1+h} f(x)\,dx - \frac{1}{h} \int_0^h f(x)\,dx
+    \underset{h \to 0^+}{\longrightarrow} f(1) - f(0)
 \]
 où la dernière égalité est vraie par continuité de $f$. Comme $f'$ est mesurable
 (en tant que limite de fonctions mesurables) et positive, on peut l'intégrer et
 le lemme de Fatou nous donne
-\[ \int_a^b f'(x)\,dx \leq \lim_{h \to 0^+} \int_a^b \frac{f(x+h) - f(x)}{h}dx =
-  f(b)- f(a) < +\infty \] 
-Ainsi, $f'$ est localement intégrale, elle est donc finie presque partout.
+\[ \int_0^{1} f'(x)\,dx \leq \lim_{h \to 0^+}
+  \int_0^{1} \frac{f(x+h) - f(x)}{h}dx =
+  f(1)- f(0) < +\infty \]
+Ainsi, $f'$ est positive et intégrale, elle est donc finie presque partout.
 \end{proof}
 
 \paragraph{Conclusion} En excluant d'abord les points où le taux d'accroissement
@@ -1058,7 +1140,7 @@ Pour en déduire les probabilités recherchées on utilise :
   coefficients de Fourier :
  \[ \displaystyle \P(S_n = k) = \frac{1}{(2\pi)^d} \int_{[-\pi,\pi]^d} \varphi_n(x)e^{-i\langle k,x \rangle} \]
 \end{lemma}
-En fait, $\phi_n$ est une série de Fourier $d$-dimensionnelle normalement
+En fait, $\varphi_n$ est une série de Fourier $d$-dimensionnelle normalement
 convergente dont les coefficients sont les $\P(S_n = (k_1, \ldots, k_d))$. Ce
 n'est pas anecdotique : la preuve qu'on est en train de dérouler repose
 fondamentalement sur un passage au domaine de Fourier\footnote{Ici les
@@ -1113,7 +1195,7 @@ Ce qui est infini exactement quand $d < 3$, CQFD.
 \paragraph{Si le temps permet…} On expliquera pourquoi dans une chaîne de Markov
 irréductible, un état est récurrent si et seulement si tous le sont, et que dans
 ce cas, tous les états sont presque sûrement atteints. Ainsi, on a montré qu'un
-ivrogne qui se déplace dans le plan peut être sûr de rentrer chez lui.
+ivrogne qui se déplace dans le plan peut être (presque) sûr de rentrer chez lui.
 
 \newpage
 
@@ -1201,10 +1283,10 @@ les fonctions continues bornées. C'est moralement un argument de densité mais
 attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
 
 \begin{theorem}[Lévy]
-  Soit $X$ une variable aléatoire réelle de fonction caractéristique $\phi$, et
+  Soit $X$ une variable aléatoire réelle de fonction caractéristique $\varphi$, et
   $(X_n)_{n \in \N}$ une suite de v.a. réelles dont on notera les fonctions
-  caractéristiques $\phi_n$ pour $n \in \N$. Alors $X_n \rightarrow X$ en loi si
-  et seulement si $\phi_n \rightarrow \phi$ simplement.
+  caractéristiques $\varphi_n$ pour $n \in \N$. Alors $X_n \rightarrow X$ en loi si
+  et seulement si $\varphi_n \rightarrow \varphi$ simplement.
 \end{theorem}
 \begin{proof}
   Le sens direct est évident, prouvons la réciproque. Soit $f \in
@@ -1214,16 +1296,16 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
   \[ \forall n \in \N,\; \E[ f(X_n) ] = 
     \E\left[ \frac{1}{2\pi} \int_\R \hat{f}(\xi) e^{i\xi X_n}\,d\xi \right] =
     \frac{1}{2\pi} \int_\R \E\left[ \hat{f}(\xi) e^{i\xi X_n} \right] d\xi =
-    \frac{1}{2\pi} \int_\R \hat{f}(\xi) \phi_n(\xi)\, d\xi
+    \frac{1}{2\pi} \int_\R \hat{f}(\xi) \varphi_n(\xi)\, d\xi
   \]
   où l'on a interverti espérance et intégrale par le théorème de Fubini (à
   justifier). (Au fond, on n'a fait que constater que la transformation de
   Fourier préserve le produit scalaire.) On peut faire le même calcul pour
-  $\E[f(X)]$, puis comme $|\phi_n| \leq 1$ et $\hat{f} \in L^1(\R)$, le théorème
-  de convergence dominée et notre  hypothèse de convergence des $\phi_n$ nous
+  $\E[f(X)]$, puis comme $|\varphi_n| \leq 1$ et $\hat{f} \in L^1(\R)$, le théorème
+  de convergence dominée et notre  hypothèse de convergence des $\varphi_n$ nous
   donnent
   \[ \E[ f(X_n) ] \underset{n \to \infty}{\longrightarrow}
-    \frac{1}{2\pi} \int_\R \hat{f}(\xi) \phi(\xi)\, d\xi = \E[f(X)].  \]
+    \frac{1}{2\pi} \int_\R \hat{f}(\xi) \varphi(\xi)\, d\xi = \E[f(X)].  \]
 \end{proof}
 
 
