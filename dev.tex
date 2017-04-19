@@ -161,7 +161,7 @@ Afin de montrer cela, introduisons le \emph{lagrangien} $\L : \R^n \times
 
   Si $(y_1,\ldots,y_k,z) \in A \cap B$, alors il existe $x$ tel que $g_i(x) \leq
   y_i < 0$ pour tout $x$, donc $x \in F$, et $f(x) \leq z < p$. C'est impossible
-  par définition de $p$. Ainsi, $A$ et $B$ sont disjoints, avec $A$ ouvert.
+  par définition de $p$. Ainsi, $A$ et $B$ sont disjoints, avec $B$ ouvert.
   
   Donc il existe un hyperplan séparateur\footnote{Il faut faire attention aux
     hypothèses topologiques de la version de Hahn-Banach qu'on utilise ici.
@@ -169,14 +169,22 @@ Afin de montrer cela, introduisons le \emph{lagrangien} $\L : \R^n \times
     dimension finie de Minkowski, qui demande seulement que les deux convexes
     soient disjoints.} i.e. une forme linéaire $\varphi$ telle que $\varphi(a) \geq
   \varphi(b)$ pour tout $a \in A$ et $b \in B$. En coordonnées, $\varphi$ s'écrit
-  \[ \varphi(y_1, \ldots, y_k, z) = \mu_1 y_1 + \ldots + \mu_k y_k + \nu z \]
+  \[ \varphi(y_1, \ldots, y_k, z) = \mu_1 y_1 + \ldots + \mu_k y_k + \nu z
+    \quad \text{avec} \quad (\mu_1, \ldots, \mu_k, \nu) \neq (0, \ldots, 0)
+  \]
   
-  En prenant $a = (g_1(x), \ldots, g_k(x), f(x))$, et $b = (0, \ldots, 0, p) \in
-  \overline{B}$, on a
+  Pour tout $x$, en prenant $a = (g_1(x), \ldots, g_k(x), f(x))$, et $b = (0,
+  \ldots, 0, p) \in \overline{B}$, on a
   \[ \sum_{i=1}^k \mu_i g_i(x) + \nu f(x) \geq \nu p \]
-  Quand $g_i(x) < 0$ (il existe un tel $x$ par hypothèse), on a $\nu f(x) > \nu
-  p$, d'où $\nu > 0$. En divisant par $\nu$, on a finalement :
-  $\L(x, \mu_1/\nu, \ldots, \mu_k/\nu) \geq p$.
+  On montre que $\nu > 0$ par disjonction de cas :
+  \begin{itemize}
+  \item si $\mu = (\mu_1, \ldots, \mu_k) \neq 0$, alors l'inégalité ci-dessus,
+    appliquée à $x_0$ strictement réalisable, nous donne $\nu f(x_0) > \nu p$ ;
+  \item sinon, $\varphi(g_1(x_0), \ldots, g_k(x_0), f(x_0)) > \varphi(0, \ldots,
+    0, p-1)$ nous donne $\nu f(x_0) > \nu(p-1)$.
+  \end{itemize}
+  En divisant par $\nu$, on a finalement : $\L(x, \mu_1/\nu, \ldots, \mu_k/\nu)
+  \geq p$.
 \end{proof}
 
 Supposons maintenant que $f, g_1, \ldots, g_k$ sont $\Cf^1$. 
@@ -203,7 +211,8 @@ donc $x$ minimise bien $f$ sur $F$.
 
 \paragraph{Ci-dessous, une tentative de prouver autrement la dualité forte…}
 comme corollaire du \emph{théorème du minimax de Sion}. L'intérêt étant de voir
-un lien entre condition de Slater et compacité.
+un lien entre condition de Slater et compacité. On suppose donc qu'il existe
+$x_0$ strictement réalisable.
 
 On a besoin comme hypothèse supplémentaire que $d > -\infty$ (comment s'en
 passer ?). On rappelle qu'un sup de fonctions semi-continues inférieurement
@@ -240,6 +249,144 @@ d'hyperplan séparateur ?
 
 \newpage
 
+\subsection{Enveloppe convexe du groupe orthogonal}
+
+Je propose ici une démonstration bien plus expéditive que celle qu'on trouve
+par-ci par-là dans des PDF sur Internet, relativement autosuffisante avec le
+programme de math spé (pas besoin de théorèmes un peu compliqués à démontrer
+comme Hahn-Banach géométrique, donc). Mais du coup c'est peut-être un peu court…
+
+On considère $\R^n$ muni de sa norme euclidienne canonique $\|\cdot\|$, $O(n)$
+le groupe orthogonal.
+
+Le seul prérequis sera le suivant :
+
+\begin{theorem}[Décomposition en valeurs singulières]
+  Soit $M \in \M_n(\R)$, alors il existe $U, V \in O(n)$ et $D$ diagonale à
+  coefficients positifs tels que $M = UDV$.
+\end{theorem}
+\begin{proof}
+  On s'est placé dans le cas particulier des matrices carrées, donc il suffit
+  d'enchaîner décomposition polaire et théorème spectral.
+\end{proof}
+
+Énonçons également un petit lemme qu'il sera bon d'illustrer avec un
+\textbf{dessin} dans $\R^2$ :
+\begin{lemma}
+  $\mathrm{Conv}(\{-1,1\}^n) = [-1,1]^n$.
+\end{lemma}
+\begin{proof}
+  On aimerait parachuter une formule explicite, mais c'est sans doute pénible,
+  vu que ça devra impérativement faire intervenir tous les $2^n$ sommets de
+  l'hypercube… Sinon, il est clair que $\mathrm{Conv}({-1,1}) = [-1,1]$, d'où
+  l'on déduit que
+  \[ \bigcup_{x \in [-1,1]}
+  \mathrm{Conv}(\{x\} \times \{-1,1\}^{n-1}) \subseteq
+  \mathrm{Conv}(\{-1,1\}^n) \]
+  puis on conclut par récurrence.
+\end{proof}
+
+
+Maintenant, soit $||| \cdot |||$ la norme subordonnée sur $\M_n(\R)$ et $B$ la
+boule unité \emph{fermée} de $\M_n(\R)$ pour cette norme.
+
+\begin{theorem}
+  $B$ est l'enveloppe convexe de $O(n)$. 
+\end{theorem}
+
+\begin{proof}
+  Tout d'abord, il est clair que les matrices orthogonales, étant des
+  isométries, sont de norme 1, donc $O(n) \subset B$. $B$ étant convexe, il
+  contient également l'enveloppe convexe de $O(n)$.
+
+  Soit $M \in B$. Écrivons sa SVD : $M = UDV$ où $U, V \in O(n)$ et $D =
+  \Diag(d_1, \ldots, d_n)$. Comme $|||D||| \leq 1$, on a $|d_i| \leq 1$ pour
+  tout $i$. Le lemme précédent nous permet donc d'écrire $D$ comme barycentre de
+  la forme $\Diag(\pm 1, \ldots, \pm 1)$. Ces matrices sont des symétries
+  orthogonales, elles sont dans $O(n)$. En multipliant par $U$ à gauche et $V$ à
+  droite, on a $M \in \mathrm{Conv}(O(n))$.
+\end{proof}
+
+Le théorème est donc en fait simplement la conséquence du fait que la plus
+grande valeur singulière est égale à la norme subordonnée.
+
+\begin{theorem}
+  $O(n)$ est l'ensemble des \emph{points extrêmes} de $B$, c'est-à-dire des
+  points qui ne peuvent pas s'écrire comme barycentres d'autres points de $B$.
+\end{theorem}
+
+Ce résultat découle du précédent via le théorème de Krein-Milman\footnote{En
+  réalité, on n'a besoin que de la version en dimension finie, plus simple, et
+  démontrée par Minkowski. Cette version nécessite quand même l'existence des
+  hyperplans d'appui, donc utilise le théorème de séparation des convexes (dont
+  la généralisation en dimension infinie est le théorème de Hahn-Banach).}, mais
+celui-ci est difficile à montrer.
+
+\begin{proof}[Preuve élémentaire] Vu le résultat précédent, tout point extrême
+  est forcément une matrice orthogonale. Réciproquement, soit $U \in O(n)$.
+
+Posons $\varphi : M \mapsto \Tr(U^{-1}M)$, $\varphi \in \M_n(\R)^*$. Pour
+tout $M \in B$, on a (puisque $\| U^{-1}M e_i \| \leq 1$)
+\[ \varphi(M) = \Tr(U^{-1}M) = \sum_{i=1}^n \langle U^{-1}M e_i \mid e_i \rangle
+  \leq \sum_{i=1}^n \| U^{-1}M e_i \| \cdot \| e_i \| \leq n \]
+
+et on a égalité si et seulement si, pour tout $i$,
+\begin{itemize}
+\item $\| U^{-1}M e_i \| = 1$
+\item (Cauchy-Schwarz) $U^{-1}M e_i$ et $e_i$ sont positivement liés
+\end{itemize}
+soit $U^{-1}M e_i = e_i$ pour tout $i$. Ce qui est équivalent à $U^{-1}M = I$ ou
+encore à $M = U$.
+
+Ainsi, d'une part $\varphi(U) = n$, d'autre part, pour tout barycentre $G =
+\sum_{i=1}^k \alpha_i M_i$ avec $M_i \in B \setminus \{U\}$, on a $\varphi(M_i) <
+n$ pour tout $i$ donc $\varphi(G) < n$. Forcément $U \neq G$ : $U$ est un point
+extrême.
+\end{proof}
+
+Conséquence de la preuve : pour chaque point extrême, il existe un hyperplan
+d'appui intersectant $B$ uniquement en ce point. Ce n'est pas vrai pour tout
+convexe (faire un dessin).
+
+% \paragraph{Enveloppe convexe de $O(n)$} Nous voulons montrer que
+% $\mathrm{Conv}(O(n)) = B$, sachant qu'une inclusion a déjà été montrée.
+% À ce stade, nous pourrions conclure directement en invoquant le théorème de
+% Krein-Milman, mais il est difficile à démontrer. Procédons autrement, avec les
+% résultats suivants :
+
+% \begin{theorem}[Carathéodory]
+%   Soit $X$ une partie d'un espace affine de dimension $n$. tout point
+%   $\mathrm{Conv}(X)$ s'écrit comme barycentre d'au plus $n+1$ points de $X$.
+% \end{theorem}
+% \begin{corollary}
+%   Si $K$ est une partie compacte d'un espace affine de dimension finie,
+%   $\mathrm{Conv}(K)$ est compacte.
+% \end{corollary}
+
+% Ce qui nous permet d'affirmer que $\mathrm{Conv}(O(n))$ est compact (comme quoi,
+% ce n'est pas si trivial que ça).
+
+% \begin{theorem}
+%   Dans un espace affine de dimension finie, si $K$ est convexe fermé et $x
+%   \not\in K$, alors il existe un hyperplan séparant strictement $x$ et $K$.
+% \end{theorem}
+% \begin{proof}
+%   On peut appliquer directement le théorème de Hahn-Banach géométrique ($\{x\}$
+%   étant convexe compact), ou bien utiliser la projection sur un convexe fermé
+%   dans un espace de Hilbert.
+% \end{proof}
+
+% Supposons par l'absurde qu'il existe $M \in B \setminus \mathrm{Conv}(O(n))$.
+% Alors il existe un hyperplan séparateur, fourni par une forme linéaire $\phi$
+% telle que pour tout $U \in \mathrm{Conv}(O(n))$, $\phi(U) < \phi(M)$. Comme
+% $\Tr(- \times -)$ est une forme bilinéaire non dégénérée, en fait,
+% \[ \exists A \in \M_n(\R) \,/\, \forall U \in O(n),\, \Tr(AU) < Tr(AM) \]
+
+
+\newpage
+
+
+
 \subsection{Fonction tangente et permutations zigzag}
 
 Cf. Richard P. Stanley, \emph{A Survey of Alternating Permutations}. Le terme
@@ -251,6 +398,85 @@ La série génératrice des permutations haut-bas est $tan(z)+sec(z)$.
 \end{theorem}
 
 Merci à Paul Melotti, c'est fait dans son PDF.
+
+\newpage
+
+\subsection{Lemme de Morse}
+
+Béni soit ce développement, car il permet de remplir la leçon
+\enquote{Applications des formules de Taylor} en faisant autre chose qu'un
+développement asymptotique. Référence : exercices 66 et 114 dans Rouvière,
+\emph{Petit guide de calcul différentiel}.
+
+On note $S_n(\R)$ l'espace des matrices symétriques réelles de taille $n$.
+
+\begin{proposition}
+  Soit $A \in S_n(\R) \cap \GL_n(\R)$. Il existe un voisinage $V \ni A$ et $P
+  \in \Cf^\infty(V, \GL_n(\R))$ tel que $M = P(M)^T A \, P(M)$ pour
+  tout $M \in V$.
+\end{proposition}
+
+\begin{proof}
+  Considérons $(A^{-1})S_n(\R) = \{A^{-1}M \mid M \in S_n(\R)\}$. C'est un
+  $\R$-espace vectoriel de dimension finie $n(n+1)/2$. $U = \GL_n(\R) \cap
+  (A^{-1})S_n(\R)$ en est une partie ouverte.
+  
+  On considère l'application $\psi : P \in U \mapsto P^T A \, P \in S_n(\R)$.
+  $\psi$ est une application $\Cf^\infty$ (car polynomiale) entre deux espaces
+  de même dimension. Il s'agit de construire un inverse (à droite) de $\psi$ au
+  voisinage de $A$ ; on voudrait donc appliquer le théorème d'inversion locale.
+  Il suffit pour cela de vérifier que la différentielle est inversible.
+
+  Calculons-la : $D\psi(I)(H) = H^TA + AH$. Cette formule montre que si $H \in
+  \Ker(D\psi(I))$, $AH$ est antisymétrique ; or $AH$ est symétrique (car $H \in
+  (A^{-1})S_n(\R)$, et l'on comprend pourquoi s'être restreint à cet espace !)
+  donc $AH = 0$ soit $H = 0$ ($A$ inversible). $D\psi(I)$ est donc inversible.
+\end{proof}
+
+\begin{corollary}[Réduction $\Cf^\infty$ des formes quadratiques]
+  Il existe $Q \in \Cf^\infty(V, \GL_n(\R))$ et $p, q \in \N$ tels que pour tout
+  $M \in V, M = Q(M)^T \Diag(I_p, -I_q)\, Q(M)$.
+\end{corollary}
+\begin{proof}
+  $A$ définit une forme quadratique non dégénérée. Il suffit de combiner le
+  théorème précédent avec la loi d'inertie de Sylvester, $(p,q)$ étant la
+  signature de $S$.
+\end{proof}
+
+\begin{theorem}[\enquote{Lemme} de Morse]
+  Soit $f \in \Cf^3(U, \R^n)$ ($U \subseteq \R^n$ ouvert) telle que $f(0) = 0$,
+  $Df(0) = 0$, et $D^2f(0)$ soit non dégénérée de signature $(p,n-p)$. Alors il
+  existe un changement de coordonnées local $\Cf^1$ $x \mapsto u$ tel que
+  \[ f(x) = u_1^2 + \ldots + u_p^2 - u_{p+1}^2 - \ldots - u_n^2 \]
+\end{theorem}
+\begin{proof}
+  On part de la formule de Taylor avec reste intégral\footnote{LE RESTE INTÉGRAL
+    !}. En écriture matricielle,
+  \[ f(x) = \int_0^1 (1-t)x^T H_f(tx) x\, dt = x^TA(x)x
+    \quad \text{où} \quad A(x) = \int_0^1 (1-t) H_f(tx) \,dt  \]
+  $H_f(x)$ étant la hessienne de $f$ en $x$ (formule valable pour $x$ dans un
+  voisinage convexe de 0). $f$ étant $\Cf^3$, par dérivation sous le signe
+  somme, $A$ est $\Cf^1$.
+
+  $A(0) = H_f(0)$ et cette dernière est inversible par hypothèse. Le théorème
+  démontré précédemment nous donne un voisinage $V$ de $A(0)$ dans $S_n(\R)$ et
+  $Q \in \Cf^\infty(V, \GL_n(\R))$ tels que si $A(x) \in V$, $A(x) = Q(A(x))^T
+  \Diag(I_p, -I_{n-p})\, Q(A(x))$. Et comme $A$ est continue à valeurs dans
+  $S_n(\R)$, $U = A^{-1}(V)$ est un voisinage de $0$.
+
+  Sur ce voisinage, on a donc :
+  \[ f(x) = x^T \cdot Q(A(x))^T\Diag(I_p, -I_{n-p})\,Q(A(x)) \cdot x
+    = u^T \Diag(I_p, -I_{n-p})\, u \quad \text{avec} \quad
+    u = Q(A(x)) \cdot x
+  \]
+  et c'est bien l'écriture qu'on voulait avoir. L'application $x \in U \mapsto
+  u$ est-elle bien un difféomorphisme ? Elle est $\Cf^1$, et sa différentielle
+  en 0 vaut $h \mapsto Q(A(0)) \cdot h$, qui est inversible. Quitte à
+  restreindre plus le voisinage de 0, on peut donc avoir un
+  $\Cf^1$-difféomorphisme par inversion locale.
+\end{proof}
+
+\newpage
 
 \subsection{Méthode de Kaczmarz}
 
@@ -715,127 +941,6 @@ $\gamma = \alpha + t\beta$.
 
 \newpage
 
-\subsection{Enveloppe convexe du groupe orthogonal}
-
-Je propose ici une démonstration bien plus expéditive que celle qu'on trouve
-par-ci par-là dans des PDF sur Internet, relativement autosuffisante avec le
-programme de math spé (pas besoin de théorèmes un peu compliqués à démontrer
-comme Hahn-Banach géométrique, donc). Mais du coup c'est peut-être un peu court…
-
-On considère $\R^n$ muni de sa norme euclidienne canonique $\|\cdot\|$, $O(n)$
-le groupe orthogonal.
-
-Le seul prérequis sera le suivant :
-
-\begin{theorem}[Décomposition en valeurs singulières]
-  Soit $M \in \M_n(\R)$, alors il existe $U, V \in O(n)$ et $D$ diagonale à
-  coefficients positifs tels que $M = UDV$.
-\end{theorem}
-\begin{proof}
-  On s'est placé dans le cas particulier des matrices carrées, donc il suffit
-  d'enchaîner décomposition polaire et théorème spectral.
-\end{proof}
-
-Énonçons également un petit lemme qu'il sera bon d'illustrer avec un
-\textbf{dessin} dans $\R^2$ :
-\begin{lemma}
-  $\mathrm{Conv}(\{-1,1\}^n) = [-1,1]^n$.
-\end{lemma}
-\begin{proof}
-  On aimerait parachuter une formule explicite, mais c'est sans doute pénible,
-  vu que ça devra impérativement faire intervenir tous les $2^n$ sommets de
-  l'hypercube… Sinon, il est clair que $\mathrm{Conv}({-1,1}) = [-1,1]$, d'où
-  l'on déduit que
-  \[ \bigcup_{x \in [-1,1]}
-  \mathrm{Conv}(\{x\} \times \{-1,1\}^{n-1}) \subseteq
-  \mathrm{Conv}(\{-1,1\}^n) \]
-  puis on conclut par récurrence.
-\end{proof}
-
-
-Maintenant, soit $||| \cdot |||$ la norme subordonnée sur $\M_n(\R)$ et $B$ la
-boule unité \emph{fermée} de $\M_n(\R)$ pour cette norme.
-
-\begin{theorem}
-  $B$ est l'enveloppe convexe de $O(n)$. 
-\end{theorem}
-
-\begin{proof}
-  Tout d'abord, il est clair que les matrices orthogonales, étant des
-  isométries, sont de norme 1, donc $O(n) \subset B$. $B$ étant convexe, il
-  contient également l'enveloppe convexe de $O(n)$.
-
-  Soit $M \in B$. Écrivons sa SVD : $M = UDV$ où $U, V \in O(n)$ et $D =
-  \Diag(d_1, \ldots, d_n)$. Comme $|||D||| \leq 1$, on a $|d_i| \leq 1$ pour
-  tout $i$. Le lemme précédent nous permet donc d'écrire $D$ comme barycentre de
-  la forme $\Diag(\pm 1, \ldots, \pm 1)$. Ces matrices sont des symétries
-  orthogonales, elles sont dans $O(n)$. En multipliant par $U$ à gauche et $V$ à
-  droite, on a $M \in \mathrm{Conv}(O(n))$.
-\end{proof}
-
-\begin{theorem}
-  $O(n)$ est l'ensemble des \emph{points extrêmes} de $B$, c'est-à-dire des
-  points qui ne peuvent pas s'écrire comme barycentres d'autres points de $B$.
-\end{theorem}
-
-\begin{proof}
-Soit $U \in O(n)$, montrons que c'est un point extrême de $B$.
-
-Posons $\varphi : M \mapsto \Tr(U^{-1}M)$, $\varphi \in \M_n(\R)^*$. Pour
-tout $M \in B$, on a (puisque $\| U^{-1}M e_i \| \leq 1$)
-\[ \varphi(M) = \Tr(U^{-1}M) = \sum_{i=1}^n \langle U^{-1}M e_i \mid e_i \rangle
-  \leq \sum_{i=1}^n \| U^{-1}M e_i \| \cdot \| e_i \| \leq n \]
-
-et on a égalité dans Cauchy-Schwarz si et seulement si,
-pour tout $i$, (i) $\| U^{-1}M e_i \| = 1$ et (ii) $U^{-1}M e_i$ et $e_i$ sont
-positivement liés, soit $U^{-1}M e_i = e_i$ pour tout $i$, ce qui est équivalent
-à $U^{-1}M = I$ ou encore à $M = U$.
-
-Ainsi, d'une part $\varphi(U) = n$, d'autre part, pour tout barycentre $G =
-\sum_{i=1}^k \alpha_i M_i$ avec $M_i \in B \setminus \{U\}$, on a $\varphi(M_i) <
-n$ pour tout $i$ donc $\varphi(G) < n$. Forcément $U \neq G$ : $U$ est un point
-extrême.
-\end{proof}
-
-Conséquence de la preuve : pour chaque point extrême, il existe un hyperplan
-d'appui intersectant $B$ uniquement en ce point.
-
-% \paragraph{Enveloppe convexe de $O(n)$} Nous voulons montrer que
-% $\mathrm{Conv}(O(n)) = B$, sachant qu'une inclusion a déjà été montrée.
-% À ce stade, nous pourrions conclure directement en invoquant le théorème de
-% Krein-Milman, mais il est difficile à démontrer. Procédons autrement, avec les
-% résultats suivants :
-
-% \begin{theorem}[Carathéodory]
-%   Soit $X$ une partie d'un espace affine de dimension $n$. tout point
-%   $\mathrm{Conv}(X)$ s'écrit comme barycentre d'au plus $n+1$ points de $X$.
-% \end{theorem}
-% \begin{corollary}
-%   Si $K$ est une partie compacte d'un espace affine de dimension finie,
-%   $\mathrm{Conv}(K)$ est compacte.
-% \end{corollary}
-
-% Ce qui nous permet d'affirmer que $\mathrm{Conv}(O(n))$ est compact (comme quoi,
-% ce n'est pas si trivial que ça).
-
-% \begin{theorem}
-%   Dans un espace affine de dimension finie, si $K$ est convexe fermé et $x
-%   \not\in K$, alors il existe un hyperplan séparant strictement $x$ et $K$.
-% \end{theorem}
-% \begin{proof}
-%   On peut appliquer directement le théorème de Hahn-Banach géométrique ($\{x\}$
-%   étant convexe compact), ou bien utiliser la projection sur un convexe fermé
-%   dans un espace de Hilbert.
-% \end{proof}
-
-% Supposons par l'absurde qu'il existe $M \in B \setminus \mathrm{Conv}(O(n))$.
-% Alors il existe un hyperplan séparateur, fourni par une forme linéaire $\phi$
-% telle que pour tout $U \in \mathrm{Conv}(O(n))$, $\phi(U) < \phi(M)$. Comme
-% $\Tr(- \times -)$ est une forme bilinéaire non dégénérée, en fait,
-% \[ \exists A \in \M_n(\R) \,/\, \forall U \in O(n),\, \Tr(AU) < Tr(AM) \]
-
-
-\newpage
 
 \subsection{Théorème de Lie-Kolchin}
 
@@ -862,12 +967,6 @@ Un long exercice dans H2G2 tome 1, corrigé dans la nouvelle édition (p. 238).
   $D^k(G) \trianglelefteq G$).
 \end{proof}
 
-\begin{proposition}
-  Le groupe dérivé d'un groupe connexe est connexe.
-\end{proposition}
-\begin{proof}
-  Admis.
-\end{proof}
 
 L'objectif est de montrer :
 
@@ -912,10 +1011,13 @@ dérivé (car $G$ non abélien !) et $\det\,[g,h] = 1$, $\det = 1$ sur $A$. D'o�
 Contradiction. Ainsi, $\{0\} \subsetneq V \subsetneq \C^n$, et on peut enchaîner
 sur la récurrence.
 
-Dans cette dernière étape, on a eu recours à la propriété suivante :
+Dans cette dernière étape, on a besoin de la propriété suivante :
 \begin{proposition}
-  L'image par un morphisme d'un groupe résoluble est résoluble.
+  Le groupe dérivé d'un groupe connexe est connexe.
 \end{proposition}
+\begin{proof}
+  Admis.
+\end{proof}
 
 \newpage
 
@@ -1187,31 +1289,9 @@ m'a été posé au concours d'entrée des ENS, en 2012 :
 \end{enumerate}
 L'examinateur affirmait que les question (2) et (3) étaient liées. Quatre ans se
 sont écoulés avant que je ne comprenne ce lien, en travaillant le développement
-ci-dessus… On admirera au passage les contorsions nécessaires pour contourner
-l'absence de l'intégrale de Lebesgue au programme des classes préparatoires.
-\begin{proof}[Solution de la question 3, datant de l'époque]
-  Pour simplifier l'écriture on va poser
-  \[E = \left\{ N \in \mathbb{Z} \mid u^*_N > 0 \right\}\]
-  Soit $N \in E$. $u_N$ n'est pas forcément positif (sinon, ça serait trop
-  simple). Par contre,
-  \[ u^*_N > 0 \quad \Leftrightarrow \quad
-    \exists n \in \mathbb{N}^* \,/\, \sum_{k=0}^{n-1} u_{N+k} > 0 \]
-  Si $u_N < 0$, alors $ \sum_{k=0}^{n-2} u_{N+1+k} \geq
-  \sum_{k=0}^{n-1} u_{N+k} > 0$ donc $u_{N+1} \in E$.
-  On peut espérer que pour un bon choix de $n$, $\{N,N+1,\ldots,N+n-1\} \subset E$
-  ce qui permettrait de découper la somme en morceaux positifs.
-
-Prenons donc $n$ minimal vérifiant $ \sum_{k=0}^{n-1} u_{N+k} > 0$. Si $u_{N+p}
-\not\in E$ pour $0 < p < n$, alors $ \sum_{k=p}^{n-1} u_{N+k} \leq 0$ donc $
-\sum_{k=0}^{p-1} u_{N+k} > 0$ ce qui contredit la minimalité de $n$. Ainsi, on a
-bien l'inclusion souhaitée.
-
-À partir de ce lemme, on montre que
- \[ \sum_{\underset{N \geq N_0}{N \in E}} u_N > 0 \]
- pour tout $N_0$ en construisant une sous-suite positive et croissante de la
-suite des sommes partielles. On conclut en faisant $N_0 \to -\infty$.
-
-\end{proof}
+ci-dessus… (Il est toutefois possible de résoudre l'exercice sans voir le lien.)
+On admirera au passage les contorsions nécessaires pour contourner l'absence de
+l'intégrale de Lebesgue au programme des classes préparatoires.
 
 \newpage
 
@@ -1313,7 +1393,7 @@ mais le calcul est bien légal à condition de considérer que $S^0 = \{\pm 1\}$
 (c'est bien la convention habituelle) et de prendre pour mesure 0-dimensionnelle
 la mesure de comptage. Les \enquote{coordonnées polaires} correspondent alors à
 la décomposition en signe et valeur absolue, qui est bien un
-$\Cf^1$-difféomorphisme entre $\R^*$ et $S^0 \times \R_+^*$ !
+difféomorphisme entre $\R^*$ et $S^0 \times \R_+^*$ !
 
 \paragraph{Si le temps permet…} On expliquera pourquoi dans une chaîne de Markov
 irréductible, un état est récurrent si et seulement si tous le sont, et que dans
@@ -1433,6 +1513,88 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
 
 \newpage
 
+\subsection{Formule de Poisson et fonction thêta}
+
+C'est un résultat qui lie séries de Fourier et transformée de Fourier :
+$2\pi$-périodiser une fonction revient à garder ses pulsations entières. (Existe
+aussi en version \enquote{1-périodiser = garder les fréquences entières}.)
+
+\begin{theorem}[Poisson]
+  Soit $f \in \S(\R)$. On a, pour tout $x \in \R$,
+  $\displaystyle \sum_{n \in \Z} f(t + 2\pi n) = \frac{1}{2\pi} \sum_{n \in \Z}
+    \hat{f}(n)e^{int}$.
+\end{theorem}
+
+\begin{remark}
+  Cette égalité se lit aussi comme la transformée de Fourier du peigne de Dirac.
+\end{remark}
+
+\begin{proof}
+  On vérifie sans difficulté que la série à gauche est normalement convergente
+  sur tout compact, et qu'il en va de même de sa dérivée. Elle définit donc une
+  fonction de $\Cf^1(R/2\pi\Z)$ ; celle-ci est donc égale à sa série de Fourier.
+
+  Il suffit ensuite de calculer les coefficients de Fourier, une interversion
+  série-intégrale (permise par la convergence normale) faisant apparaître la
+  transformée de Fourier de $f$.
+\end{proof}
+
+Voici maintenant une application classique (on peut notamment en déduire
+l'équation fonctionnelle de la fonction $\zeta$ de Riemann).
+
+\begin{theorem}[Équation fonctionnelle de la fonction $\theta$ de Jacobi]
+  Soit $\theta : x \mapsto \sum_{n \in \Z} e^{-\pi n^2 x}$.\\
+  Alors $\theta(1/x) = \sqrt{x}\theta(x)$ pour tout $x \in \R_+^*$.
+\end{theorem}
+\begin{remark}
+  La fonction $\theta$ est analytique sur le demi-plan $\{\mathrm{Re}(z) > 0\}
+  \subset \C$, et l'identité s'étend par unicité du prolongement analytique à ce
+  demi-plan, où il existe une unique détermination de la racine carrée
+  coïncidant avec celle sur $\R^*_+$.
+\end{remark}
+
+La preuve fera intervenir les gaussiennes $g_\sigma : t \mapsto
+(\sigma\sqrt{2\pi})^{-1} \exp(-t/2\sigma^2)$, et on utilisera (cf. développement
+\enquote{inversion de Fourier}) :
+\begin{proposition}[Transformée de Fourier d'une gaussienne]
+  $\displaystyle \widehat{g_\sigma}(\omega) = \exp\left(- \frac{\sigma^2
+      \omega^2}{2} \right)$. % $ = \frac{\sqrt{2\pi}}{\sigma} g_{1/\sigma}(\xi)$.
+\end{proposition}
+
+\begin{proof}[Preuve de l'équation fonctionnelle]
+  Fixons $x \in \R_+^*$.
+  \[ \theta(x) = \sum_{n \in \Z} \sigma(x)\sqrt{2\pi}
+    \cdot g_{\sigma(x)}(2\pi n) \quad \text{où} \quad
+    \sigma(x)^2 = \frac{2\pi}{x}.
+  \]
+  $g_{\sigma(x)}$ étant dans $\S(\R)$, la formule de Poisson peut s'appliquer :
+  \[ \theta(x) =
+    \frac{\sigma(x)\sqrt{2\pi}}{2\pi} \sum_{n \in \Z}
+    \widehat{g_{\sigma(x)}}(n) =
+    \frac{\sigma(x)}{\sqrt{2\pi}} \sum_{n \in \Z}
+    \exp\left(-\frac{\sigma(x)^2 n^2}{2} \right) =
+    \frac{1}{\sqrt{x}} \sum_{n \in \Z} \exp\left( -\frac{\pi n^2}{x} \right)
+    = \frac{\theta(1/x)}{\sqrt{x}}.
+  \]
+\end{proof}
+
+\begin{application}[Un développement asymptotique]
+  $\displaystyle \sum_{n \in \Z} x^{n^2} \underset{x \to 1^-}{\sim}
+  \sqrt{\frac{\pi}{- \ln x}}$
+\end{application}
+\begin{proof}
+  On a une série entière de rayon de convergence 1, donc elle est bien définie
+  au voisinage à droite de 1. Écrivons l'équation fonctionnelle pour $x \in
+  ]0,1[$
+  \[ \sum_{n \in \Z} x^{n^2} = \theta\left( \frac{- \ln x}{\pi} \right) =
+      \sqrt{\frac{\pi}{- \ln x}} \theta\left( \frac{\pi}{- \ln x} \right)
+  \]
+  Il suffit de vérifier que $\displaystyle \theta(u) = 1 + 2 \sum_{n=1}^\infty
+  e^{-\pi n^2 u}\to 1$ quand $u \to +\infty$ ($u = -\pi/\ln x$) et c'est bon…
+\end{proof}
+
+\newpage
+
 \subsection{Théorème du point fixe de Brouwer $\Cf^1$}
 
 Soit $n \geq 2$ un entier. On note $D^n$ la boule unité fermée de $\R^n$, et
@@ -1445,7 +1607,7 @@ $S^{n-1} = \partial D^n$ la sphère unité.
 \begin{remark}
   On en déduit le théorème pour $f \in \Cf^0(D^n, D^n)$.
 \end{remark}
-\begin{proof}
+\begin{proof}[Preuve de la remarque]
   On approxime $f$ par une suite de fonctions $\Cf^1$ qui convergent
   uniformément ; chacune admet un point fixe, et on extrait une sous-suite
   convergente.
@@ -1512,6 +1674,7 @@ $\Cf^0$.
 \end{proof}
 
 \newpage
+
 
 \subsection{Polynômes de Bernstein}
 

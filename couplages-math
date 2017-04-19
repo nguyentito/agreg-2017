@@ -62,7 +62,7 @@ Réciprocité quadratique / Boustrophédon
 Brouwer C^1 / Géodésiques
 
 208 : Espaces vectoriels normés, applications linéaires continues.
-Banach-Steinhaus et série de Fourier divergente / ?
+Enveloppe convexe du groupe orthogonal / ?
 
 214 : Théorème d'inversion locale, théorème des fonctions implicites.
 Lemme de Morse / Brouwer C^1
@@ -86,10 +86,10 @@ Dualité lagrangienne / Géodésiques
 Méthode de Newton pour les polynômes / 
 
 224 : Exemples de développements asymptotiques de suites et de fonctions.
-Méthode de Newton pour les polynômes / 
+Méthode de Newton pour les polynômes / Formule de Poisson
 
 226 : Suites vectorielles et réelles définies par une relation de récurrence u_{n+1} = f(u_n).
-Méthode de Newton pour les polynômes /
+Méthode de Newton pour les polynômes / Méthode de Kaczmarz
 
 228 : Continuité et dérivabilité des fonctions réelles d'une variable réelle.
 Polynômes de Bernstein / Dérivabilité des fonctions monotones
@@ -98,7 +98,7 @@ Polynômes de Bernstein / Dérivabilité des fonctions monotones
 Dérivabilité des fonctions monotones / Dualité lagrangienne
 
 230 : Séries de nombres réels ou complexes. Comportement des restes ou des sommes partielles des séries numériques.
-Taubérien fort / ?
+Formule de Poisson /
 
 233 : Méthodes itératives en analyse numérique matricielle.
 NON.
@@ -110,16 +110,16 @@ Inversion de Fourier / ?
 Inversion de Fourier / ?
 
 243 : Convergence des séries entières, propriété de la somme.
-Taubérien fort / Boustrophédon (algèbre)
+Boustrophédon (algèbre) / ?
 
 246 : Séries de Fourier.
-Banach-Steinhaus et série de Fourier divergente / Marche aléatoire
+Marche aléatoire / Formule de Poisson
 
 250 : Transformation de Fourier.
-Inversion de Fourier / 
+Inversion de Fourier / Formule de Poisson
 
 260 : Espérance, variance et moments d'une variable aléatoire.
-Polynômes de Bernstein / ?
+Polynômes de Bernstein / Marche aléatoire
 
 264 : Variables aléatoires discrètes.
 Polynômes de Bernstein / Marche aléatoire
