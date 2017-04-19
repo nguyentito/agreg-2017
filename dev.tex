@@ -62,6 +62,8 @@
 \def\SL{\mathrm{SL}}
 \def\PSL{\mathrm{PSL}}
 \def\Aut{\mathrm{Aut}}
+\def\Vol{\mathrm{Vol}}
+\def\Diag{\mathrm{Diag}}
 
 \newtheorem*{definition}{Définition}
 \newtheorem*{example}{Exemple}
@@ -631,7 +633,7 @@ classifiées à similitude près par la réduction de Jordan.
 \end{lemma}
 \begin{proof}
   Soit une telle classe, elle admet un unique représentant $N =
-  \mathrm{Diag}(J_1, \ldots, J_k)$ où les $J_i$ sont des blocs de Jordan, de
+  \Diag(J_1, \ldots, J_k)$ où les $J_i$ sont des blocs de Jordan, de
   taille décroissante. $N^2 = 0$ signifie que $J_i^2 = 0$ pour tout $i$. Les
   blocs de Jordan sont donc de taille 1 ou 2. On réalise donc la bijection en
   comptant les blocs d'ordre 2 : il y en a forcément au moins un, sinon $N = 0$,
@@ -679,7 +681,7 @@ transvection
       0 & 0 & 1
     \end{matrix}\right] \]
 ce qui s'écrit $A = PTP^{-1}$ avec $P \in \GL_3(\F_4)$. Peut-on choisir $P$ dans
-$\SL_3(\F_4)$ ? Oui, quitte à la multiplier à droite par $\mathrm{Diag}(1,1,\det
+$\SL_3(\F_4)$ ? Oui, quitte à la multiplier à droite par $\Diag(1,1,\det
 P^{-1})$. Tout élément d'ordre 2 est donc conjugué à $T$ dans $\SL_3(\F_4)$.
 
 Passons maintenant au quotient dans $H = \PSL_3(\F_4)$. Soit $A \in \SL_3(\F_4)$
@@ -715,49 +717,123 @@ $\gamma = \alpha + t\beta$.
 
 \subsection{Enveloppe convexe du groupe orthogonal}
 
+Je propose ici une démonstration bien plus expéditive que celle qu'on trouve
+par-ci par-là dans des PDF sur Internet, relativement autosuffisante avec le
+programme de math spé (pas besoin de théorèmes un peu compliqués à démontrer
+comme Hahn-Banach géométrique, donc). Mais du coup c'est peut-être un peu court…
+
 On considère $\R^n$ muni de sa norme euclidienne canonique $\|\cdot\|$, $O(n)$
-le groupe orthogonal, et $||| \cdot |||$ la norme subordonnée sur $\M_n(\R)$.
-Soit $B$ la boule unité \emph{fermée} de $\M_n(\R)$ pour $||| \cdot |||$.
-Alors :
+le groupe orthogonal.
+
+Le seul prérequis sera le suivant :
+
+\begin{theorem}[Décomposition en valeurs singulières]
+  Soit $M \in \M_n(\R)$, alors il existe $U, V \in O(n)$ et $D$ diagonale à
+  coefficients positifs tels que $M = UDV$.
+\end{theorem}
+\begin{proof}
+  On s'est placé dans le cas particulier des matrices carrées, donc il suffit
+  d'enchaîner décomposition polaire et théorème spectral.
+\end{proof}
+
+Énonçons également un petit lemme qu'il sera bon d'illustrer avec un
+\textbf{dessin} dans $\R^2$ :
+\begin{lemma}
+  $\mathrm{Conv}(\{-1,1\}^n) = [-1,1]^n$.
+\end{lemma}
+\begin{proof}
+  On aimerait parachuter une formule explicite, mais c'est sans doute pénible,
+  vu que ça devra impérativement faire intervenir tous les $2^n$ sommets de
+  l'hypercube… Sinon, il est clair que $\mathrm{Conv}({-1,1}) = [-1,1]$, d'où
+  l'on déduit que
+  \[ \bigcup_{x \in [-1,1]}
+  \mathrm{Conv}(\{x\} \times \{-1,1\}^{n-1}) \subseteq
+  \mathrm{Conv}(\{-1,1\}^n) \]
+  puis on conclut par récurrence.
+\end{proof}
+
+
+Maintenant, soit $||| \cdot |||$ la norme subordonnée sur $\M_n(\R)$ et $B$ la
+boule unité \emph{fermée} de $\M_n(\R)$ pour cette norme.
 
 \begin{theorem}
-  $O(n)$ est l'ensemble des points extrêmes du convexe compact $B$, et $B$ est
-  l'enveloppe convexe de $O(n)$.\\
-  (On appelle \emph{point extrême} de $B$ un point de $B$ qui ne peut pas s'écrire
-  comme barycentre d'autres points.)
+  $B$ est l'enveloppe convexe de $O(n)$. 
 \end{theorem}
 
-Tout d'abord, il est clair que les matrices orthogonales, étant des isométries,
-sont de norme 1, donc $O(n) \subset B$. $B$ étant convexe, il contient également
-l'enveloppe convexe de $O(n)$.
+\begin{proof}
+  Tout d'abord, il est clair que les matrices orthogonales, étant des
+  isométries, sont de norme 1, donc $O(n) \subset B$. $B$ étant convexe, il
+  contient également l'enveloppe convexe de $O(n)$.
 
-\paragraph{Étude des points extrêmes} Soit $U \in O(n)$, montrons que c'est un
-point extrême de $B$.
+  Soit $M \in B$. Écrivons sa SVD : $M = UDV$ où $U, V \in O(n)$ et $D =
+  \Diag(d_1, \ldots, d_n)$. Comme $|||D||| \leq 1$, on a $|d_i| \leq 1$ pour
+  tout $i$. Le lemme précédent nous permet donc d'écrire $D$ comme barycentre de
+  la forme $\Diag(\pm 1, \ldots, \pm 1)$. Ces matrices sont des symétries
+  orthogonales, elles sont dans $O(n)$. En multipliant par $U$ à gauche et $V$ à
+  droite, on a $M \in \mathrm{Conv}(O(n))$.
+\end{proof}
 
-Posons $\varphi : M \mapsto \Tr(U^{-1}M)$, forme linéaire sur $\M_n(\R)$. Pour tout
-$M \in B$, on a
+\begin{theorem}
+  $O(n)$ est l'ensemble des \emph{points extrêmes} de $B$, c'est-à-dire des
+  points qui ne peuvent pas s'écrire comme barycentres d'autres points de $B$.
+\end{theorem}
+
+\begin{proof}
+Soit $U \in O(n)$, montrons que c'est un point extrême de $B$.
+
+Posons $\varphi : M \mapsto \Tr(U^{-1}M)$, $\varphi \in \M_n(\R)^*$. Pour
+tout $M \in B$, on a (puisque $\| U^{-1}M e_i \| \leq 1$)
 \[ \varphi(M) = \Tr(U^{-1}M) = \sum_{i=1}^n \langle U^{-1}M e_i \mid e_i \rangle
-\leq \sum_{i=1}^n \| U^{-1}M e_i \| \cdot \| e_i \| \leq n \]
-puisque $\| U^{-1}M e_i \| \leq 1$, et on a égalité dans Cauchy-Schwarz si et
-seulement si, pour tout $i$,
-\begin{itemize}
-\item $\| U^{-1}M e_i \| = 1$
-\item $U^{-1}M e_i$ et $e_i$ sont positivement liés
-\end{itemize}
-soit $U^{-1}M e_i = e_i$ pour tout $i$, ce qui est équivalent à $U^{-1}M = I$ ou
-encore à $M = U$.
+  \leq \sum_{i=1}^n \| U^{-1}M e_i \| \cdot \| e_i \| \leq n \]
+
+et on a égalité dans Cauchy-Schwarz si et seulement si,
+pour tout $i$, (i) $\| U^{-1}M e_i \| = 1$ et (ii) $U^{-1}M e_i$ et $e_i$ sont
+positivement liés, soit $U^{-1}M e_i = e_i$ pour tout $i$, ce qui est équivalent
+à $U^{-1}M = I$ ou encore à $M = U$.
 
 Ainsi, d'une part $\varphi(U) = n$, d'autre part, pour tout barycentre $G =
 \sum_{i=1}^k \alpha_i M_i$ avec $M_i \in B \setminus \{U\}$, on a $\varphi(M_i) <
 n$ pour tout $i$ donc $\varphi(G) < n$. Forcément $U \neq G$ : $U$ est un point
 extrême.
+\end{proof}
 
-Réciproquement, soit $U$ un point extrême. $U$ admet une décomposition en
-valeurs singulières : $U = VSW$ où $V, W \in O(n)$ et $S \in S_n^+(\R)$.
-Remarquons que $M \mapsto VMW$ est un isomorphisme affine de $\M_n(\R)$ qui
-induit une bijection de $B$ avec lui-même,
+Conséquence de la preuve : pour chaque point extrême, il existe un hyperplan
+d'appui intersectant $B$ uniquement en ce point.
 
-pffffffffffffft
+% \paragraph{Enveloppe convexe de $O(n)$} Nous voulons montrer que
+% $\mathrm{Conv}(O(n)) = B$, sachant qu'une inclusion a déjà été montrée.
+% À ce stade, nous pourrions conclure directement en invoquant le théorème de
+% Krein-Milman, mais il est difficile à démontrer. Procédons autrement, avec les
+% résultats suivants :
+
+% \begin{theorem}[Carathéodory]
+%   Soit $X$ une partie d'un espace affine de dimension $n$. tout point
+%   $\mathrm{Conv}(X)$ s'écrit comme barycentre d'au plus $n+1$ points de $X$.
+% \end{theorem}
+% \begin{corollary}
+%   Si $K$ est une partie compacte d'un espace affine de dimension finie,
+%   $\mathrm{Conv}(K)$ est compacte.
+% \end{corollary}
+
+% Ce qui nous permet d'affirmer que $\mathrm{Conv}(O(n))$ est compact (comme quoi,
+% ce n'est pas si trivial que ça).
+
+% \begin{theorem}
+%   Dans un espace affine de dimension finie, si $K$ est convexe fermé et $x
+%   \not\in K$, alors il existe un hyperplan séparant strictement $x$ et $K$.
+% \end{theorem}
+% \begin{proof}
+%   On peut appliquer directement le théorème de Hahn-Banach géométrique ($\{x\}$
+%   étant convexe compact), ou bien utiliser la projection sur un convexe fermé
+%   dans un espace de Hilbert.
+% \end{proof}
+
+% Supposons par l'absurde qu'il existe $M \in B \setminus \mathrm{Conv}(O(n))$.
+% Alors il existe un hyperplan séparateur, fourni par une forme linéaire $\phi$
+% telle que pour tout $U \in \mathrm{Conv}(O(n))$, $\phi(U) < \phi(M)$. Comme
+% $\Tr(- \times -)$ est une forme bilinéaire non dégénérée, en fait,
+% \[ \exists A \in \M_n(\R) \,/\, \forall U \in O(n),\, \Tr(AU) < Tr(AM) \]
+
 
 \newpage
 
@@ -872,41 +948,21 @@ prouver un sens du lemme d'Artin.
 
 \section{Analyse}
 
-\subsection{Les fonctions monotones sont dérivables presque partout (long !)}
+\subsection{Les fonctions monotones (continues) sont dérivables presque partout}
 
-Un joli résultat suggéré par le rapport de jury d'agrég, dont on peut notamment
-déduire que la dérivation est bien l'opération inverse de l'intégrale de
-Lebesgue (presque partout, évidemment). Ce qui suit est une tentative de
+Un joli résultat suggéré par le rapport de jury d'agrég… mais c'est long !
+(Peut-être trop pour 15 minutes ?) Ce qui suit est une tentative de
 démonstration qui s'inspire princpalement des \emph{Leçons d'analyse
   fonctionnelle} de Riesz \& Szokefalvi-Nagy, la fin étant tirée de \emph{Real
-  Analysis}, Royden (ou Royden \& Fitzpatrick pour la dernière édition). On
-pourra aussi consulter \emph{An introduction to measure theory} de Terence Tao
-pour plus de détails sur les théorèmes de dérivation presque partout.
+  Analysis}, Royden (ou Royden \& Fitzpatrick pour la dernière édition). À la
+fin de la section, on trouvera des compléments culturels.
 
-Je ne suis pas du tout convaincu que ça rentre en 15 minutes… une approche
-possible serait d'énoncer les lemmes sans démonstration (mais en dessinant
-impérativement les rayons du soleil, et en agitant les mains), prouver
-l'existence p.p. de $f'$ (le cœur de la démo), puis au choix prouver la finitude
-p.p. ou l'un des lemmes.
-
-Pour éviter le recours au lemme de recouvrement de Vitali ou de Besicovitch, on
-va se contenter de montrer :
+On va se restreindre ici aux fonctions monotones \emph{continues}. Même avec
+cette hypothèse, ça reste technique, attention !
 \begin{theorem}
-  Soit $f : [0,1] \to \R$ une fonction \textnormal{continue} croissante. Alors $f$ est
+  Soit $f : [0,1] \to \R$ une fonction continue croissante. Alors $f$ est
   dérivable presque partout.
 \end{theorem}
-L'hypothèse de continuité était d'ailleurs présente dans la démonstration de ce
-théorème par Lebesgue en 1904. Le fait de se restreindre à un intervalle fermé,
-lui, est pratique parce qu'il permet que $f(0)$ et $f(1)$ soient définis et
-bornent $f$ ; on passe au cas d'un intervalle quelconque par une suite
-exhaustive de compacts.
-
-Par contre, attention, l'hypothèse de continuité ne peut pas être levée en se
-restreignant à des intervalles de continuité ; reste le cas des \emph{fonctions
-  de saut}, qui peuvent avoir des discontinuités denses. Exemple : $x \mapsto
-\sum_{n \in \N} 2^{-n} \Indic_{[x \geq q_n]}$ où $(q_n)_{n \in \N}$ est une
-énumération des rationnels. (Note : on sait qu'une fonction monotone a un nombre
-au plus dénombrable de points de discontinuité.)
 
 \begin{definition}
   On notera $\displaystyle \Delta f(x,y) = \frac{f(y) - f(x)}{y - x}$ pour $x
@@ -977,7 +1033,7 @@ l'épigraphe au lieu de l'hypographe.) Ce dernier cas est celui généralement
 $\alpha = 0$ revient à placer le soleil à l'horizon(tale), et les rayons
 viennent de la droite i.e. de l'est).
 
-\begin{proof}[Démonstration du lemme du soleil levant]
+\begin{proof}[Démonstration du \enquote{rising sun lemma}]
   $U$ est ouvert car les inégalités strictes de fonctions continues définissent
   des ouverts, et une projection linéaire d'un ouvert sur une coordonnée
   est un ouvert\footnote{Banach--Schauder en dimension finie !}.
@@ -1082,20 +1138,80 @@ Ainsi, $f'$ est positive et intégrale, elle est donc finie presque partout.
 n'a pas de limite, puis ceux où la limite est $+\infty$, on ne s'est privé que
 d'en semble de mesure nulle, donc : $f$ est dérivable presque partout !
 
-Remarquons qu'en utilisant la majoration de la variation totale et le lemme des
-rayons du soleil, on peut aussi démontrer (et ça a presque été fait dans la
-preuve ci-dessus) que
-\[ \mu\left( \left\{ x \in ]a,b[ \mid D^+f(x) \geq \beta \right\} \right)
-  \leq \frac{f(b)-f(a)}{\beta} \]
+Le théorème se généralise évidemment à un intervalle de définition quelconques
+(par union dénombrable de segments compacts), et il est tout aussi clair que
+l'énoncé s'applique aussi pour $f$ décroissante. Par contre, attention, il n'est
+pas facile de généraliser à $f$ discontinue !
+
+\paragraph{À propos de l'hypothèse de continuité} Cette hypothèse était présente
+dans la première démonstration de ce théorème par Lebesgue en 1904.
+
+Quand $f$ est discontinue, on pourrait vouloir se restreindre à ses intervalles
+de continuité pour se ramener au cas qu'on a prouvé. Un contre-exemple à cette
+stratégie naïve est donné par la fonction $f : x \mapsto \sum_{n \in \N} 2^{-n}
+\Indic_{[x \geq q_n]}$ où $(q_n)_{n \in \N}$ est une énumération des rationnels.
+Il faut donc traiter le cas de ce genre de \emph{fonctions de saut} (et en fait,
+toute fonction monotone est la somme d'une fonction continue et d'une fonction
+de saut, puisqu'une fonction monotone a un nombre au plus dénombrable de points
+de discontinuité).
+
+On trouvera chez Royden une preuve directe du cas général ($f$ potentiellement
+discontinue) utilisant le lemme de recouvrement de Vitali. Dans ce livre, ce
+théorème est le premier d'une séquence qui aboutit à montrer que pour les
+fonctions d'une variable réelle la dérivation est bien l'opération inverse de
+l'intégrale de Lebesgue (presque partout, évidemment).
+
+\paragraph{Dernière remarque culturelle}
+
+En utilisant la majoration de la variation totale et le lemme des rayons du
+soleil, on peut aussi démontrer (et ça a quasiment déjà été fait !) que
+\[ \mu\left( \left\{ x \in ]0,1[ \mid D^+f(x) \geq \beta \right\} \right)
+  \leq \frac{f(1)-f(0)}{\beta} \]
 ce qui aurait pu permettre de traiter la partie finitude (exercice pour la
 lectrice). Ce résultat est à comparer avec le suivant, utilisé pour démontrer
-des théorèmes de dérivation du même genre :
+d'autres théorèmes de dérivation presque partout dans le même esprit (cf. par
+exemple \emph{An introduction to measure theory} de Terence Tao) :
 \begin{theorem}[Inégalité maximale de Hardy-Littlewood]
   Soit $f \in L^1(\R)$, et soit $\beta > 0$. Alors
-  \[ \mu\left( \left\{ x \in \R \mid \sup_{h > 0} \frac{1}{h} \int_x^{x+h}
+  \[ \mu\left( \left\{ x \in \R \;\middle|\; \sup_{h > 0} \frac{1}{h} \int_x^{x+h}
         |f(t)|\,dt \geq \beta \right\} \right)
     \leq \frac{1}{\beta} \int_\R |f(t)|\,dt \]
 \end{theorem}
+
+À ce propos, le lecteur est invité à se pencher sur l'énoncé d'un exercice qui
+m'a été posé au concours d'entrée des ENS, en 2012 :
+\begin{enumerate}
+\item Montrer que tout ouvert de $\mathbb{R}$ est une réunion disjointe dénombrable d'intervalles ouverts.
+\item On prend une fonction continue sur un intervalle de $\mathbb{R}$ et on desssine son graphe. On fait arriver de la droite ($x = +\infty$) un faisceau lumineux de rayons parallèles à l'axe des abscisses. Ce faisceau éclaire certaines parties du graphe, le reste étant dans l'ombre (on considérera qu'un rayon arrivant tangent en un extrémum n'est pas bloqué). Montrer que l'ensemble des abscisses des points à l'ombre est une union disjointe d'intervalles ouverts.
+\item Soit $(u_n)_{n \in \mathbb{Z}} \in \mathbb{R}^{\mathbb{Z}}$ une suite \emph{sommable}. On pose $u^*_N = \displaystyle \sup_{n \in \mathbb{N}^*} \frac{1}{n} \sum_{k=0}^{n-1} u_{N+k}$.\\ Montrer que $\displaystyle \sum_{\underset{u_N^* > 0}{N \in \mathbb{Z}}} u_N \geq 0$.
+\end{enumerate}
+L'examinateur affirmait que les question (2) et (3) étaient liées. Quatre ans se
+sont écoulés avant que je ne comprenne ce lien, en travaillant le développement
+ci-dessus… On admirera au passage les contorsions nécessaires pour contourner
+l'absence de l'intégrale de Lebesgue au programme des classes préparatoires.
+\begin{proof}[Solution de la question 3, datant de l'époque]
+  Pour simplifier l'écriture on va poser
+  \[E = \left\{ N \in \mathbb{Z} \mid u^*_N > 0 \right\}\]
+  Soit $N \in E$. $u_N$ n'est pas forcément positif (sinon, ça serait trop
+  simple). Par contre,
+  \[ u^*_N > 0 \quad \Leftrightarrow \quad
+    \exists n \in \mathbb{N}^* \,/\, \sum_{k=0}^{n-1} u_{N+k} > 0 \]
+  Si $u_N < 0$, alors $ \sum_{k=0}^{n-2} u_{N+1+k} \geq
+  \sum_{k=0}^{n-1} u_{N+k} > 0$ donc $u_{N+1} \in E$.
+  On peut espérer que pour un bon choix de $n$, $\{N,N+1,\ldots,N+n-1\} \subset E$
+  ce qui permettrait de découper la somme en morceaux positifs.
+
+Prenons donc $n$ minimal vérifiant $ \sum_{k=0}^{n-1} u_{N+k} > 0$. Si $u_{N+p}
+\not\in E$ pour $0 < p < n$, alors $ \sum_{k=p}^{n-1} u_{N+k} \leq 0$ donc $
+\sum_{k=0}^{p-1} u_{N+k} > 0$ ce qui contredit la minimalité de $n$. Ainsi, on a
+bien l'inclusion souhaitée.
+
+À partir de ce lemme, on montre que
+ \[ \sum_{\underset{N \geq N_0}{N \in E}} u_N > 0 \]
+ pour tout $N_0$ en construisant une sous-suite positive et croissante de la
+suite des sommes partielles. On conclut en faisant $N_0 \to -\infty$.
+
+\end{proof}
 
 \newpage
 
@@ -1188,9 +1304,16 @@ Pour $x \to 0$,
 Finalement, reste à étudier l'intégrabilité de $\|x\|^{-2}$. Un passage en
 coordonnées polaires et le théorème de Tonelli donnent
 \[ \int_{B(0,\varepsilon)} \|x\|^{-2}\,dx = \int_{]0,\varepsilon[ \times S^{d-1}}
-  r^{-2} \cdot r^{d-1}\,dr\,d\omega = \textnormal{Vol}(S^{d-1}) \int_0^\varepsilon
+  r^{-2} \cdot r^{d-1}\,dr\,d\omega = \Vol(S^{d-1}) \int_0^\varepsilon
   r^{d-3}\,dr \]
 Ce qui est infini exactement quand $d < 3$, CQFD.
+
+Petit détail : le cas $d=1$ semble nécessiter un traitement particulier,
+mais le calcul est bien légal à condition de considérer que $S^0 = \{\pm 1\}$
+(c'est bien la convention habituelle) et de prendre pour mesure 0-dimensionnelle
+la mesure de comptage. Les \enquote{coordonnées polaires} correspondent alors à
+la décomposition en signe et valeur absolue, qui est bien un
+$\Cf^1$-difféomorphisme entre $\R^*$ et $S^0 \times \R_+^*$ !
 
 \paragraph{Si le temps permet…} On expliquera pourquoi dans une chaîne de Markov
 irréductible, un état est récurrent si et seulement si tous le sont, et que dans
@@ -1308,9 +1431,85 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
     \frac{1}{2\pi} \int_\R \hat{f}(\xi) \varphi(\xi)\, d\xi = \E[f(X)].  \]
 \end{proof}
 
-
+\newpage
 
 \subsection{Théorème du point fixe de Brouwer $\Cf^1$}
+
+Soit $n \geq 2$ un entier. On note $D^n$ la boule unité fermée de $\R^n$, et
+$S^{n-1} = \partial D^n$ la sphère unité.
+
+\begin{theorem}[Brouwer]
+  Toute application $f \in \Cf^1(D^n, D^n)$ admet un point fixe.
+\end{theorem}
+
+\begin{remark}
+  On en déduit le théorème pour $f \in \Cf^0(D^n, D^n)$.
+\end{remark}
+\begin{proof}
+  On approxime $f$ par une suite de fonctions $\Cf^1$ qui convergent
+  uniformément ; chacune admet un point fixe, et on extrait une sous-suite
+  convergente.
+
+  Attention : il faut s'assurer que les approximations de $f$ soient bien à
+  valeur dans $D^n$ et non dans une boule de rayon $1+\varepsilon$.
+\end{proof}
+
+S'il existait un contre-exemple $f$ au théorème, alors on pourrait définir la
+rétraction
+\[ r : x \mapsto \frac{f(x) - x}{\|f(x) - x\|}\]
+qui contredirait le lemme suivant :
+
+\begin{lemma}[de non-rétraction $\Cf^1$]
+  Il n'existe pas de fonction $r \in \Cf^1(D^n, S^{n-1})$ telle que
+  $r\restriction_{S^{n-1}} = \mathrm{id}$.
+\end{lemma}
+\begin{remark}
+En topologie algébrique, on prouve que $D^n$ et $S^{n-1}$ n'ont pas le même type
+d'homotopie ; une conséquence est qu'il n'existe pas non plus de rétraction
+$\Cf^0$.
+\end{remark}
+
+\begin{proof}[Preuve du lemme]
+  Par l'absurde, soit $r$ un contre-exemple.  
+  Posons, pour $t \in [0,1]$, $f_t = (1-t)\mathrm{id} + tr$, et définissons
+  \[ P(t) = \int_{D^n} \det J_{f_t}(x)\,dx = \int_{D^n} \det ((1-t)I +
+    tJ_r(x))\,dx \]
+  où $J_r(x)$ désigne la matrice jacobienne de $r$ au point $x$.
+
+  La seconde expression montre que la fonction $P$ est \emph{polynomiale}, ce
+  qui résulte de la polynomialité du déterminant en développant l'intégrande.
+  Comme $r(D^n)$ est d'intérieur vide, $J_r$ s'annule partout (contraposée du
+  théorème d'inversion locale) donc $P(1) = 0$.
+
+  Soit maintenant $t \in [0,1/(1+M)[$ où $M = \sup |||J_r|||$. Alors pour tout
+  $x \in D^n$, $1-t > tM \geq |||tJ_r|||$, donc $J_{f_t}$ est inversible
+  (propriété classique des algèbres de Banach). De plus, si $f_t(x) = f_t(y)$,
+  alors
+  \[(1-t)(x-y) = t(r(y) - r(x)) \quad \text{d'où} \quad
+    (1-t)\|x-y\| = t\|r(x) - r(y)\| \leq tM\|x-y\| \]
+  par inégalité des accroissements finis. Ceci contredit $1-t > tM$
+  à moins que $\|x-y\| = 0$ : $f$ est donc injective.
+
+  Le théorème d'inversion globale nous dit donc que $f_t$ est un difféomorphisme
+  pour des petites valeurs de $t$. Ainsi, la formule de changement de variable
+  s'applique immédiatement à la définition de $P(t)$ (ou presque ! modulo une
+  valeur absolue qu'on évacue en vérifiant que l'intégrande est toujours
+  positive), et donne $P(t) = \Vol(f_t(D^n))$.
+
+  Que peut-on dire sur l'image de $f_t$ ? Tout d'abord, comme $D^n$ est compact,
+  $f_t(D^n)$ est compacte, donc fermée dans $D^n$. $f_t(D^n)\setminus S^{n-1}$
+  est donc un fermé relatif de la boule ouverte. Souvenons-nous maintenant que
+  $r$ est une rétraction : on a donc $f_t(S^{n-1}) = S^{n-1}$, d'où par
+  injectivité $f_t(D^n)\setminus S^{n-1} = f_t(D^n \setminus S^{n-1})$. Le
+  membre de droite est un ouvert, car $D^n \setminus S^{n-1}$ est un ouvert de
+  $\R^n$ et $f_t$ un difféomorphisme local. $f_t(D^n\setminus S^{n-1})$ est donc
+  à la fois ouvert et fermé relativement à $D^n \setminus S^{n-1}$, et non vide,
+  donc par connexité, on a finalement $f_t(D^n) = D^n$.
+
+  Mais alors, la fonction polynomiale $P$ est constante égale à $\Vol(D^n)$ sur
+  $[0,1/(1+M)[$, donc l'est partout. Or $\Vol(D^n) \neq 0$ et $P(1) = 0$,
+  contradiction.
+\end{proof}
 
 \newpage
 
