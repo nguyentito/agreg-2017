@@ -1836,9 +1836,15 @@ répondre aux questions sur le développement.
 
 \subsection{Théorème taubérien fort de Hardy--Littlewood}
 
-Référence : Gourdon, \emph{Analyse}.
+Référence : Gourdon, \emph{Analyse}. On propose ici une preuve avec moins de
+découpage d'$\varepsilon$, en utilisant des sommes de Riemann ainsi qu'en
+sortant un peu du programme de prépa.
 
-\begin{theorem}
+Pour présenter ce développement, il faut un peu de culture sur les théorèmes
+abéliens et taubériens, en particulier savoir énoncer le théorème d'Abel radial
+ou angulaire, dont le résultat suivant est une réciproque partielle.
+
+\begin{theorem}[Hardy--Littlewood]
   Soit $(a_n) \in \R^n$ telle que $a_n = O(1/n)$ quand $n \to +\infty$. En
   particulier, la série entière $F(x) = \sum_{n \in \N} a_n x^n$ a un rayon de
   convergence au moins 1.
@@ -1847,20 +1853,84 @@ Référence : Gourdon, \emph{Analyse}.
   est convergente et vaut $c$.
 \end{theorem}
 
+\begin{example}
+  $\displaystyle 1 - \frac{1}{2} + \frac{1}{3} + \ldots = \ln 2$.
+\end{example}
+
 Il suffit de montrer le théorème pour $c = 0$, quitte à soustraire $c$ à $a_0$.
 
 \paragraph{Stratégie globale} Soit $\Theta$ l'ensemble des fonctions $\theta :
 [0,1] \to \R$ telles que
 \begin{itemize}
 \item $\displaystyle \sum_{n \in \N} a_n \theta(x^n)$ converge pour $0 \leq x < 1$ ;
-\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n) \xrightarrow[x \to 1^{-}] 0$.
+\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n) \xrightarrow[x \to 1^{-}]{} 0$.
 \end{itemize}
+Remarquons que $\Theta$ est un espace vectoriel.
+
 On va montrer que $g = \Indic_{[1/2, 1]} \in \Theta$, ce qui établira le
 théorème : en effet, dans ce cas,
 \[ \forall N \in \N,\; S_N =  \sum_{n = 0}^N a_n = \sum_{n = 0}^{\infty} a_n
   g(x_N^n) \quad \text{avec}\; x_N = 2^{-1/N} \xrightarrow[N \to +\infty]{} 1^- \]
 et par composition de limites $S_N \rightarrow 0$ quand $N \to +\infty$.
 
+\begin{lemma}
+  Si $P$ est un polynôme s'annulant en $0$, alors $P \in \Theta$.
+\end{lemma}
+\begin{proof}
+  Par linéarité, il suffit de le montrer pour les monômes. Si $\theta(x) = x^k$
+  pour $k \geq 1$, alors comme $(x^n)^k = x^{nk} = (x^k)^n$, on a $\sum_{n \in
+    \N} a_n f(x^n) = \theta(x^k)$, puis on conclut par composition de limites.
+\end{proof}
+
+\begin{lemma}
+  Si $f : [0,1] \to \R$ est continue par morceaux (ou plus généralement bornée
+  et Riemann-intégrable\footnote{Remarque culturelle : une fonction bornée est
+    Riemann-intégrable si et seulement si son ensemble de points de
+    discontinuités est de mesure nulle.}), alors
+  \[ (1-x) \sum_{n=0}^\infty x^nf(x^n) \xrightarrow[x \to 1^{-}]{} \int_0^1
+    f(t)\,dt\]
+\end{lemma}
+\begin{proof}
+  La série se réécrit $\sum_{n=0}^\infty (x^n - x^{n+1})f(x^n)$ et on reconnaît
+  donc une somme de Riemann infinie associée à la subdivision $]0,1] =
+  \bigcup_{n \in \N} ]x^{n+1},x^n]$ ! Comme la finesse de cette subdivision est
+  $1-x$, et tend vers $0$ quand $x \to 1^-$, la somme de Riemann converge vers
+  l'intégrale.
+  
+  Ceci est légèrement une arnaque dans la mesure où le théorème habituel de
+  convergence des sommes de Riemann est énoncé pour des subdivisions finies,
+  mais on peut montrer qu'il est aussi valable pour des subdivisions
+  dénombrables.
+\end{proof}
+
+Écrivons maintenant $g(x) = x + x(1-x)h(x)$ où, pour $x < 1/2$, $h(x) =
+1/(x-1)$, et pour $x \geq 1/2$, $h(x) = 1/x$. 
+
+Les fonctions polynomiales étant denses dans $L^1([0,1])$ (corollaire du
+théorème de Weierstrass), il existe $Q \in \R[X]$ tel que $\|h-Q\|_1 <
+\varepsilon$. Posons alors $P(X) = X + X(1-X)Q(X)$ : c'est une approximation de
+$g$. (Au passage, tout polynôme $P$ avec $P(0) = 0$ et $P(1) = 1$ s'écrit sous
+cette forme, ce qui motive l'introduction de $h$.)
+
+On a alors :
+\[ \left| \sum_{n \in \N} a_n g(x^n) - \sum_{n \in \N} a_n P(x^n) \right| \leq
+  \sum_{n \in \N} |a_n| \cdot |g - P|(x^n) = \sum_{n \in \N} |a_n| \cdot
+  x^n(1-x^n) \cdot |h - Q|(x^n) \]
+
+Comme $1-x^n = (1-x)(1+ \ldots + x^{n-1}) \leq n(1-x)$, $|a_n|(1-x^n) \leq
+n|a_n|(1-x)$. Or $n|a_n| = O(1)$ par hypothèse. Donc il existe $M > 0$ tel que
+\[ \left| \sum_{n \in \N} a_n g(x^n) - \sum_{n \in \N} a_n P(x^n) \right| \leq
+  M (1-x) \sum_{n \in \N} x^n|h - Q|(x^n) \]
+Soit :
+\[ \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
+  \left| \sum_{n \in \N} a_n P(x^n) \right| +
+  M (1-x) \sum_{n \in \N} x^n|h - Q|(x^n) \]
+En passant à la limite avec les lemmes précédents, sachant que $P(0) = 0$ et que
+$|h-Q|$ est continue par morceaux :
+\[ \limsup_{x \to 1^-} \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
+  0 + M \int_0^1 |h(t) - Q(t)|dt = M \|h-Q\|_1 < M\varepsilon \]
+D'où, finalement,
+\[ \sum_{n \in \N} a_n g(x^n) \xrightarrow[x \to 1^-]{} 0 \]
 
 \newpage
 
