@@ -1,0 +1,62 @@
+901 : Structures de données.
+Union-Find / ?
+
+902 : Diviser pour régner.
+Algorithme de Hirschberg / Médiane en temps linéaire
+
+903 : Exemples d'algorithmes de tri. Correction et complexité.
+Tri par tas / Tri des suffixes
+
+906 : Programmation dynamique.
+Arbre de recherche optimal / FPTAS pour le sac à dos
+
+907 : Algorithmique du texte.
+Tri des suffixes / Algorithme de Hirschberg / Automate de Simon
+
+909 : Langages rationnels et automates finis.
+Double renversement / Automate de Simon / Arithmétique de Presburger (?)
+
+912 : Fonctions récursives primitives et non primitives.
+Fonction d'Ackermann / 
+
+913 : Machines de Turing.
+? / Théorème de Baker-Gill-Solovay
+
+914 : Décidabilité et indécidabilité.
+? / Arithmétique de Presburger
+
+915 : Classes de complexité.
+Théorème de Baker-Gill-Solovay / Théorème de Savitch
+
+916 : Formules du calcul propositionnel : représentation, formes normales, satisfiabilité.
+Compacité propositionnelle / 2-SAT via forte connexité
+
+918 : Systèmes formels de preuve en logique du premier ordre.
+
+
+919 : Unification ; algorithmes et applications.
+Algorithme naïf d'unification / Paires critiques
+
+920 : Réécriture et formes normales.
+Paires critiques / ?
+
+921 : Algorithmes de recherche et structures de données associées.
+Arbre de recherche optimal / ?
+
+923 : Analyses lexicale et syntaxique.
+???
+
+924 : Théorie et modèles en logique du premier ordre.
+Théorème de Löwenheim-Skolem / ?
+
+925 : Graphes ; représentations et algorithmes.
+2-SAT via forte connexité / NP-complétude de la couverture par sommets /
+Couplage de poids minimum en O(n^4)
+
+
+927 : Exemples de preuve d'algorithme ; correction, terminaison.
+NON.
+
+928 : Problèmes NP-complets ; exemples et réductions.
+FPTAS pour le sac à dos / NP-complétude de la couverture par sommets
+
