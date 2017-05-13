@@ -7,6 +7,8 @@
 \usepackage{stmaryrd}
 \usepackage{amsthm}
 \usepackage{tikz-cd}
+\usepackage{algorithm,caption}
+\usepackage{algpseudocode}
 
 % Locale/encoding with XeTeX: UTF-8 by default, use fontspec
 \usepackage{unicode-math}
@@ -75,10 +77,25 @@
 \newtheorem*{remark}{Remarque}
 \newtheorem*{corollary}{Corollaire}
 
+\algtext*{EndProcedure}
+\algtext*{EndWhile}
+\algtext*{EndFor}
+\algtext*{EndIf}
+\algrenewcommand\algorithmicprocedure{\textbf{procédure}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{alors}}
+\algrenewcommand\algorithmicelse{\textbf{sinon}}
+\algrenewcommand\algorithmicfor{\textbf{pour}}
+\algrenewcommand\algorithmicwhile{\textbf{tant que}}
+\algrenewcommand\algorithmicdo{\textbf{faire}}
+\algrenewcommand\algorithmicreturn{\textbf{renvoyer}}
+
+
 \begin{document}
 
-\title{Mes développements d'agrég de math(-info)}
-\author{Nguyễn Lê Thành Dũng\\(ENS Ulm, département informatique, promo 2012)}
+\title{Mes développements pour l'agrég de maths\\
+  (leçons d'algèbre et analyse, option D)}
+\author{Nguyễn Lê Thành Dũng (ENS Ulm, département informatique, promo 2012)}
 \date{Préparation à l'agrégation de l'ENS Paris-Saclay, 2016--2017}
 \maketitle
 
@@ -434,13 +451,13 @@ On note $S_n(\R)$ l'espace des matrices symétriques réelles de taille $n$.
 \end{proof}
 
 \begin{corollary}[Réduction $\Cf^\infty$ des formes quadratiques]
-  Il existe $Q \in \Cf^\infty(V, \GL_n(\R))$ et $p, q \in \N$ tels que pour tout
-  $M \in V, M = Q(M)^T \Diag(I_p, -I_q)\, Q(M)$.
+  Soit $(p,q)$ la signature de $A$ en tant que forme quadratique non dégénérée.
+  Il existe $Q \in \Cf^\infty(V, \GL_n(\R))$ telle que pour tout $M \in V$,
+  \[M = Q(M)^T \Diag(I_p, -I_q)\, Q(M). \]
 \end{corollary}
 \begin{proof}
-  $A$ définit une forme quadratique non dégénérée. Il suffit de combiner le
-  théorème précédent avec la loi d'inertie de Sylvester, $(p,q)$ étant la
-  signature de $S$.
+  Il suffit de combiner le théorème précédent avec la loi d'inertie de
+  Sylvester.
 \end{proof}
 
 \begin{theorem}[\enquote{Lemme} de Morse]
@@ -922,25 +939,115 @@ dernier est donc la seule, CQFD.
 
 \newpage
 
-\subsection{Théorème de l'élément primitif via le résultant}
+\subsection{Sous-groupe de Frattini et théorème de la base de Burnside}
 
-(Cf. PDF de Paul Melotti.)
+C'est le problème 3 dans Zavidovique, \emph{Un max de maths}. On propose ici une
+façon plus courte d'établir les résultats du début.
 
-\begin{theorem}
-  Si $L/K$ est une extension de corps finie séparable, alors il existe $\alpha
-  \in L$ tel que $L = K(\alpha)$.
+\begin{theorem}[de la base de Burnside]
+  Toutes les familles génératrices minimales (pour l'inclusion) d'un $p$-groupe
+  ont même cardinal.
 \end{theorem}
 
-Comme on a \enquote{facilement} que $L = K(\alpha_1, \ldots, \alpha_n)$, on peut
-faire une récurrence sur $n$ et il suffit pour cela de traiter le cas $n = 2$ :
-$L = K(\alpha,\beta)$ avec $\alpha, \beta$ qui sont dans $L$ mais pas dans $K$.
+\begin{lemma}
+  Soient $H_1, \ldots, H_n \trianglelefteq G$ tels que $G/H_i$ soit abélien pour
+  tout $i$. Alors $G/\bigcap_i H_i$ est abélien.
+\end{lemma}
+\begin{proof}
+  En effet, $G/H$ est abélien si et seulement si $D(G) \subseteq H$, où $D(G)$
+  est le groupe dérivé.
+\end{proof}
 
-Notons $P$ et $Q$ sont les polynômes minimaux respectifs de $\alpha$ et $\beta$
-sur $K$. On cherche $\gamma$ tel que $L = K(\gamma)$, qu'on cherche de la forme
-$\gamma = \alpha + t\beta$.
+Fixons maintenant $G$ un $p$-groupe, c'est-à-dire que $|G| = p^m$ avec $p$
+premier.
+
+\begin{lemma}
+  Soit $H < G$ un sous-groupe strict \emph{maximal}. Alors $H \triangleleft G$
+  et $G/H \simeq \Z/p\Z$.
+\end{lemma}
+\begin{proof}
+  Soit $N_G(H)$ le normalisateur de $H$ dans $G$. On a $H \subseteq N_G(H)
+  \subseteq G$, or $H$ est maximal, donc soit $N_G(H) = H$, soit $N_G(H) = G$
+  i.e. $H \triangleleft G$.
+
+  Supposons par l'absurde que $N_G(H) = H$. L'équation aux classes pour l'action
+  de $H$ sur $C(H) = \{gHg^{-1} \mid g \in G\}$ s'écrit :
+  \[ [G : H] = [G : N_G(H)] = |C(H)| = \sum_g [H : N_H(gHg^{-1})] \]
+  Or $[H : N_H(gHg^{-1})] = 1 \Leftrightarrow g \in H$, et sinon $p \mid [H :
+  N_H(gHg^{-1})]$ ; en effet,
+  \[ N_H(gHg^{-1}) = N_G(gHg^{-1}) \cap H = g N_G(H) g^{-1} \cap H = gHg^{-1}
+  \cap H \]
+  En réduisant modulo $p$ l'équation aux classes, on a ainsi $0 \equiv 1 \mod
+  p$, contradiction.
+
+  On a donc établi $H \triangleleft G$. $G/H$ est un groupe de cardinal $p^k$
+  avec $k \geq 1$. Si $k > 1$, alors en prenant $x \in G/H$ d'ordre $p$, on a
+  $\{1\} \subsetneq \langle x \rangle \subsetneq G/H$, qu'on relève par la
+  projection canonique $\pi$ en $H \subsetneq \pi^{-1}(\langle x \rangle)
+  \subsetneq G$, contredisant la maximalité de $H$. Donc $|G/H| = p$.
+\end{proof}
+
+Posons maintenant $F(G)$ l'intersection des sous-groupes maximaux de $G$,
+qui porte le petit nom de \emph{sous-groupe de Frattini}.
+D'après ce qui précède, on a immédiatement que $F(G) \triangleleft G$ et
+$G/F(G)$ est abélien. On notera donc additivement :
+\[ \overline{g} + \overline{g'} = \overline{gg'} \qquad
+   \overline{g},\overline{g'} \in G/F(G) \]
+
+\begin{proposition}
+  Pour tout $\overline{g} \in G/F(G)$, $\overline{g^p} = \overline{1}$.
+\end{proposition}
+\begin{proof}
+  Soit $g \in G$ un représentant de $\overline{g}$. Pour $H < G$ maximal, notons
+  $[g]_H$ sa classe dans $G/H$. Comme $G/H \simeq \Z/p\Z$, on a $[g]_H^p =
+  [1]_H$, soit $g^p \in H$. Ainsi, $g^p \in \cap_H H = F(G)$.
+\end{proof}
+
+On peut donc définir la loi externe
+\[ \overline{n} \cdot \overline{g} = \overline{g^n} \qquad
+  \overline{n} \in \Z/p\Z,\, \overline{g} \in G/F(G)
+\]
+dont on vérifie\footnote{Les amateurs d'algèbre commutative auront compris qu'il
+  s'agit de passer au quotient sur la structure de $\Z$-module d'un groupe
+  abélien dont l'annulateur contient l'idéal $p\Z$.} qu'il munit $G/F(G)$ d'une
+structure de $\Z/p\Z$-espace vectoriel ! Plus explicitement, on a :
+\[ \forall (n_i) \in \Z/p\Z,\, \forall (\overline{g_i}) \in G/F(G), \quad
+  \sum_i \overline{n_i} \cdot \overline{g_i} = \overline{\prod_i g_i^{n_i}} \]
+et cette écriture rend évidente la proposition suivante :
+
+\begin{proposition}
+  Pour tous $\overline{g_1}, \ldots, \overline{g_k} \in G/F(G),\,
+  \Vect_{\F_p}  \{\overline{g_1}, \ldots, \overline{g_k}\} =
+  \langle \overline{g_1}, \ldots, \overline{g_k} \rangle$.
+\end{proposition}
+
+Ainsi, les parties génératrices minimales de $G/F(G)$ sont des \emph{bases}, la
+théorie de la dimension nous dit donc qu'elles ont toutes le même cardinal, soit
+$d = \dim_{\F_p} G/F(G)$.
+
+Pour conclure, il ne reste plus qu'à montrer ceci :
+
+\begin{proposition}
+  Si $\{g_1, \ldots, g_k\}$ est une partie génératrice minimale de $G$, alors
+  $\{ \overline{g_1}, \ldots, \overline{g_k} \}$ est une base de $G/F(G)$ sur
+  $\F_p$.
+\end{proposition}
+\begin{proof}
+  $\{ \overline{g_1}, \ldots, \overline{g_k} \}$ est évidemment une famille
+  génératrice ; supposons par l'absurde qu'elle ne soit pas libre.
+
+  Dans ce cas, $k > d$ et on peut extraire une base ; sans perte de généralité,
+  disons que $\{ \overline{g_1}, \ldots, \overline{g_d} \}$ est une base de
+  $G/F(G)$, et en particulier engendre $G/F(G)$ comme groupe abélien. On a alors
+  $\langle \{g_1, \ldots, g_d\} \cup F(G) \rangle = G$.
+
+  Remarquons cependant que $\langle g_1, \ldots, g_d \rangle \neq G$ par
+  minimalité ; il existe donc $H < G$ maximal contenant $\langle g_1, \ldots,
+  g_d \rangle$. Comme $F(G) \subseteq H$ par définition, on a $\langle \{g_1,
+  \ldots, g_d\} \cup F(G) \rangle \subseteq H$ : contradiction.
+\end{proof}
 
 \newpage
-
 
 \subsection{Théorème de Lie-Kolchin}
 
@@ -1036,10 +1143,9 @@ prouver un sens du lemme d'Artin.
 \subsection{Quatre autres développements}
 
 \begin{itemize}
+\item Groupe circulaire : référence à trouver 
 \item Réciprocité quadratique par double comptage d'une conique sur $\F_p$ (trop
   beau !) : dans H2G2 tome 1
-\item Sous-groupe de Frattini et théorème de la base de Burnside : problème 3
-  dans Zavidovique
 \item Algorithme de Berlekamp : cf. PDF de Jill-Jênn Vie
 \item Existence de la réduction de Frobenius (utilisant l'orthogonalité duale) :
   fait en cours dans H2G2 tome 1
@@ -1225,7 +1331,7 @@ Calculons d'abord, en prolongeant $f$ par $f(1)$ sur $]1,+\infty[$,
 \[
   \int_0^1 \frac{f(x+h) - f(x)}{h}dx =
     \frac{1}{h} \int_1^{1+h} f(x)\,dx - \frac{1}{h} \int_0^h f(x)\,dx
-    \underset{h \to 0^+}{\longrightarrow} f(1) - f(0)
+    \xrightarrow[h \to 0^+] f(1) - f(0)
 \]
 où la dernière égalité est vraie par continuité de $f$. Comme $f'$ est mesurable
 (en tant que limite de fonctions mesurables) et positive, on peut l'intégrer et
@@ -1295,6 +1401,10 @@ l'intégrale de Lebesgue au programme des classes préparatoires.
 
 \newpage
 
+\subsection{Théorèmes de Schauder et de Cauchy-Peano}
+
+
+
 \subsection{Récurrence d'une marche aléatoire via séries de Fourier}
 
 Un théorème célèbre, avec une preuve étrangement moins célèbre et pourtant
@@ -1334,7 +1444,8 @@ est égale à $\varphi^n$ (somme de v.a. indépendantes).
 Pour en déduire les probabilités recherchées on utilise :
 \begin{lemma} Soit $k = (k_1, \ldots, k_d) \in \Z^d$. On a la formule des
   coefficients de Fourier :
- \[ \displaystyle \P(S_n = k) = \frac{1}{(2\pi)^d} \int_{[-\pi,\pi]^d} \varphi_n(x)e^{-i\langle k,x \rangle} \]
+  \[ \displaystyle \P(S_n = k) = \frac{1}{(2\pi)^d} \int_{[-\pi,\pi]^d}
+    \varphi_n(x)e^{-i\langle k,x \rangle} \]
 \end{lemma}
 En fait, $\varphi_n$ est une série de Fourier $d$-dimensionnelle normalement
 convergente dont les coefficients sont les $\P(S_n = (k_1, \ldots, k_d))$. Ce
@@ -1402,7 +1513,7 @@ ivrogne qui se déplace dans le plan peut être (presque) sûr de rentrer chez l
 
 \newpage
 
-\subsection{Inversion de Fourier et théorème de continuité de Lévy (en dimension 1)}
+\subsection{Gaussiennes, inversion de Fourier et théorème de continuité de Lévy}
 
 Notre but est de montrer, dans le cas $d = 1$ (mais toutes les preuves se
 généralisent sans mal à $d$ quelconque) :
@@ -1430,7 +1541,7 @@ elle est intégrable tout comme toutes ses dérivées.
 
 \begin{lemma}
   Pour tout $f \in L^1(\R)$,
-  $g_\sigma * f \underset{\sigma \to 0}{\longrightarrow} f$ dans $L^1(\R)$.
+  $g_\sigma * f \xrightarrow[\sigma \to 0]{}$ dans $L^1(\R)$.
 \end{lemma}
 \begin{proof}
   Admis. Cette propriété découle du fait que les gaussiennes sont des
@@ -1507,7 +1618,7 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
   $\E[f(X)]$, puis comme $|\varphi_n| \leq 1$ et $\hat{f} \in L^1(\R)$, le théorème
   de convergence dominée et notre  hypothèse de convergence des $\varphi_n$ nous
   donnent
-  \[ \E[ f(X_n) ] \underset{n \to \infty}{\longrightarrow}
+  \[ \E[ f(X_n) ] \xrightarrow[n \to \infty]{}
     \frac{1}{2\pi} \int_\R \hat{f}(\xi) \varphi(\xi)\, d\xi = \E[f(X)].  \]
 \end{proof}
 
@@ -1678,7 +1789,7 @@ $\Cf^0$.
 
 \subsection{Polynômes de Bernstein}
 
-Référence : Zuily-Quéffélec.
+Référence : Zuily-Quéffélec, \emph{Éléments d'analyse pour l'agrégation}.
 
 \begin{theorem}[Bernstein]
   Soit $f \in \Cf([0,1], \R)$.
@@ -1720,119 +1831,148 @@ TODO : optimalité de la borne par le théorème central limite.
 Il faut bien connaître le théorème de Stone-Weierstrass plus général pour
 répondre aux questions sur le développement.
 
-\subsection{Méthode de Newton (lol)}
-
-\subsection{Lemme de Morse}
-
-Pour avoir une application aux formules de Taylor.
-
-\section{Informatique}
-
-\subsection{Théorème de Baker--Gill--Solovay}
+\newpage
 
 
+\subsection{Théorème taubérien fort de Hardy--Littlewood}
 
-\subsection{Minimisation par double renversement (avec complexité)}
+Référence : Gourdon, \emph{Analyse}.
 
-Source : Sakarovitch.
+\begin{theorem}
+  Soit $(a_n) \in \R^n$ telle que $a_n = O(1/n)$ quand $n \to +\infty$. En
+  particulier, la série entière $F(x) = \sum_{n \in \N} a_n x^n$ a un rayon de
+  convergence au moins 1.
 
-Notons $D$ la déterminisation d'un automate, prenant en entrée un AFN et
-renvoyant un AFDC, partie accessible de l'automate des parties. Notons $T$ la
-transposition d'un automate, obtenue en renversant le sens des flèches. La
-transposée d'un automate reconnaissant $L$ reconnaît $\tilde{L}$, langage miroir
-de $L$.
+  Alors, si $F(x) \to c \in \R$ quand $x \to 1^-$, alors $\sum_{n \in \N} a_n$
+  est convergente et vaut $c$.
+\end{theorem}
 
-\begin{algo}[Calcul d'un AFDC minimal à partir d'un AFN]
-  Si $\mathcal{A}$ est un automate reconnaissant le langage $L$, $D \circ T
-  \circ D \circ T(\mathcal{A})$ est un AFDC minimal reconnaissant $L$.
-\end{algo}
+Il suffit de montrer le théorème pour $c = 0$, quitte à soustraire $c$ à $a_0$.
 
-Comme la dernière opération est une déterminisation, la sortie est bien un AFDC.
-Le langage reconnu est préservé puisque $D$ le préserve et $T$ prend le miroir,
-ce qui est involutif. Reste à prouver la minimalité.
-
-\begin{lemma}[Brzozowski]
-  Soit $\mathcal{B}$ un automate reconnaissant $L$, \emph{co-déterministe} et
-  \emph{co-accessible} (autrement dit, dont la transposée est un AFD
-  accessible). Soient $u$ et $v$ vérifiant $u^{-1}L = v^{-1}L$. Alors tout état
-  atteignable en lisant $u$ l'est en lisant $v$.
-\end{lemma}
-\begin{proof}
-  Soit $q$ atteignable à partir de $u$, $q$ est co-accessible donc il existe $w$
-  atteignant l'unique état final à partir de $q$. $uw \in L$ donc $vw \in L$, et
-  le seul chemin acceptant pour $vw$ doit passer par $q$ après avoir lu $v$ par
-  co-déterminisime… Faire un dessin !
-\end{proof}
-
-Appliquons maintenant le lemme à $\mathcal{B} = T \circ D \circ T(\mathcal{A})$.
-Si deux mots ont même résiduels, ils atteignent le même état dans l'automate des
-parties de $\mathcal{B}$ en vertu du lemme. Il y a autant d'états que de
-résiduels dans $D(\mathcal{B})$, ce dernier est donc minimal.
-
-\begin{proposition}
-  La complexité de cet algorithme est simplement exponentielle en le nombre
-  d'états de l'automate d'entrée.
-\end{proposition}
-
-Pour une raison simple : la première fois qu'on déterminise, on peut avoir une
-explosion exponentielle ; la seconde fois, c'est impossible puisque la taille de
-la sortie est connue pour être celle d'un AFDC minimal !
-
-TODO : réfléchir à la complexité précise de la déterminisation (avec taille de
-l'alphabet en paramètre).
-
-Pour avoir une minoration correspondante, on considère $L = X^{n-1}aX^*$ où $X =
-\{a,b\}$ est l'alphabet. $L$ est reconnaissable par un AFD à $n+1$ états, et son
-miroir a $2^n$ résiduels ! La minimisation ne fait que \emph{rajouter} un état
-puits pour rendre l'automate complet.
-
-\subsection{Union-find avec compression de chemin}
-
-Trouvable sur CS Stack Exchange.
-
-\[ \Phi(x) = \lambda \sum_{i=1}^n \log_2 w_i \]
-
-On ne va étudier que Find (exercice : montrer que pour Union c'est bon).
-
-\subsection{Tri par tas}
-
-\subsection{Sélection en temps linéaire}
-
-Avec une astuce pour rendre le truc plus rapide, merci Jill-Jênn !
-
-\subsection{Réduction de 2SAT à la connexité forte}
-
-\subsection{Rationalité des témoins en arithmétique de Presburger}
-
-Soit $\phi(x_1,\ldots,x_k)$ une formule à $k$ variables libres de l'arithmétique
-de Presburger, c'est-à-dire formée à partir des symboles $0$, $1$, $+$, $=$.
-Soit $S_\phi$ son ensemble de témoins d'existence : $S_\phi = \{ (n_1, \ldots,
-n_k) \in \N^k \mid \N \models \phi(n_1, \ldots, n_k) \}$. Définissons maintenant
-le langage suivant :
-
-\[ L_\phi = \left\{  \right\}\]
-C'est compliqué à écrire formellement, mais ça représente juste des $k$-uplets
-d'entiers codés en binaire. Comme la taille des entiers est non bornée et $k$
-est fixe, on \enquote{transpose} les listes de listes de bits représentant
-naturellement ces $k$-uplets pour avoir des mots sur un alphabet fini.
-
-$L_\phi$ est un langage sur l'alphabet $\{0,1\}^k$.
-
-\begin{proposition}
-  $L_\phi$ est un langage rationnel, et de plus, on dispose d'une procédure
-  effective pour construire un automate reconnaissant $L_\phi$ à partir de
-  $\phi$.
-\end{proposition}
-
-\begin{corollary}
-  L'arithmétique de Presburger est décidable.
-\end{corollary}
-
-\subsection{}
+\paragraph{Stratégie globale} Soit $\Theta$ l'ensemble des fonctions $\theta :
+[0,1] \to \R$ telles que
+\begin{itemize}
+\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n)$ converge pour $0 \leq x < 1$ ;
+\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n) \xrightarrow[x \to 1^{-}] 0$.
+\end{itemize}
+On va montrer que $g = \Indic_{[1/2, 1]} \in \Theta$, ce qui établira le
+théorème : en effet, dans ce cas,
+\[ \forall N \in \N,\; S_N =  \sum_{n = 0}^N a_n = \sum_{n = 0}^{\infty} a_n
+  g(x_N^n) \quad \text{avec}\; x_N = 2^{-1/N} \xrightarrow[N \to +\infty]{} 1^- \]
+et par composition de limites $S_N \rightarrow 0$ quand $N \to +\infty$.
 
 
+\newpage
 
 \section{Idées exclues}
+
+\subsection{Fonctions invariantes d'une équation différentielle linéaire}
+
+Un développement inspiré par une remarque dans \emph{Ten lessons I wish I had
+  learned before I started teaching differential equations} (item 3) de
+Gian-Carlo Rota. Voir la fin pour plus de remarques culturelles. 
+
+On considère ici l'équation différentielle linéaire
+homogène
+\[ y''(t) + p(t)y'(t) + q(t) = 0 \qquad (p, q : \R \to \R) \]
+dont on notera $S \subset \Cf^2(\R, \R)$ l'espace des solutions.
+
+Si $f : \R^{2k} \to \R$ ($k \in \N^*$ quelconque), on abrégera
+\[ f[y,z](t) = f \left(y(t), \ldots, y^{(k)}(t), z(t), \ldots,
+    z^{(k)}(t)\right) \]
+et on appellera $f$ une \emph{fonction invariante} si, pour toute
+base de $S$ (i.e. système fondamental de solutions) $(y, z)$,
+\[
+  \forall L \in \GL(S),\, \exists \lambda(L) \in \R \,/\, \forall t \in \R,\;
+  f[Ly,Lz](t) = \lambda(L) \cdot f[Ly, Lz](t)
+\]
+Autrement dit, une fonction invariante est indépendante du système fondamental
+de solution choisi, à un facteur constant (par rapport au temps) près.
+
+On peut remarquer que les coefficients de l'équation sont en fait des fonctions
+invariantes (avec $\lambda(L) = 1$) puisque
+\[ \]
+Un autre exemple de fonction invariante est le \emph{wronskien}
+\[  W[y,z](t) =  \]
+
+L'invariance du wronskien découle immédiatement du lemme suivant :
+\begin{lemma}
+  Soit $(y, z)$ une base de $S$, $L \in \GL(V)$. Alors, pour tout $t \in \R$,
+  \[ W[Ly,Lz](t) = (\det L) \cdot W[y,z](t) \]
+\end{lemma}
+Ici, donc $\lambda(L) = \det(L)$.
+\begin{proof}
+  Comme $(y,z)$ est une base, on peut y décomposer $Ly$ et $Lz$ :
+  \[ Ly = ay + bz \quad Lz = cy + dz \]
+  Dans la base $(y,z)$, la matrice de $L$ est donc
+  \[ M = abcd \]
+  donc $\det L = \det M$.
+
+  Maintenant, soit $t \in \R$. Évaluons ces relations, ainsi que celles obtenues
+  en dérivant, au point $t$. On obtient
+  \[ plif = plaf \times plouf \]
+  d'où, en prenant le déterminant,
+  \[ tadaaa \]
+\end{proof}
+
+Nous en venons maintenant au théorème principal : en un certain sens, ces
+fonctions invariantes suffisent à engendrer toutes les autres.
+
+\begin{theorem}
+  Soit $f$ une fonction invariante, alors il existe $g : \R \to \R$ et $h :
+  \R^{2l} \to R$ tels que pour toute base $(y,z)$,
+  \[ \forall t \in \R,\, f[y,z](t) = g(W[y,z](t))h[p,q](t) \]
+\end{theorem}
+
+Commençons par un résultat d'algèbre linéaire.
+
+\begin{proposition}
+  Soit $\phi : \GL_n(\R) \to \R^*$ un morphisme de groupes. Alors il existe
+  $\psi : \R^* \to \R^*$ tel que $\phi = \psi \circ \det$.
+\end{proposition}
+\begin{proof}
+  Soit $T$ une transvection, alors $T^2$ est aussi une transvection, donc $T$ est
+  semblable à $T^2$. Comme $\phi$ est à valeurs dans un groupe abélien, on a
+  donc $\phi(T)^2 = \phi(T)$, soit $\phi(T) = 1$ dans $\R^*$.
+
+  Comme les transvections engendrent $\SL_n(\R)$, on a $\phi(\SL_n(\R)) =
+  \{1\}$. $\phi$ passe donc au quotient comme morphisme $\GL_n(\R)/\SL_n(\R) \to
+  \R^*$. Or le déterminant réalise un isomorphisme entre $\GL_n(\R)/\SL_n(\R)$
+  et $\R^*$…
+\end{proof}
+
+Maintenant, fixons $f$ une fonction invariante et $(y,z)$ une base. On peut voir
+que si $f[y,z](t) \neq 0$ pour un certain $t$, alors les $\lambda(L)$ sont
+uniques, non nuls, et réalisent un morphisme de groupes vers $\R^*$. On a alors,
+par le lemme précédent, $\lambda(L) = g(\det L)$ pour tout $L \in GL(S)$.
+
+Soit $t \in \R$. Il existe un système fondamental $(u_t, v_t) \in S^2$ tel que
+$u(0) = v'(0) = 1$, $u'(0) = v(0) = 0$, de sorte que $W[u,v](t) = 1$. Soit $L_t
+\in \GL(S)$ telle que $L_tu_t = y$ et $L_tv_t = z$. Alors
+\[ f[y,z](t) = \lambda(L) \cdot f[u_t,v_t](t) \quad \text{avec} \quad
+  \lambda(L) = g(\det L_t) = g\left( \frac{W[y,z](t)}{W[u_t,v_t](t)} \right)
+    = g(W[y,z](t))
+\]
+en utilisant le lemme sur le wronskien démontré plus haut.
+
+On a donc notre facteur $g(W)$, reste à trouver $h$ telle que
+\[ \forall t \in \R,\, h[p,q](t) = W[u_t, v_t](t) \]
+
+Pour cela, remarquons qu'on a $y'' = -py' - qy$, suite à quoi $y''' = -py'' -
+p'y' - qy' - q'y = p(py'+qy) - p'y' - qy' - q'y$, etc. Par récurrence, il existe
+une suite de polynômes $P_n$ tels que…
+
+ENFIN BREF VOILÀ
+
+\begin{remark}
+  Ce théorème est l'analogue du théorème fondamental sur les polynômes
+  symétriques, qui dit qu'un polynôme symétrique en les solutions d'une équation
+  polynomiale s'exprime comme polynôme en les coefficients de l'équation.
+\end{remark}
+
+\paragraph{Culture, biblio, etc.}
+
+\newpage
 
 \subsection{Unicité de la topologie de $\R$-EVT séparé en dimension finie}
 
@@ -1901,45 +2041,7 @@ On a deux procédés d'itération légèrement différents pour relever des solu
 dans un $\Z/p^n\Z$ plus grand : l'un est la méthode de Newton, l'autre ressemble
 à la preuve du théorème d'inversion locale.
 
-\subsection{Schéma de réflexion de Kreisel}
 
-\begin{theorem}[Kreisel]
-  Soit $T$ un sous-système fini de l'arithmétique de Peano. Pour toute formule
-  close $F$, AP prouve : \enquote{$F \text{ prouvable dans } T \Rightarrow F$}.
-\end{theorem}
-Note : dans la formule $\phi$ dont il est affirmé que $AP \vdash \phi$, à gauche
-de $\Rightarrow$, on a un prédicat de prouvabilité appliqué au code de Gödel de
-$F$, et à droite, on a vraiment $F$.
-\begin{corollary}
-  L'arithmétique de Peano prouve la cohérence de ses sous-systèmes finis, et
-  n'est donc pas finiment axiomatisable.
-\end{corollary}
 
-D'abord, on peut se ramener au cas où $T = \emptyset$. Ensuite, essentiellement,
-on veut montrer naïvement que $F$ prouvable $\Rightarrow$ $F$ vraie par
-induction sur les règles logiques, qui préservent la vérité. Comme les formules
-apparaissant dans une preuve sans coupures de $F$ sont de complexité logique
-bornée par celle de $F$, on peut définir un prédicat de vérité borné qui fait
-marcher ça, et de sorte que \enquote{$F$ vraie} soit équivalent à $F$.
-
-Souci majeur : les détails sont impossibles à expliciter en 15 minutes, et la
-preuve repose sur la possibilité de raisonner de façon interne dans AP, ce
-pourquoi il faut déjà avoir une bonne intuition de quels principes logiques y
-sont autorisés (les fonctions récursives sont définissables, l'induction
-structurelle est valide…) car cela devient imbuvable sans un recours intensif à
-l'agitage de mains.
-
-Je ne connais pas d'autre référence \enquote{livre de cours} que Le Point
-aveugle pour ce théorème…
-
-\subsection{Algorithme de Hirschberg}
-
-Une superbe astuce qui consiste à utiliser un diviser-pour-régner afin de
-baisser la complexité spatiale d'un algorithme de programmation dynamique,
-appliquée au problème de la distance d'édition. On utilise la programmation
-dynamique pour calculer le point de délimitation entre les deux sous-problèmes
-récursifs.
-
-C'est parfaitement au programme de l'agrégation, mais c'est trop long…
 
 \end{document}

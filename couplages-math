@@ -29,7 +29,7 @@ Réduction de Frobenius / Réciprocité quadratique / Groupes simples non isomor
 Base de Burnside / Constructibilité des polygones réguliers / Algorithme de Berlekamp
 
 152 : Déterminant.
-Points à distances impaires / Théorème de l'élément primitif
+Points à distances impaires / Ellipsoïde / Théorème de l'élément primitif
 
 153 : Polynômes d'endomorphisme en dimension finie. Réduction d'un endomorphisme en dimension finie.
 Réduction de Frobenius / Groupes simples non isomorphes
@@ -41,7 +41,7 @@ Lie-Kolchin / Groupes simples non isomorphes
 Réduction de Frobenius / Dualité lagrangienne (analyse)
 
 162 : Systèmes d'équations linéaires ; opératioins élémentaires, aspects algorithmiques et conséquences théoriques.
-Algorithme de Berlekamp / Méthode de Kaczmarz (hapax)
+Algorithme de Berlekamp / Méthode de Kaczmarz
 
 170 : Formes quadratiques sur un espace vectoriel de dimension finie. Orthogonalité, isotropie. Applications.
 Réciprocité quadratique / Lemme de Morse (analyse)
@@ -59,28 +59,28 @@ Constructibilité des polygones réguliers / Groupe circulaire
 Réciprocité quadratique / Boustrophédon
 
 203 : Utilisation de la notion de compacité.
-Brouwer C^1 / Géodésiques
+Brouwer C^1 / Théorème d'existence de Cauchy-Peano
 
 208 : Espaces vectoriels normés, applications linéaires continues.
-Enveloppe convexe du groupe orthogonal / ?
+Enveloppe convexe de O(n) / Banach-Schauder et série de Fourier
 
 214 : Théorème d'inversion locale, théorème des fonctions implicites.
 Lemme de Morse / Brouwer C^1
 
 215 : Applications différentiables définies sur un ouvert de R^n.
-Dualité lagrangienne / Lemme de Morse
+Lemme de Morse / Brouwer C^1 / Dualité lagrangienne
 
 218 : Applications des formules de Taylor.
 Lemme de Morse / Méthode de Newton pour les polynômes
 
 219 : Extremums : existence, caractérisation, recherche.
-Dualité lagrangienne / Géodésiques
+Dualité lagrangienne / Enveloppe convexe de O(n)
 
 220 : Équations différentielles X' = f(t,X). Exemples d'étude des solutions en dimension 1 et 2.
-???
+Théorème de Liapounov / Théorème d'existence de Cauchy-Peano
 
 221 : Équations différentielles linéaires. Systèmes d'équations différentielles linéaires.
-???
+Théorème de Liapounov / 
 
 223 : Suites numériques. Convergence, valeurs d'adhérence.
 Méthode de Newton pour les polynômes / 
@@ -94,11 +94,11 @@ Méthode de Newton pour les polynômes / Méthode de Kaczmarz
 228 : Continuité et dérivabilité des fonctions réelles d'une variable réelle.
 Polynômes de Bernstein / Dérivabilité des fonctions monotones
 
-228 : Fonctions monotones. Fonctions convexes
+229 : Fonctions monotones. Fonctions convexes.
 Dérivabilité des fonctions monotones / Dualité lagrangienne
 
 230 : Séries de nombres réels ou complexes. Comportement des restes ou des sommes partielles des séries numériques.
-Formule de Poisson /
+Formule de Poisson / Théorème taubérien fort
 
 233 : Méthodes itératives en analyse numérique matricielle.
 NON.
@@ -107,19 +107,19 @@ NON.
 Inversion de Fourier / ?
 
 239 : Fonctions définies par une intégrale dépendant d'un paramètre.
-Inversion de Fourier / ?
+Inversion de Fourier / Lemme de Hoeffding
 
 243 : Convergence des séries entières, propriété de la somme.
-Boustrophédon (algèbre) / ?
+Boustrophédon (algèbre) / Théorème taubérien fort
 
 246 : Séries de Fourier.
-Marche aléatoire / Formule de Poisson
+Formule de Poisson / Banach-Schauder et série de Fourier
 
 250 : Transformation de Fourier.
 Inversion de Fourier / Formule de Poisson
 
 260 : Espérance, variance et moments d'une variable aléatoire.
-Polynômes de Bernstein / Marche aléatoire
+Polynômes de Bernstein / Lemme de Hoeffding
 
 264 : Variables aléatoires discrètes.
 Polynômes de Bernstein / Marche aléatoire

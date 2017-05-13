@@ -1,0 +1,375 @@
+\documentclass[a4paper, 11pt]{article}
+
+% Math symbols, notation, etc.
+% Apparently, must be loaded earlier than mathspec?
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{amsthm}
+\usepackage{tikz-cd}
+\usepackage{algorithm,caption}
+\usepackage{algpseudocode}
+
+% Locale/encoding with XeTeX: UTF-8 by default, use fontspec
+\usepackage{unicode-math}
+\usepackage[frenchb]{babel}
+\usepackage{csquotes} % guillemets
+
+% TeX Gyre Pagella = URW Palladio (free Palatino) extended
+\setmainfont[Mapping=tex-text]{TeX Gyre Pagella}
+\setmathfont{Asana Math}
+
+% Other
+\usepackage{fullpage}
+%\usepackage{enumerate}
+%\usepackage{graphicx}
+
+% Macros de Jill-Jênn
+\def\A{{\cal{A}}}
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\Q{\mathbb{Q}}
+\def\U{\mathbb{U}}
+\def\K{\mathbb{K}}
+\def\P{\mathbb{P}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\L{{\cal{L}}}
+\def\S{{\cal{S}}}
+\def\V{{\cal{V}}}
+\def\T{{\cal{T}}}
+\def\O{{\cal{O}}}
+\def\Fs{{\cal{F}}}
+\def\Ps{{\cal{P}}}
+\def\Cf{{\cal{C}}}
+\def\M{\mathcal{M}}
+\def\MnK{{\cal M}_n(\K)}
+\def\Tr{\textnormal{Tr}}
+\def\Sp{\textnormal{Sp}}
+\def\Re{\textnormal{Re}}
+\def\Vect{\textnormal{Vect}}
+\def\car{\textnormal{car}}
+\def\pgcd{\textnormal{pgcd}}
+\def\ppcm{\textnormal{ppcm}}
+\def\Sigmap{\mathfrak{S}}
+\def\prog{\texttt{prog}}
+
+
+\newtheorem*{definition}{Définition}
+\newtheorem*{example}{Exemple}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{theorem}{Théorème}
+\newtheorem*{application}{Application}
+\newtheorem*{algo}{Algorithme}
+\newtheorem*{lemma}{Lemme}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{corollary}{Corollaire}
+
+\algtext*{EndProcedure}
+\algtext*{EndWhile}
+\algtext*{EndFor}
+\algtext*{EndIf}
+\algrenewcommand\algorithmicprocedure{\textbf{procédure}}
+\algrenewcommand\algorithmicif{\textbf{si}}
+\algrenewcommand\algorithmicthen{\textbf{alors}}
+\algrenewcommand\algorithmicelse{\textbf{sinon}}
+\algrenewcommand\algorithmicfor{\textbf{pour}}
+\algrenewcommand\algorithmicwhile{\textbf{tant que}}
+\algrenewcommand\algorithmicdo{\textbf{faire}}
+\algrenewcommand\algorithmicreturn{\textbf{renvoyer}}
+
+
+\begin{document}
+
+\title{Mes développements pour l'agrég de maths\\(leçons d'informatique)}
+\author{Nguyễn Lê Thành Dũng\\(ENS Ulm, département informatique, promo 2012)}
+\date{Préparation à l'agrégation de l'ENS Paris-Saclay, 2016--2017}
+\maketitle
+
+\tableofcontents
+
+
+\section{Développements transversaux}
+
+\subsection{Rationalité des témoins en arithmétique de Presburger}
+
+Soit $\phi(x_1,\ldots,x_k)$ une formule à $k$ variables libres de l'arithmétique
+de Presburger, c'est-à-dire formée à partir des symboles $0$, $1$, $+$, $=$.
+Soit $S_\phi$ son ensemble de témoins d'existence : $S_\phi = \{ (n_1, \ldots,
+n_k) \in \N^k \mid \N \models \phi(n_1, \ldots, n_k) \}$. Définissons maintenant
+le langage suivant :
+
+\[ L_\phi = \left\{  \right\}\]
+C'est compliqué à écrire formellement, mais ça représente juste des $k$-uplets
+d'entiers codés en binaire. Comme la taille des entiers est non bornée et $k$
+est fixe, on \enquote{transpose} les listes de listes de bits représentant
+naturellement ces $k$-uplets pour avoir des mots sur un alphabet fini.
+
+$L_\phi$ est un langage sur l'alphabet $\{0,1\}^k$.
+
+\begin{proposition}
+  $L_\phi$ est un langage rationnel, et de plus, on dispose d'une procédure
+  effective pour construire un automate reconnaissant $L_\phi$ à partir de
+  $\phi$.
+\end{proposition}
+
+\begin{corollary}
+  L'arithmétique de Presburger est décidable.
+\end{corollary}
+
+
+\section{Algorithmique}
+
+\subsection{Algorithme de Hirschberg}
+
+Une superbe astuce qui consiste à utiliser un diviser-pour-régner afin de
+baisser la complexité spatiale d'un algorithme de programmation dynamique,
+appliquée au problème de la distance d'édition. On utilise la programmation
+dynamique pour calculer le point de délimitation entre les deux sous-problèmes
+récursifs.
+
+
+\newpage
+
+\subsection{Tri des suffixes}
+
+Ce développement d'algorithmique du texte se recase aussi dans la leçon
+\emph{Exemples d'algorithmes de tri}, en fournissant une application inattendue
+du tri par base. Référence : Crochemore-Hancart-Lecroq, \emph{Algorithmique du
+  texte}, section 4.4. La présentation est un peu trop \enquote{bas niveau},
+notamment en ce qui concerne les détails du tri par base ; par conséquent, ça
+fait peur au premier abord, alors qu'en fait le principe est très simple.\\
+
+On cherche à trier par ordre lexicographique l'ensemble des suffixes d'un mot.
+L'application principale est la construction d'une \emph{table des
+  suffixes}\footnote{En anglais, \emph{suffix array}.}, structure de données
+utile dans de nombreux problèmes d'algorithmique du texte (notamment en concours
+de programmation).
+
+Définissons formellement le problème :
+\begin{itemize}
+\item Entrée : $w \in A^*$ ($A$ alphabet fini), $|w| = n$.
+\item Sortie : $\sigma \in \Sigmap_n$ telle que $w[\sigma(1) \ldots n] < \ldots
+  < w[\sigma(n) \ldots n]$.
+\end{itemize}
+
+Naïvement, on pourrait appliquer un tri par comparaison sur l'ensemble des $n$
+suffixes, mais chaque comparaison entre deux chaînes prend un temps $O(n)$ ce
+qui donne une complexité totale $O(n^2 \log n)$ ! On va voir comment faire
+mieux.
+
+\paragraph{Principe de l'algorithme}
+
+Soit $R_k[i]$ le rang de $w[i \ldots i + 2^k - 1]$ dans $\{ w[j \ldots j + 2^k -
+1] \mid j = 1, \ldots, n \}$ ordonné \emph{sans répétition}, de sorte que
+$R_k[i] < R_k[j] \Leftrightarrow w[i \ldots i + 2^k - 1] < w[j \ldots j + 2^k -
+1]$. (Si $i + 2^k > n$, on tronque à $n$.) On a donc $1 \leq R_k[i] \leq n$ pour
+$i \in \{1, \ldots, n\}$, et on pose $R_k[i] = 0$ pour $i > n$.
+
+Notons que :
+\begin{itemize}
+\item si $k = 0$, alors cela revient à trier les suffixes par leur première
+  lettre, c'est-à-dire à trier les lettres de $w$ ;
+\item si $k \geq \log_2 n$, alors on a le vrai ordre sur les suffixes :
+  formellement, $\sigma^{-1}(i) = R_k[i]$.
+\end{itemize}
+L'algorithme va calculer par récurrence $R_k$ pour $k = 0, \ldots, \lceil
+\log_2 n \rceil$.
+
+\begin{lemma}
+  $R[k+1][i]$ est le rang de $(R_k[i], R_k[i+2^k])$ dans $\{ (R_k[j],
+  R_k[j+2^k]) \mid j = 1, \ldots, n \}$ ordonné sans répétition par ordre
+  lexicographique.
+\end{lemma}
+\begin{proof}
+Première remarque, qui va nous faciliter la vie en évitant des dépassements
+d'indices : en posant $u = w\$^\omega \in (A \cup \{\$\}^\omega$, où $ \$ $ est
+plus petit que les lettres de $A$, cette condition s'écrit aussi
+$u[\sigma(1)\ldots] < \ldots < u[\sigma(n)\ldots]$.
+\end{proof}
+
+D'où l'algorithme suivant, qui ne fait pas référence à $u$ :
+
+\begin{algorithm}
+\begin{algorithmic}
+  \Procedure{TriSuffixes}{$w$}
+  \State $n \gets |w|$
+  \State $R \gets $ \Call{TriRang}{$[w[i] \mid i = 1, \ldots, n]$}
+  \For{$k \gets 1, \ldots, \lceil \log_2 n \rceil$}
+  \State $R \gets $ \Call{TriRang}{$[(R[k-1][i], R[k-1][i+k]) \mid i = 1, \ldots, n]$}
+  \EndFor
+  \State \textbf{renvoyer} l'inverse de la permutation $R[k]$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\paragraph{Implémentation du tri}
+
+On sait que $0 \leq R[k-1][i] \leq n$ pour tout $i \in \N^*$. Trier les couples
+$(R[k-1][i], R[k-1][i+k])$ revient donc à trier une liste de $n$ nombres à 2
+chiffres en base $n+1$.
+
+Rappelons que l'algorithme de \emph{tri par base}\footnote{En anglais,
+  \emph{radix sort}.} permet de trier $n$ nombres à $d$ chiffres en base $b$ en
+temps $O(d(n+b))$. Ici, sa complexité est donc de $O(2 \times (n + (n+1)))$,
+soit $O(n)$.
+
+\paragraph{Complexité totale}
+
+On a $\lceil \log_2 n \rceil$ itérations dont chacune coûte $O(n)$ : au total,
+l'algorithme tourne en temps $O(n \log n)$. On a donc battu l'algorithme naïf
+d'un facteur $n$ !
+
+En espace, l'implémentation proposée consomme $O(n \log n)$. Il est possible de
+ne retenir que $R[k-1]$ et $R[k]$ à chaque itération, ce qui fait descendre
+l'usage mémoire à $O(n)$. Cependant, garder en mémoire la matrice $R$ est utile
+par la suite dans la construction de la table des suffixes, pour calculer les
+plus longs préfixes communs entre deux suffixes.
+
+
+\newpage
+
+
+
+\subsection{Union-find avec compression de chemin}
+
+Trouvable sur CS Stack Exchange.
+
+\[ \Phi(x) = \sum_{i=1}^n \log_2 w_i \]
+
+On ne va étudier que Find (exercice : montrer que pour Union c'est bon).
+
+\begin{algorithm}
+\caption*{\textbf{Implémentation} de la structure Union-Find}
+\begin{algorithmic}
+\Procedure{Init}{$n$}
+\State $T \gets $ nouveau tableau de taille $n$
+\For{$i \gets 1, \ldots, n$}
+\State $T[i] \gets i$
+\EndFor
+\State \textbf{renvoyer} $T$
+\EndProcedure
+\Procedure{Find}{$T,x$}
+\If{$T[x] \neq x$}
+$T[x] \gets $ \Call{Find}{$T, t[x]$}
+\EndIf
+\State \textbf{renvoyer} $T[x]$
+\EndProcedure
+\Procedure{Union}{$T, x, y$}
+\State $T[\text{\Call{Find}{$x$}}] \gets T[\text{\Call{Find}{$y$}}]$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Tri par tas}
+
+\subsection{Sélection en temps linéaire}
+
+Avec une astuce pour rendre le truc plus rapide, merci Jill-Jênn !
+
+\subsection{Réduction de 2SAT à la connexité forte}
+
+
+\section{Automates, calculabilité et complexité}
+
+\subsection{Minimisation par double renversement (avec complexité)}
+
+Source : Sakarovitch.
+
+Notons $D$ la déterminisation d'un automate, prenant en entrée un AFN et
+renvoyant un AFDC, partie accessible de l'automate des parties. Notons $T$ la
+transposition d'un automate, obtenue en renversant le sens des flèches. La
+transposée d'un automate reconnaissant $L$ reconnaît $\tilde{L}$, langage miroir
+de $L$.
+
+\begin{algo}[Calcul d'un AFDC minimal à partir d'un AFN]
+  Si $\mathcal{A}$ est un automate reconnaissant le langage $L$, $D \circ T
+  \circ D \circ T(\mathcal{A})$ est un AFDC minimal reconnaissant $L$.
+\end{algo}
+
+Comme la dernière opération est une déterminisation, la sortie est bien un AFDC.
+Le langage reconnu est préservé puisque $D$ le préserve et $T$ prend le miroir,
+ce qui est involutif. Reste à prouver la minimalité.
+
+\begin{lemma}[Brzozowski]
+  Soit $\mathcal{B}$ un automate reconnaissant $L$, \emph{co-déterministe} et
+  \emph{co-accessible} (autrement dit, dont la transposée est un AFD
+  accessible). Soient $u$ et $v$ vérifiant $u^{-1}L = v^{-1}L$. Alors tout état
+  atteignable en lisant $u$ l'est en lisant $v$.
+\end{lemma}
+\begin{proof}
+  Soit $q$ atteignable à partir de $u$, $q$ est co-accessible donc il existe $w$
+  atteignant l'unique état final à partir de $q$. $uw \in L$ donc $vw \in L$, et
+  le seul chemin acceptant pour $vw$ doit passer par $q$ après avoir lu $v$ par
+  co-déterminisime… Faire un dessin !
+\end{proof}
+
+Appliquons maintenant le lemme à $\mathcal{B} = T \circ D \circ T(\mathcal{A})$.
+Si deux mots ont même résiduels, ils atteignent le même état dans l'automate des
+parties de $\mathcal{B}$ en vertu du lemme. Il y a autant d'états que de
+résiduels dans $D(\mathcal{B})$, ce dernier est donc minimal.
+
+\begin{proposition}
+  La complexité de cet algorithme est simplement exponentielle en le nombre
+  d'états de l'automate d'entrée.
+\end{proposition}
+
+Pour une raison simple : la première fois qu'on déterminise, on peut avoir une
+explosion exponentielle ; la seconde fois, c'est impossible puisque la taille de
+la sortie est connue pour être celle d'un AFDC minimal !
+
+TODO : réfléchir à la complexité précise de la déterminisation (avec taille de
+l'alphabet en paramètre).
+
+Pour avoir une minoration correspondante, on considère $L = X^{n-1}aX^*$ où $X =
+\{a,b\}$ est l'alphabet. $L$ est reconnaissable par un AFD à $n+1$ états, et son
+miroir a $2^n$ résiduels ! La minimisation ne fait que \emph{rajouter} un état
+puits pour rendre l'automate complet.
+
+
+\subsection{Théorème de Baker--Gill--Solovay}
+
+Proposé à la prépa agrég de Cachan par C. Lemonnier.
+
+\section{Logique et réécriture}
+
+
+
+
+\section{Idées exclues}
+
+\subsection{Schéma de réflexion de Kreisel}
+
+\begin{theorem}[Kreisel]
+  Soit $T$ un sous-système fini de l'arithmétique de Peano. Pour toute formule
+  close $F$, AP prouve : \enquote{$F \text{ prouvable dans } T \Rightarrow F$}.
+\end{theorem}
+Note : dans la formule $\phi$ dont il est affirmé que $AP \vdash \phi$, à gauche
+de $\Rightarrow$, on a un prédicat de prouvabilité appliqué au code de Gödel de
+$F$, et à droite, on a vraiment $F$.
+\begin{corollary}
+  L'arithmétique de Peano prouve la cohérence de ses sous-systèmes finis, et
+  n'est donc pas finiment axiomatisable.
+\end{corollary}
+
+D'abord, on peut se ramener au cas où $T = \emptyset$. Ensuite, essentiellement,
+on veut montrer naïvement que $F$ prouvable $\Rightarrow$ $F$ vraie par
+induction sur les règles logiques, qui préservent la vérité. Comme les formules
+apparaissant dans une preuve sans coupures de $F$ sont de complexité logique
+bornée par celle de $F$, on peut définir un prédicat de vérité borné qui fait
+marcher ça, et de sorte que \enquote{$F$ vraie} soit équivalent à $F$.
+
+Souci majeur : les détails sont impossibles à expliciter en 15 minutes, et la
+preuve repose sur la possibilité de raisonner de façon interne dans AP, ce
+pourquoi il faut déjà avoir une bonne intuition de quels principes logiques y
+sont autorisés (les fonctions récursives sont définissables, l'induction
+structurelle est valide…) car cela devient imbuvable sans un recours intensif à
+l'agitage de mains.
+
+Je ne connais pas d'autre référence \enquote{livre de cours} que Le Point
+aveugle pour ce théorème…
+
+\end{document}
