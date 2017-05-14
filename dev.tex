@@ -406,15 +406,114 @@ convexe (faire un dessin).
 
 \subsection{Fonction tangente et permutations zigzag}
 
-Cf. Richard P. Stanley, \emph{A Survey of Alternating Permutations}. Le terme
-\enquote{permutation alternante} pouvant induire en confusion avec le groupe
-alterné, nous parlerons ici de \emph{permutation zigzag}.
+Cf. Richard P. Stanley, \emph{A Survey of Alternating Permutations}. Le
+développement lui-même est tiré du PDF de Paul Melotti.
+
+Le terme \enquote{permutation alternante} pouvant induire en confusion avec le
+groupe alterné, nous parlerons ici de \emph{permutation zigzag}. Plus
+précisément, on dira que $\sigma \in \Sigmap_n$ est :
+\begin{itemize}
+\item \emph{haut-bas} si $\sigma(1) > \sigma(2)$, $\sigma(2) < \sigma(3)$,
+  \ldots
+\item \emph{bas-haut} si $\sigma(1) < \sigma(2)$, $\sigma(2) > \sigma(3)$,
+  \ldots
+\item \emph{zigzag} si elle est haut-bas ou bas-haut, ou de façon équivalente si
+  $(\sigma(i) - \sigma(i-1))(\sigma(i+1) - \sigma(i)) < 0$ pour tout $i$.
+\end{itemize}
+(Faire un dessin pour illustrer.) On notera leurs ensembles respectifs $Z_n^+$,
+$Z_n^-$ et $Z_n = Z_n^+ \cup Z_n^-$, et on prendra comme convention, pour $n \in
+\{0,1\}$, $Z_n^+ = Z_n^- = \Sigmap_n$ qui est un singleton.
+
+Notre but est de montrer le résultat inattendu suivant :
 
 \begin{theorem}[Désiré André]
-La série génératrice des permutations haut-bas est $tan(z)+sec(z)$.
+  La série génératrice exponentielle des permutations haut-bas est\\
+  $G(z) = \tan(z)+\sec(z)$.
 \end{theorem}
 
-Merci à Paul Melotti, c'est fait dans son PDF.
+En fait, au lieu d'utiliser la série génératrice pour dénombrer nos objets comme
+d'habitude, ici le sens utile est plutôt l'obtention d'un algorithme pour
+obtenir les coefficients des séries entières des fonctions tangente et sécante.
+Il faudrait pour cela dénombrer d'une autre façon les permutations haut-bas, ce
+qu'on ne fera pas ici.
+
+\begin{proposition}
+  Pour tout $n \in \N$, $Z_n^+ \simeq Z_n^-$, et si $n \geq 2$, alors $Z_n^+
+  \cap Z_n^- = \emptyset$.
+\end{proposition}
+\begin{proof}
+  Pour $n \leq 1$, on a égalité. Sinon, la bijection entre $Z_n^+$ et $Z_n^-$
+  est réalisée par $\sigma \mapsto (i \mapsto \sigma(n-i+1))$ (visuellement,
+  c'est une réflexion par rapport à un axe horizontal).
+  
+  Dès qu'il existe deux éléments dans l'ensemble, on ne peut pas avoir à la fois
+  $\sigma(1) > \sigma(2)$ et $\sigma(1) < \sigma(2)$.
+\end{proof}
+
+\begin{proposition}
+  Pour $n \in \N$, $\displaystyle Z_{n+1} \simeq \bigsqcup_{G \sqcup D =
+    \llbracket 1,n \rrbracket} Z_{|G|}^- \times Z_{|D|}^+$.
+\end{proposition}
+\begin{proof}
+  Soit $\sigma \in Z_{n+1}$ et soit $m = \sigma^{-1}(n+1)$. Posons $G =
+  \sigma(\llbracket 1,m-1 \rrbracket) = \{g_1, \ldots, g_p\}$ et $D =
+  \sigma(\llbracket m+1,n-1 \rrbracket) = \{d_1, \ldots, d_q\}$ ($p = m-1$, $q =
+  n-m+1$).
+
+  On peut maintenant définir $\sigma_g \in Z_p$ par $\sigma(m-i) =
+  g_{\sigma_g(i)}$, et $\sigma(m+i) = d_{\sigma_d(i)}$. Il faut voir ce qui se
+  passe sur un dessin : à gauche de $m$, on lit $\sigma_g$ de droite à gauche,
+  et à droite de $m$, on lit $\sigma_d$ de gauche à droite.
+
+  Comme la suite $\sigma(m), \sigma(m-1), \sigma(m-2)$ est zigzag et $\sigma(m)$
+  est maximal, $\sigma_g \in Z_p^-$ ; de même, $\sigma_d \in Z_q^+$. Si $p \leq
+  1$ ou $q \leq 1$, on peut se convaincre que ça marche toujours avec la
+  définition choisie de $Z_p^-$ et $Z_q^+$.
+
+  On a ainsi défini une application $Z_{n+1} \longrightarrow \bigsqcup_{G \sqcup
+    D = \llbracket 1,n \rrbracket} Z_{|G|}^- \times Z_{|D|}^+$, dont on peut se
+  convaincre qu'elle est bijective.
+\end{proof}
+
+Nous pouvons maintenant passer au dénombrement. Posons $a_n = |Z_n^+| = |Z_n^-|$
+et $b_n = a_n/n!$ ; la série génératrice exponentielle s'écrit alors $G(x) =
+\sum_{n \in \N} b_n x^n$. Comme $0 \leq b_n \leq |\Sigmap_n| / n! = 1$, $G$ est
+de rayon de convergence au moins 1
+
+La relation de récurrence se réécrit, avec les cardinaux,
+\[ |Z_{n+1}| = \sum_{G \sqcup D = \llbracket 1,n \rrbracket} a_{|G|} \cdot
+  a_{|D|} = \sum_{k = 1}^n \binom{n}{p} a_k a_{n-k}
+  = \sum_{k = 1}^n n! \frac{a_k}{k!} \frac{a_{n-k}}{k!} \quad \text{d'où} \quad
+  \frac{|Z_{n+1}|}{n!} = \sum_{k = 1}^n b_k b_{n-k}
+\]
+
+On voit donc apparaître une convolution, ce qui nous donne envie de reformuler
+l'identité avec des séries entières. Mais attention au terme $n = 0$ ! Pour $n
+\geq 1$, comme $Z_{n+1}^+ \cap Z_{n+1}^- = \emptyset$, on a $|Z_{n+1}| =
+2a_{n+1}$ soit $|Z_{n+1}|/n! = 2(n+1)b_{n+1}$. Pour $n = 0$, $|Z_1|/0! = 1 =
+2 \times 1 \times b_1 - 1$. Ainsi :
+\[ \sum_{n \in \N} \frac{|Z_{n+1}|}{n!}x^n = \sum_{n \in \N} 2(n+1)b_{n+1}x^n - 1
+  = 2G'(z) - 1
+\]
+le rayon de convergence étant au moins 1 pour la même raison que précédemment.
+
+À droite de l'égalité, la convolution devient un produit de Cauchy en prenant la
+série génératrice ; finalement, on trouve que $G$ est une solution de l'équation
+différentielle
+\[ 2y' = y^2 + 1 \qquad \text{avec condition initiale} \quad y(0) = 1 \]
+
+Par Cauchy-Lipschitz, il existe une unique solution maximale à ce problème. Il
+suffit donc d'en exhiber une autre définie sur $]-1,1[$ pour déterminer $G$ sur
+cet intervalle. Parachutons donc $f(x) = \tan(x) + \sec(x)$ ; il ne reste qu'à
+calculer pour conclure.
+
+
+\begin{corollary}
+  $a_n = \sec^{(n)}(0)$ si $n$ est pair, $a_n = \tan^{(n)}(0)$ sinon.
+\end{corollary}
+\begin{proof}
+  La fonction tangente est impaire tandis que la sécante est paire.
+\end{proof}
 
 \newpage
 
@@ -1401,8 +1500,120 @@ l'intégrale de Lebesgue au programme des classes préparatoires.
 
 \newpage
 
-\subsection{Théorèmes de Schauder et de Cauchy-Peano}
 
+
+\subsection{Lemme de Hoeffding}
+
+Le lemme lui-même est une majoration de la fonction génératrice des moments
+d'une variable aléatoire bornée p.s. ; on en déduit une inégalité de
+concentration.
+
+\begin{lemma}[Hoeffding]
+  Soit $X$ une variable aléatoire telle que $a \leq X \leq b$ presque sûrement.
+  Alors on a $\E[e^{tX}] \leq \exp(t^2(b-a)^2/8)$.
+\end{lemma}
+
+Pour 
+
+\begin{proof}[Preuve du lemme de Hoeffding]
+  
+\end{proof}
+
+
+\newpage
+
+\subsection{Polynômes de Bernstein}
+
+Référence : Zuily--Quéffélec, \emph{Éléments d'analyse pour l'agrégation}.
+
+\begin{theorem}[Bernstein]
+  Soit $f \in \Cf([0,1], \R)$.
+  
+  Pour $n \in \N$ et $x \in \R$, on pose $B_n(x) = \E[f(X_{n,x})]$ où $X_{n,x}
+  \sim \textnormal{Binom}(n,x)$. Alors :
+  \begin{enumerate}
+  \item Pour tout $n \in \N$, $B_n : [0,1] \to \R$ est une fonction polynomiale.
+    ($B_n$ est appelé le $n$-ième polynôme de Bernstein de $f$.)
+  \item $\|B_n - f\|_\infty \underset{n \to \infty}{=} O\left(
+      \omega_f(n^{-1/2}) \right)$.
+  \end{enumerate}
+\end{theorem}
+
+On rappelle que $\omega_f$ est le \emph{module de continuité uniforme} de $f$ :
+\[ \omega_f(h) = \sup_{|x-y| \leq h} |f(x) - f(y)| \]
+
+\begin{corollary}[Théorème de Weierstrass]
+  Les fonctions polynomiales sont denses dans $\Cf([0,1])$.
+\end{corollary}
+
+Notons qu'il est utile de connaître le théorème de Stone-Weierstrass plus
+général pour répondre aux questions sur le développement.
+
+\begin{proof}[Preuve du corollaire]
+  Soit $f \in \Cf([0,1])$. D'après le théorème de Heine, $f$ est uniformément
+  continue, ce qui est équivalent à dire que $\omega_f(x) \to 0$ quand $x \to
+  0^+$. Ainsi, $\|B_n - f\| \to 0$ quand $n \to +\infty$.
+\end{proof}
+
+\begin{lemma}
+  Pour tous $\lambda, h > 0$,
+  $\omega_f(\lambda h) \leq \lceil \lambda \rceil \omega_f(h)$.
+\end{lemma}
+\begin{proof}[Preuve du lemme]
+  On montre d'abord que $\omega_f$ est croissante (c'est évident) et
+  sous-additive (par inégalité triangulaire), puis le lemme en découle
+  facilement.
+\end{proof}
+
+\begin{proof}[Preuve du théorème]
+  La polynomialité de $B_n$ est immédiate en écrivant la formule de l'espérance.
+
+  Fixons $x \in [0,1]$. On a
+  \[ |B_n(x) - f(x)| = \left| \E\left[ f(X_{n,x}) - f(x) \right] \right|
+    \leq \E\left[ \left| f(X_{n,x}) - f(x) \right| \right]
+    \leq \E[\omega_f(|X_{n,x} - x|)]\]
+  puis en utilisant le lemme,
+  \[ |B_n(x) - f(x)| \leq \E\left[ \left\lceil \sqrt{n} |X_{n,x} - x| \right\rceil
+    \omega_f\left( \frac{1}{\sqrt{n}} \right) \right]
+    \leq \omega_f\left( \frac{1}{\sqrt{n}} \right)
+    \E\left[ \sqrt{n} |X_{n,x} - x| + 1 \right]\]
+
+  Par inégalité de Cauchy-Schwarz (ou convexité de $t \mapsto t^2$, au choix),
+  \[  \E\left[ \sqrt{n} |X_{n,x} - x| \right]^2 \leq
+    \E\left[ n (X_{n,x} - x)^2 \right] = n \Var(X_{n,x}) = x(1-x) \leq \frac{1}{4} \]
+  (on rappelle que $X_{n,x} \sim \textnormal{Binom}(n,x)$, et on connaît la
+  variance d'une loi binomiale).
+
+  Finalement, on a :
+  \[ \forall x \in [0,1],\quad |B_n(x) - f(x)|
+    \leq \frac{3}{2}  \omega_f\left( \frac{1}{\sqrt{n}} \right) \]
+  et le majorant étant indépendant de $x$, c'est fini.
+\end{proof}
+
+\begin{proposition}
+  La majoration de la vitesse de convergence est optimale à un facteur près.
+\end{proposition}
+Zuily--Quéffelec fait ça avec l'inégalité de Khintchine, mais on peut aussi
+invoquer le théorème central limite (qui est plus difficile, mais plus connu)~;
+en fait, on n'a besoin que de la version pour les variables de Bernouilli,
+appelée \enquote{théorème de Moivre--Laplace} et qui peut être prouvée sans
+fonctions caractéristiques.
+\begin{proof}
+  Soit $f : x \in [0,1] \mapsto |x - 1/2|$, on va montrer que $|f(1/2) -
+  B_n(1/2)| = \Omega(\omega_f(n^{-1/2}))$. Remarquons d'abord que $f$ est
+  1-lipschitzienne, donc $\omega_f(h) \leq h$.
+
+  Pour cela, posons $X_n = X_{n,1/2}$.
+  Le TCL nous dit que $2\sqrt{n}(X_n - 1/2)
+  \xrightarrow{\textnormal{loi}} \mathcal{N}(0,1)$. Donc
+  \[ \sqrt{n} \left| B_n\left( \frac{1}{2} \right) - f\left( \frac{1}{2} \right)
+    \right| = \E\left[ \sqrt{n} \left| X_n - \frac{1}{2} \right| \right]
+    \xrightarrow[n \to +\infty]{} \frac{1}{2} \E[|Y|] > 0 \quad
+    \textnormal{avec}\; Y \sim \mathcal{N}(0,1).
+  \]
+\end{proof}
+
+\newpage
 
 
 \subsection{Récurrence d'une marche aléatoire via séries de Fourier}
@@ -1650,10 +1861,13 @@ aussi en version \enquote{1-périodiser = garder les fréquences entières}.)
   transformée de Fourier de $f$.
 \end{proof}
 
-Voici maintenant une application classique (on peut notamment en déduire
-l'équation fonctionnelle de la fonction $\zeta$ de Riemann).
+Voici maintenant une application classique. On peut notamment en déduire
+l'équation fonctionnelle de la fonction $\zeta$ de Riemann ; cf. Anders
+Karlsson, \emph{Applications of heat kernels on abelian groups: $\zeta(2n)$,
+  quadratic reciprocity, Bessel integrals}, pour d'autres conséquences
+surprenantes.
 
-\begin{theorem}[Équation fonctionnelle de la fonction $\theta$ de Jacobi]
+\begin{theorem}[Formule d'inversion de la fonction $\theta$ de Jacobi]
   Soit $\theta : x \mapsto \sum_{n \in \Z} e^{-\pi n^2 x}$.\\
   Alors $\theta(1/x) = \sqrt{x}\theta(x)$ pour tout $x \in \R_+^*$.
 \end{theorem}
@@ -1705,6 +1919,107 @@ La preuve fera intervenir les gaussiennes $g_\sigma : t \mapsto
 \end{proof}
 
 \newpage
+
+\subsection{Théorème taubérien fort de Hardy--Littlewood}
+
+Référence : Gourdon, \emph{Analyse}. On propose ici une preuve avec moins de
+découpage d'$\varepsilon$, en utilisant des sommes de Riemann ainsi qu'en
+sortant un peu du programme de prépa.
+
+Pour présenter ce développement, il faut un peu de culture sur les théorèmes
+abéliens et taubériens, en particulier savoir énoncer le théorème d'Abel radial
+ou angulaire, dont le résultat suivant est une réciproque partielle.
+
+\begin{theorem}[Hardy--Littlewood]
+  Soit $(a_n) \in \R^n$ telle que $a_n = O(1/n)$ quand $n \to +\infty$. En
+  particulier, la série entière $F(x) = \sum_{n \in \N} a_n x^n$ a un rayon de
+  convergence au moins 1.
+
+  Alors, si $F(x) \to c \in \R$ quand $x \to 1^-$, alors $\sum_{n \in \N} a_n$
+  est convergente et vaut $c$.
+\end{theorem}
+
+\begin{example}
+  $\displaystyle 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \ldots = \ln 2$.
+\end{example}
+
+Il suffit de montrer le théorème pour $c = 0$, quitte à soustraire $c$ à $a_0$.
+
+\paragraph{Stratégie globale} Soit $\Theta$ l'ensemble des fonctions $\theta :
+[0,1] \to \R$ telles que
+\begin{itemize}
+\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n)$ converge pour $0 \leq x < 1$ ;
+\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n) \xrightarrow[x \to 1^{-}]{} 0$.
+\end{itemize}
+Remarquons que $\Theta$ est un espace vectoriel.
+
+On va montrer que $g = \Indic_{[1/2, 1]} \in \Theta$, ce qui établira le
+théorème : en effet, dans ce cas,
+\[ \forall N \in \N,\; S_N =  \sum_{n = 0}^N a_n = \sum_{n = 0}^{\infty} a_n
+  g(x_N^n) \quad \text{avec}\; x_N = 2^{-1/N} \xrightarrow[N \to +\infty]{} 1^- \]
+et par composition de limites $S_N \rightarrow 0$ quand $N \to +\infty$.
+
+\begin{lemma}
+  Si $P$ est un polynôme s'annulant en $0$, alors $P \in \Theta$.
+\end{lemma}
+\begin{proof}
+  Par linéarité, il suffit de le montrer pour les monômes. Si $\theta(x) = x^k$
+  pour $k \geq 1$, alors comme $(x^n)^k = x^{nk} = (x^k)^n$, on a $\sum_{n \in
+    \N} a_n f(x^n) = \theta(x^k)$, puis on conclut par composition de limites.
+\end{proof}
+
+\begin{lemma}
+  Si $f : [0,1] \to \R$ est continue par morceaux (ou plus généralement bornée
+  et Riemann-intégrable\footnote{Remarque culturelle : une fonction bornée est
+    Riemann-intégrable si et seulement si son ensemble de points de
+    discontinuités est de mesure nulle.}), alors
+  \[ (1-x) \sum_{n=0}^\infty x^nf(x^n) \xrightarrow[x \to 1^{-}]{} \int_0^1
+    f(t)\,dt\]
+\end{lemma}
+\begin{proof}
+  La série se réécrit $\sum_{n=0}^\infty (x^n - x^{n+1})f(x^n)$ et on reconnaît
+  donc une somme de Riemann infinie associée à la subdivision $]0,1] =
+  \bigcup_{n \in \N} ]x^{n+1},x^n]$ ! Comme la finesse de cette subdivision est
+  $1-x$, et tend vers $0$ quand $x \to 1^-$, la somme de Riemann converge vers
+  l'intégrale.
+  
+  Ceci est légèrement une arnaque dans la mesure où le théorème habituel de
+  convergence des sommes de Riemann est énoncé pour des subdivisions finies,
+  mais on peut montrer qu'il est aussi valable pour des subdivisions
+  dénombrables.
+\end{proof}
+
+Écrivons maintenant $g(x) = x + x(1-x)h(x)$ où, pour $x < 1/2$, $h(x) =
+1/(x-1)$, et pour $x \geq 1/2$, $h(x) = 1/x$. 
+
+Les fonctions polynomiales étant denses dans $L^1([0,1])$ (corollaire du
+théorème de Weierstrass), il existe $Q \in \R[X]$ tel que $\|h-Q\|_1 <
+\varepsilon$. Posons alors $P(X) = X + X(1-X)Q(X)$ : c'est une approximation de
+$g$. (Au passage, tout polynôme $P$ avec $P(0) = 0$ et $P(1) = 1$ s'écrit sous
+cette forme, ce qui motive l'introduction de $h$.)
+
+On a alors :
+\[ \left| \sum_{n \in \N} a_n g(x^n) - \sum_{n \in \N} a_n P(x^n) \right| \leq
+  \sum_{n \in \N} |a_n| \cdot |g - P|(x^n) = \sum_{n \in \N} |a_n| \cdot
+  x^n(1-x^n) \cdot |h - Q|(x^n) \]
+
+Comme $1-x^n = (1-x)(1+ \ldots + x^{n-1}) \leq n(1-x)$, $|a_n|(1-x^n) \leq
+n|a_n|(1-x)$. Or $n|a_n| = O(1)$ par hypothèse. Donc il existe $M > 0$ tel que
+\[ \left| \sum_{n \in \N} a_n g(x^n) - \sum_{n \in \N} a_n P(x^n) \right| \leq
+  M (1-x) \sum_{n \in \N} x^n|h - Q|(x^n) \]
+Soit :
+\[ \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
+  \left| \sum_{n \in \N} a_n P(x^n) \right| +
+  M (1-x) \sum_{n \in \N} x^n|h - Q|(x^n) \]
+En passant à la limite avec les lemmes précédents, sachant que $P(0) = 0$ et que
+$|h-Q|$ est continue par morceaux :
+\[ \limsup_{x \to 1^-} \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
+  0 + M \int_0^1 |h(t) - Q(t)|dt = M \|h-Q\|_1 < M\varepsilon \]
+D'où, finalement,
+\[ \sum_{n \in \N} a_n g(x^n) \xrightarrow[x \to 1^-]{} 0 \]
+
+\newpage
+
 
 \subsection{Théorème du point fixe de Brouwer $\Cf^1$}
 
@@ -1786,153 +2101,107 @@ $\Cf^0$.
 
 \newpage
 
+\subsection{Théorème d'existence de Cauchy-Peano par méthode de point fixe}
 
-\subsection{Polynômes de Bernstein}
-
-Référence : Zuily-Quéffélec, \emph{Éléments d'analyse pour l'agrégation}.
-
-\begin{theorem}[Bernstein]
-  Soit $f \in \Cf([0,1], \R)$.
-  
-  Pour $n \in \N$ et $x \in \R$, on pose $B_n(x) = \E[f(X)]$ où $X \sim
-  \textnormal{Binom}(n,x)$. Alors :
-  \begin{enumerate}
-  \item Pour tout $n \in \N$, $B_n : [0,1] \to \R$ est une fonction polynomiale.
-    ($B_n$ est appelé le $n$-ième polynôme de Bernstein de $f$.)
-  \item $\|B_n - f\|_\infty \underset{n \to \infty}{=} O\left(
-      \omega_f(n^{-1/2}) \right)$.
-  \end{enumerate}
+\begin{theorem}[Schauder]
+  Soit $K$ une partie compacte convexe non vide d'un espace vectoriel normé.
+  Alors toute application continue $f : K \to K$ admet un point fixe.
 \end{theorem}
 
-On rappelle que
-\[ \omega_f(h) = \sup_{|x-y| \leq h} |f(x) - f(y)| \]
-est le \emph{module de continuité uniforme} de $f$.
+En dimension finie, ce n'est autre que le théorème de point fixe de Brouwer. Le
+théorème suivant donne un exemple d'application dans un espace de fonctions de
+dimension infinie.
 
-\begin{corollary}[Weierstrass]
-  Les fonctions polynomiales sont denses dans $\Cf([0,1])$.
-\end{corollary}
+\begin{theorem}[Cauchy--Peano]
+  Soit $f : I \times U, \R^d$ où $I$ est un intervalle ouvert contenant 0
+  et $U \subseteq \R^d$ ouvert. Soit $y_0 \in U$.
+  Si $f$ est \emph{continue}, alors le problème de Cauchy
+  \[ y'(t) = f(t, y(t)) \quad y(0) = y_0\]
+  admet au moins une solution locale au voisinage de 0.
+\end{theorem}
 
-Le corollaire découle directement du théorème de Heine, le point 1 du théorème
-est trivial en écrivant la formule de l'espérance.
+\begin{proof}[Preuve du théorème de Cauchy--Peano]
+  Le problème est équivalent à l'équation intégrale
+  \[ y(t) = y_0 + \int_0^t f(u,y(u))\,du = \Phi(y)(t) \qquad
+    \Phi : y \mapsto \left( t \mapsto y_0 + \int_0^t f(u,y(u))\,du \right) \]
+  donc se formule comme recherche d'un point fixe de l'application $\Phi$. Reste
+  à savoir sur quel espace cette application est définie…
 
-Démonstration du théorème :
-\begin{enumerate}
-\item À $x$ fixé, écrire $|B_n(x) - f(x)|$ comme une espérance, qu'on majore en
-  utilisant $\omega_f$
-\item Astuce : utiliser $\omega_f(\lambda h) \leq \lceil \lambda \rceil
-  \omega_f(h)$ pour obtenir $\omega_f(n^{-1/2})$ fois un facteur probabiliste
-\item Majorer l'espérance de ce facteur en faisant intervenir la variance
-  (dépendante de $x$, paramètre de la loi binomiale)…
-\item puis indépendamment de $x$, et c'est fini !
-\end{enumerate}
+  Fixons $a > 0$ tel que $[-a,a] \subset I$ et $\bar{B}(y_0,a) \subset U$. Sur
+  le compact $[-a,a] \times \bar{B}(y_0,a)$, $|f|$ atteint un maximum $M$. Soit
+  $b = \min(a,a/M)$. Posons
+  \[ K = \left\{ y \in \Cf([-b,b], \bar{B}(y_0,a)) \; \middle| \; y \;
+      \text{$M$-lipschitzienne} \right\}\]
 
-TODO : optimalité de la borne par le théorème central limite.
+  Il est clair que $K$ est non vide (il contient l'application $t \mapsto y_0$)
+  et convexe. $K$ est compact en vertu du théorème d'Ascoli : les fonctions dans
+  $K$ sont toutes à valeurs dans un même compact, et équicontinues car elles ont
+  la même constante de Lipschitz.
 
-Il faut bien connaître le théorème de Stone-Weierstrass plus général pour
-répondre aux questions sur le développement.
+  Pour appliquer le théorème de Schauder, il ne reste qu'à montrer que $\Phi$
+  est bien définie et continue sur $K$ et que $\Phi(K) \subseteq K$. Soit $y \in
+  K$. Puisque $y$ est à valeurs dans $\bar{B}(y_0,a) \subset U$, $f(t,y(t))$ est
+  définie pour tout $t$, ce qui assure que $\Phi(y)$ est définie. Pour $-b \leq
+  s < t \leq b$,
+  \[ |\Phi(y)(s) - \Phi(y)(t)| \leq \int_s^t |f(u,y(u))|\,du \leq M(t-s)
+    \quad \text{car} \quad (u,y(u)) \in [-a,a] \times \bar{B}(y_0,a)
+  \]
+  d'où le caractère $M$-lipschitzien. De plus, comme $\Phi(y)(0) = y_0$, on en
+  déduit que $\Phi(y)$ est à valeurs dans $\bar{B}(y_0,Mb) \subseteq
+  \bar{B}(y_0,a)$. Donc $\Phi(y) \in K$.
+
+  Enfin, pour ce qui est de la continuité,
+  \[ \|\Phi(y) - \Phi(z)\| \leq \int_{-b}^b |f(u,y(u)) - f(u,y(u))|\,du
+    \xrightarrow[y \to y]{} 0
+  \]
+  par convergence dominée (domination sur $[-b,b]$ par $2M$) ou par un argument
+  de convergence uniforme plus long à détailler.
+\end{proof}
+
+\begin{proof}[Preuve du théorème de Schauder]
+  On va admettre le théorème de Brouwer (cf. développement \enquote{théorème de
+    Brouwer $\Cf^1$})) et se ramener au cas de la dimension finie.
+
+  Soit $\varepsilon > 0$. Par précompacité, $K$ peut être recouvert par un
+  nombre fini de boules ouvertes de rayon $\varepsilon$ et de centres $x_1,
+  \ldots, x_n$. Soit $C = \mathrm{Conv}(x_1, \ldots, x_n) \subseteq K$ ; c'est
+  un compact convexe en dimension finie car $C \subset \Vect(x_1,\ldots,x_n)$.
+  
+  $C$ est ainsi une $\varepsilon$-approximation de $K$ par un convexe compact ;
+  approximons maintenant $f$ en posant
+  \[g_\varepsilon : x \in C \mapsto
+    \frac{\sum_{i=1}^n h_i(f(x))x_i}{\sum_{i=1}^n h_i(x)}
+    \quad \text{où} \quad
+    h_i(x) = \min(0, \varepsilon - \|x-x_i\|) \geq 0
+  \]
+  Il est clair que si $g_\varepsilon$ est bien définie (i.e. son dénominateur ne
+  s'annule jamais), alors elle est continue.
+  
+  Soit $x \in K$. Comme $h_i(f(x)) > 0 \Leftrightarrow d(f(x),x_i) <
+  \varepsilon$, $g_\varepsilon(x)$ est un barycentre à poids strictement des
+  points de $x_1, \ldots, x_n$ à distance $< \varepsilon$ de $f(x)$. De tels
+  points existent par la condition de recouvrement. Ainsi :
+  \begin{itemize}
+  \item $g_\varepsilon(x)$ est bien défini ;
+  \item c'est un barycentre des $x_1, \ldots, x_n$, donc $g_\varepsilon(x) \in
+    C$ ; 
+  \item $\|g_\varepsilon(x) - f(x)\| < \varepsilon$ par convexité de $B(f(x),
+    \varepsilon)$.
+  \end{itemize}
+  Ainsi, $g_\varepsilon \in \Cf(C,C)$. Par le théorème de Brouwer,
+  $g_\varepsilon$ admet un point fixe $x_\varepsilon$. La famille
+  $(x_\varepsilon)_{\epsilon > 0}$ admet une valeur d'adhérence $x_0 \in K$.
+  Montrons que $x_0$ est un point fixe de $f$.
+
+  Pour tout $\varepsilon > 0$, $\|f(x_\varepsilon) - x_\varepsilon\| =
+  \|f(x_\varepsilon) - g(x_\varepsilon)\| < \varepsilon$.
+  En passant à la limite sur une suite $(\varepsilon_n)_{n \in \N}$ telle que
+  $\varepsilon_n \to 0$ et $x_{\varepsilon_n} \to x_0$, on a $\|f(x_0) - x_0\| =
+  0$, soit $f(x_0) = x_0$.
+\end{proof}
 
 \newpage
 
-
-\subsection{Théorème taubérien fort de Hardy--Littlewood}
-
-Référence : Gourdon, \emph{Analyse}. On propose ici une preuve avec moins de
-découpage d'$\varepsilon$, en utilisant des sommes de Riemann ainsi qu'en
-sortant un peu du programme de prépa.
-
-Pour présenter ce développement, il faut un peu de culture sur les théorèmes
-abéliens et taubériens, en particulier savoir énoncer le théorème d'Abel radial
-ou angulaire, dont le résultat suivant est une réciproque partielle.
-
-\begin{theorem}[Hardy--Littlewood]
-  Soit $(a_n) \in \R^n$ telle que $a_n = O(1/n)$ quand $n \to +\infty$. En
-  particulier, la série entière $F(x) = \sum_{n \in \N} a_n x^n$ a un rayon de
-  convergence au moins 1.
-
-  Alors, si $F(x) \to c \in \R$ quand $x \to 1^-$, alors $\sum_{n \in \N} a_n$
-  est convergente et vaut $c$.
-\end{theorem}
-
-\begin{example}
-  $\displaystyle 1 - \frac{1}{2} + \frac{1}{3} + \ldots = \ln 2$.
-\end{example}
-
-Il suffit de montrer le théorème pour $c = 0$, quitte à soustraire $c$ à $a_0$.
-
-\paragraph{Stratégie globale} Soit $\Theta$ l'ensemble des fonctions $\theta :
-[0,1] \to \R$ telles que
-\begin{itemize}
-\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n)$ converge pour $0 \leq x < 1$ ;
-\item $\displaystyle \sum_{n \in \N} a_n \theta(x^n) \xrightarrow[x \to 1^{-}]{} 0$.
-\end{itemize}
-Remarquons que $\Theta$ est un espace vectoriel.
-
-On va montrer que $g = \Indic_{[1/2, 1]} \in \Theta$, ce qui établira le
-théorème : en effet, dans ce cas,
-\[ \forall N \in \N,\; S_N =  \sum_{n = 0}^N a_n = \sum_{n = 0}^{\infty} a_n
-  g(x_N^n) \quad \text{avec}\; x_N = 2^{-1/N} \xrightarrow[N \to +\infty]{} 1^- \]
-et par composition de limites $S_N \rightarrow 0$ quand $N \to +\infty$.
-
-\begin{lemma}
-  Si $P$ est un polynôme s'annulant en $0$, alors $P \in \Theta$.
-\end{lemma}
-\begin{proof}
-  Par linéarité, il suffit de le montrer pour les monômes. Si $\theta(x) = x^k$
-  pour $k \geq 1$, alors comme $(x^n)^k = x^{nk} = (x^k)^n$, on a $\sum_{n \in
-    \N} a_n f(x^n) = \theta(x^k)$, puis on conclut par composition de limites.
-\end{proof}
-
-\begin{lemma}
-  Si $f : [0,1] \to \R$ est continue par morceaux (ou plus généralement bornée
-  et Riemann-intégrable\footnote{Remarque culturelle : une fonction bornée est
-    Riemann-intégrable si et seulement si son ensemble de points de
-    discontinuités est de mesure nulle.}), alors
-  \[ (1-x) \sum_{n=0}^\infty x^nf(x^n) \xrightarrow[x \to 1^{-}]{} \int_0^1
-    f(t)\,dt\]
-\end{lemma}
-\begin{proof}
-  La série se réécrit $\sum_{n=0}^\infty (x^n - x^{n+1})f(x^n)$ et on reconnaît
-  donc une somme de Riemann infinie associée à la subdivision $]0,1] =
-  \bigcup_{n \in \N} ]x^{n+1},x^n]$ ! Comme la finesse de cette subdivision est
-  $1-x$, et tend vers $0$ quand $x \to 1^-$, la somme de Riemann converge vers
-  l'intégrale.
-  
-  Ceci est légèrement une arnaque dans la mesure où le théorème habituel de
-  convergence des sommes de Riemann est énoncé pour des subdivisions finies,
-  mais on peut montrer qu'il est aussi valable pour des subdivisions
-  dénombrables.
-\end{proof}
-
-Écrivons maintenant $g(x) = x + x(1-x)h(x)$ où, pour $x < 1/2$, $h(x) =
-1/(x-1)$, et pour $x \geq 1/2$, $h(x) = 1/x$. 
-
-Les fonctions polynomiales étant denses dans $L^1([0,1])$ (corollaire du
-théorème de Weierstrass), il existe $Q \in \R[X]$ tel que $\|h-Q\|_1 <
-\varepsilon$. Posons alors $P(X) = X + X(1-X)Q(X)$ : c'est une approximation de
-$g$. (Au passage, tout polynôme $P$ avec $P(0) = 0$ et $P(1) = 1$ s'écrit sous
-cette forme, ce qui motive l'introduction de $h$.)
-
-On a alors :
-\[ \left| \sum_{n \in \N} a_n g(x^n) - \sum_{n \in \N} a_n P(x^n) \right| \leq
-  \sum_{n \in \N} |a_n| \cdot |g - P|(x^n) = \sum_{n \in \N} |a_n| \cdot
-  x^n(1-x^n) \cdot |h - Q|(x^n) \]
-
-Comme $1-x^n = (1-x)(1+ \ldots + x^{n-1}) \leq n(1-x)$, $|a_n|(1-x^n) \leq
-n|a_n|(1-x)$. Or $n|a_n| = O(1)$ par hypothèse. Donc il existe $M > 0$ tel que
-\[ \left| \sum_{n \in \N} a_n g(x^n) - \sum_{n \in \N} a_n P(x^n) \right| \leq
-  M (1-x) \sum_{n \in \N} x^n|h - Q|(x^n) \]
-Soit :
-\[ \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
-  \left| \sum_{n \in \N} a_n P(x^n) \right| +
-  M (1-x) \sum_{n \in \N} x^n|h - Q|(x^n) \]
-En passant à la limite avec les lemmes précédents, sachant que $P(0) = 0$ et que
-$|h-Q|$ est continue par morceaux :
-\[ \limsup_{x \to 1^-} \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
-  0 + M \int_0^1 |h(t) - Q(t)|dt = M \|h-Q\|_1 < M\varepsilon \]
-D'où, finalement,
-\[ \sum_{n \in \N} a_n g(x^n) \xrightarrow[x \to 1^-]{} 0 \]
-
-\newpage
 
 \section{Idées exclues}
 
