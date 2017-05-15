@@ -105,6 +105,19 @@
 
 \section{Algèbre/géométrie et analyse}
 
+Liste de développements que je n'ai pas voulu taper :
+
+\begin{itemize}
+\item Groupe circulaire : référence à trouver 
+\item Réciprocité quadratique par double comptage d'une conique sur $\F_p$ (trop
+  beau !) : dans H2G2 tome 1
+\item Algorithme de Berlekamp : cf. PDF de Jill-Jênn Vie
+\item Existence de la réduction de Frobenius (utilisant l'orthogonalité duale) :
+  fait en cours dans H2G2 tome 1
+\end{itemize}
+
+\newpage
+
 \subsection{Dualité lagrangienne et extrema liés en optimisation convexe}
 
 On montre ici un théorème fondamental en recherche opérationnelle, variante du
@@ -1230,25 +1243,91 @@ Dans cette dernière étape, on a besoin de la propriété suivante :
 
 \subsection{Constructibilité des polygones réguliers}
 
-\[ \Q(\zeta_p) = K_m \supset K_{m-1} \supset \ldots \supset K_0 = \Q \]
-\[ \{0\} \hookrightarrow \Z/2\Z \hookrightarrow \ldots \hookrightarrow \Z/2^n\Z
-  \simeq (\Z/pZ)^* \simeq \textnormal{Gal}(\Q(\zeta_p)/\Q) \]
+Rappelons que l'ensemble des nombres \emph{constructibles} est la clôture
+quadratique de $\Q$, et qu'il correspond, d'après le théorème de Wantzel, à
+l'ensemble des affixes dans $\C$ des points repérables par une construction à la
+règle non graduée et au compas à partir des points 0 et 1.
 
-TODO. Utiliser un élément primitif pour borner le nombre d'automorphismes fixant
-une extension intermédiaire d'un corps cyclotomique, ce qui évite d'avoir à
-prouver un sens du lemme d'Artin.
+\begin{theorem}[Gauss--Wantzel]
+  Soit $p$ un nombre premier impair. $\zeta_p = e^{2\pi i / p}$ est
+  constructible si et seulement si $p$ est de la forme $2^n + 1$.
+\end{theorem}
 
+Dire que $\zeta_p$ est constructible revient à dire qu'on peut construire le
+polygone régulier à $p$ côtés à la règle et au compas.
 
-\subsection{Quatre autres développements}
+\begin{remark}
+  Dans ce cas, $p$ est appelé \emph{nombre premier de Fermat} et on montre qu'il
+  s'écrit forcément comme $p = 2^{2^m} + 1$.
+\end{remark}
 
-\begin{itemize}
-\item Groupe circulaire : référence à trouver 
-\item Réciprocité quadratique par double comptage d'une conique sur $\F_p$ (trop
-  beau !) : dans H2G2 tome 1
-\item Algorithme de Berlekamp : cf. PDF de Jill-Jênn Vie
-\item Existence de la réduction de Frobenius (utilisant l'orthogonalité duale) :
-  fait en cours dans H2G2 tome 1
-\end{itemize}
+\begin{proposition}
+  Le polynôme minimal de $\zeta_p$ est $\Phi_p(X) = X^{p-1} + \ldots + 1$.
+\end{proposition}
+\begin{proof}
+  On a bien $\Phi_p(\zeta_p) = 0$, et on vérifie l'irréductibilité en appliquant
+  à $\Phi_p(X+1)$ le critère d'Eisenstein.
+\end{proof}
+\begin{corollary}
+  $\deg \zeta_p = [\Q(\zeta_p) : \Q] = p - 1$.
+\end{corollary}
+
+\begin{proof}[Preuve du sens direct du théorème]
+  Si $\zeta_p$ est constructible, alors il est inclus dans une tour d'extensions
+  quadratiques : $\zeta_p \in K_m \supset K_{m-1} \supset \ldots \supset K_0 =
+  \Q$ avec $[K_m : K_{m-1}] = 2$. Ainsi, $p - 1 = \deg \zeta_p \mid [K_m :
+  K_{m-1}] \times \ldots \times [K_1 : K_0] = 2^m$, donc $p = 2^n + 1$ avec $n
+  \leq m$.
+\end{proof}
+
+Pour le sens réciproque, nous allons considérer le groupe
+$\mathrm{Gal}(\Q(\zeta_p))/\Q$ des automorphismes de $\Q(\zeta_p)$.
+
+\begin{proposition}
+  $\mathrm{Gal}(\Q(\zeta_p))/\Q \simeq (\Z/p\Z)^\times \simeq \Z/(p-1)\Z$.
+\end{proposition}
+\begin{proof}
+  Tout d'abord, tout automorphisme $\sigma \in \mathrm{Gal}(\Q(\zeta_p))/\Q$ est
+  uniquement déterminé par l'image de $\zeta_p$. Cette image est forcément une
+  racine de $\Phi_p$. Réciproquement, toute racine $z$ de $\Phi_p$ détermine un
+  automorphisme de $\Q(\zeta_p)$ par composition des isomorphismes canoniques
+  $\Q(\zeta_p) \simeq \Q(X)/(\Phi_p) \simeq \Q(z)$.
+
+  De plus, les racines de $\Phi_p$, i.e. les racines primitives de l'unité, sont
+  en bijection avec $(\Z/p\Z)^\times$, via $\bar{k} \mapsto \zeta_p^k$. Ainsi,
+  $\bar{k} \mapsto (\phi_k : \zeta_p \mapsto \zeta_p^k)$ est une bijection vers
+  $\mathrm{Gal}(\Q(\zeta_p))/\Q$, et on vérifie que c'est un morphisme.
+\end{proof}
+
+\begin{proof}[Preuve du sens réciproque]
+  Supposons que $p = 2^n + 1$. Alors $\mathrm{Gal}(\Q(\zeta_p)/\Q) \simeq
+  \Z/2^n\Z$. Soit $\sigma$ un générateur du groupe, alors en notant $G_l =
+  \langle \sigma^{2^l} \rangle$, on a
+  \[ \{1\} = G_n \subset G_{n-1} \subset \ldots \subset G_0 =
+    \textnormal{Gal}(\Q(\zeta_p)/\Q) \]
+  Puis, en posant $K_l = \{x \in \Q(\zeta_p) \mid \sigma^{2^l}(x) = x\}$,
+  qui est un sous-corps, on a :
+  \[ \Q(\zeta_p) = K_n \supseteq K_{n-1} \supseteq \ldots \supseteq K_0 = \Q \]
+
+  À ce stade, on peut conclure immédiatement avec la correspondance de Galois :
+  on a $[K_l : K_{l-1}] = [G_{l-1} : G_l] = 2$, donc on a bien obtenu une tour
+  d'extensions quadratiques correspondant à notre tour de sous-groupes. Ainsi,
+  le résultat est trivial d'un point de vue galoisien.
+
+  Pour se passer du théorème fondamental de la théorie de Galois, qui est
+  difficile, on va montrer $[K_l : K_{l-1}] > 1$, puis la multiplicativité des
+  degrés permettra de conclure. Posons $x = \sum_{\tau \in G_l} \tau(\zeta_p)$ ;
+  il est clair que $x \in K_l$. Supposons par l'absurde que $x \in K_{l-1}$.
+  Alors, en notant $\rho = \sigma^{2^l}$,
+  \[ \sum_{\tau \in G_l} \tau(\zeta_p) = x = \rho(x) = \sum_{\tau \in \rho G_l}
+    \tau(\zeta_p) \]
+  Or, $G_l \cap \rho G_l = \emptyset$ puisque $\rho \notin G_l$, et on a vu tout
+  à l'heure que $(\tau(\zeta_p),\;\tau \in \mathrm{Gal}(\Q(\zeta_p)/\Q))$ est la
+  famille des racines de $\Phi_p$ énumérée sans répétition. Cette famille est
+  égale à $(\zeta_p, \ldots, \zeta_p^{p-1})$, qui est une base de $\Q(\zeta_p)$,
+  donc en particulier est libre. La relation de liaison obtenue plus haut et
+  donc impossible ; contradiction.
+\end{proof}
 
 
 \newpage
@@ -2011,8 +2090,8 @@ Soit :
 \[ \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
   \left| \sum_{n \in \N} a_n P(x^n) \right| +
   M (1-x) \sum_{n \in \N} x^n|h - Q|(x^n) \]
-En passant à la limite avec les lemmes précédents, sachant que $P(0) = 0$ et que
-$|h-Q|$ est continue par morceaux :
+En passant à la limite avec les lemmes précédents, sachant que $P \in \Theta$ et
+que $|h-Q|$ est continue par morceaux :
 \[ \limsup_{x \to 1^-} \left| \sum_{n \in \N} a_n g(x^n) \right| \leq
   0 + M \int_0^1 |h(t) - Q(t)|dt = M \|h-Q\|_1 < M\varepsilon \]
 D'où, finalement,
@@ -2151,8 +2230,8 @@ dimension infinie.
   \bar{B}(y_0,a)$. Donc $\Phi(y) \in K$.
 
   Enfin, pour ce qui est de la continuité,
-  \[ \|\Phi(y) - \Phi(z)\| \leq \int_{-b}^b |f(u,y(u)) - f(u,y(u))|\,du
-    \xrightarrow[y \to y]{} 0
+  \[ \|\Phi(y) - \Phi(z)\| \leq \int_{-b}^b |f(u,y(u)) - f(u,z(u))|\,du
+    \xrightarrow[z \to y]{} 0
   \]
   par convergence dominée (domination sur $[-b,b]$ par $2M$) ou par un argument
   de convergence uniforme plus long à détailler.
@@ -2199,6 +2278,16 @@ dimension infinie.
   $\varepsilon_n \to 0$ et $x_{\varepsilon_n} \to x_0$, on a $\|f(x_0) - x_0\| =
   0$, soit $f(x_0) = x_0$.
 \end{proof}
+
+Moralement, on a démontré et utilisé une version plus fine de la propriété
+suivante :
+
+\begin{proposition}
+  Si $K$ est une partie compacte d'un espace vectoriel normé $E$, alors pour
+  tout $\varepsilon > 0$, il existe un sous-espace $F \subset E$ de dimension
+  finie tel que $K$ soit compris dans le voisinage d'épaisseur $\varepsilon$ de
+  $F$.
+\end{proposition}
 
 \newpage
 
