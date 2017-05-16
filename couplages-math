@@ -29,7 +29,7 @@ Réduction de Frobenius / Réciprocité quadratique / Groupes simples non isomor
 Base de Burnside / Constructibilité des polygones réguliers / Algorithme de Berlekamp
 
 152 : Déterminant.
-Points à distances impaires / Ellipsoïde / Théorème de l'élément primitif
+Points à distances impaires / Théorème de l'élément primitif
 
 153 : Polynômes d'endomorphisme en dimension finie. Réduction d'un endomorphisme en dimension finie.
 Réduction de Frobenius / Groupes simples non isomorphes
@@ -80,13 +80,13 @@ Dualité lagrangienne / Enveloppe convexe de O(n)
 Théorème de Liapounov / Théorème d'existence de Cauchy-Peano
 
 221 : Équations différentielles linéaires. Systèmes d'équations différentielles linéaires.
-Théorème de Liapounov / 
+Théorème de Liapounov / Sous-espaces de C^0 stables par translation
 
 223 : Suites numériques. Convergence, valeurs d'adhérence.
 Méthode de Newton pour les polynômes / 
 
 224 : Exemples de développements asymptotiques de suites et de fonctions.
-Méthode de Newton pour les polynômes / Formule de Poisson
+Méthode de Newton pour les polynômes / Fonction thêta et somme de Gauss
 
 226 : Suites vectorielles et réelles définies par une relation de récurrence u_{n+1} = f(u_n).
 Méthode de Newton pour les polynômes / Méthode de Kaczmarz
@@ -98,7 +98,7 @@ Polynômes de Bernstein / Dérivabilité des fonctions monotones
 Dérivabilité des fonctions monotones / Dualité lagrangienne
 
 230 : Séries de nombres réels ou complexes. Comportement des restes ou des sommes partielles des séries numériques.
-Formule de Poisson / Théorème taubérien fort
+Formule de Poisson / Fonction thêta et somme de Gauss / Théorème taubérien fort
 
 233 : Méthodes itératives en analyse numérique matricielle.
 NON.
