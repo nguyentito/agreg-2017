@@ -89,10 +89,13 @@
 
 \tableofcontents
 
+\newpage
 
 \section{Développements transversaux}
 
 \subsection{Rationalité des témoins en arithmétique de Presburger}
+
+Référence : LFCC de Carton.
 
 Soit $\phi(x_1,\ldots,x_k)$ une formule à $k$ variables libres de l'arithmétique
 de Presburger, c'est-à-dire formée à partir des symboles $0$, $1$, $+$, $=$.
@@ -118,16 +121,89 @@ $L_\phi$ est un langage sur l'alphabet $\{0,1\}^k$.
   L'arithmétique de Presburger est décidable.
 \end{corollary}
 
+\newpage
 
 \section{Algorithmique}
 
 \subsection{Algorithme de Hirschberg}
 
 Une superbe astuce qui consiste à utiliser un diviser-pour-régner afin de
-baisser la complexité spatiale d'un algorithme de programmation dynamique,
-appliquée au problème de la distance d'édition. On utilise la programmation
-dynamique pour calculer le point de délimitation entre les deux sous-problèmes
-récursifs.
+baisser la complexité spatiale d'un algorithme de programmation dynamique. On
+l'applique ici au problème du \emph{plus long sous-mot commun} (PLSC), mais la
+technique est assez générique.
+
+Pour une fois, le cours de Jeff Erickson n'est pas la meilleure référence : il
+se complique inutilement la vie avec sa relation de récurrence.
+
+On considère le problème d'optimisation suivant :
+\begin{itemize}
+\item Entrée : $u, v \in \Sigma^*$ ($\Sigma$ alphabet fini) ;
+\item Sortie : $w$ sous-mot commun de $u$ et $v$, tel que sa longueur $|w|$ soit
+  maximale.
+\end{itemize}
+Notons $\mathrm{PLSC}(u,v)$ l'ensemble des solutions optimales, et $l(u,v)$ la
+longueur d'une telle solution.
+
+\begin{proposition}
+  Soient $u, v \in \Sigma^*$, $m = |u|$, $n = |v|$. le tableau $t[i] = l(u[1 …
+  i], v)$, $i = 1, …, m$ peut être calculé en temps $O(mn)$ et espace $O(m)$.
+\end{proposition}
+\begin{proof}
+  C'est l'algorithme archi-classique de programmation dynamique… Admis.
+\end{proof}
+
+En particulier, $l(u,v)$ peut être calculé avec cette complexité (remarquons de
+plus que les rôles de $u$ et $v$ étant symétriques, on peut avoir un espace
+$O(\min(m,n))$). Il s'agit maintenant de trouver une \emph{solution} optimale $w
+\in \mathrm{PLSC}(u,v)$, avec les mêmes complexités temporelle et spatiale que
+le calcul de la \emph{valeur} optimale. (En temps $O(mn)$ et espace $O(mn)$, ça
+se fait en lisant la solution sur le tableau d'états de la programmation
+dynamique.)
+
+\begin{lemma}
+  Posons $g = u[1 … \lfloor m/2 \rfloor]$ et $d = u[\lfloor m/2 \rfloor + 1 …
+  m]$. Soit $i$ maximisant $l(g, v[1 … i]) + l(d, v[i+1 … n])$. Alors, pour tout
+  $w \in \mathrm{PLSC}(g, v[1 … i])$ et $w' \in \mathrm{PLSC}(d, v[i+1 … n])$,
+  on a $w \cdot w' \in \mathrm{PLSC}(u,v)$.
+\end{lemma}
+\begin{proof}
+  Soit $s \in \mathrm{PLSC}(u,v)$. $s$ est un sous-mot de $u$ et $g \cdot d =
+  u$, donc il existe $s', s''$ tels que $s'$ (resp.\ $s''$) soit un sous-mot de
+  $g$ (resp.\ $d$). Maintenant, $s' \cdot s''$ est sous-mot de $v$, donc il
+  existe $j$ tel que $s'$ (resp.\ $s''$) soit un sous-mot de $v[1 … j]$ (resp.\
+  $v[j+1 … n]$).
+
+  Pour $w, w'$ donnés dans l'énoncé, par deux arguments successifs de
+  maximalité, on a
+  \[ |w \cdot w'| = l(g, v[1 … i]) + l(d, v[i+1 … n])
+    \geq l(g, v[1 … j]) + l(d, v[j+1 … n]) \geq |s \cdot s'| = l(u,v). \]
+  Or $w \cdot w'$ est un sous-mot commun de $u$ et $v$, donc c'est un plus long
+  sous-mot commun.
+\end{proof}
+
+Ce lemme conduit immédiatement à considérer l'algorithme suivant, dont il prouve
+la correction :
+
+\begin{algorithm}
+  \begin{algorithmic}
+    \Procedure{Hirschberg}{$u,v$}
+    \State $(m, n) \gets (|u|,|v|)$
+    \If{$m \leq 1$}
+    \State \textbf{calculer} $w \in \mathrm{PLSC}(u,v)$ en temps $O(n)$
+    \State \textbf{renvoyer} $w$
+    \Else
+    \State $(g,d) \gets (u[1 … \lfloor m/2 \rfloor], u[\lfloor m/2 \rfloor + 1…m])$
+    \State $lg \gets [l(g, v[1 … i]) \mid i = 1, \ldots, n]$
+    \State $ld \gets [l(d, v[i+1 … n]) \mid i = 1, \ldots, n]$
+    \State Soit $i$ minimisant $lg[i] + ld[i]$
+    \State \textbf{renvoyer} \Call{Hirschberg}{$g,v[1…i]$} $\cdot$
+    \Call{Hirschberg}{$d,v[i+1…n]$}
+    \EndIf
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+L'analyse n'est pas très dure, mais il faut expliciter des constantes…
 
 
 \newpage
@@ -182,34 +258,51 @@ L'algorithme va calculer par récurrence $R_k$ pour $k = 0, \ldots, \lceil
   R_k[j+2^k]) \mid j = 1, \ldots, n \}$ ordonné sans répétition par ordre
   lexicographique.
 \end{lemma}
-\begin{proof}
-Première remarque, qui va nous faciliter la vie en évitant des dépassements
-d'indices : en posant $u = w\$^\omega \in (A \cup \{\$\}^\omega$, où $ \$ $ est
-plus petit que les lettres de $A$, cette condition s'écrit aussi
-$u[\sigma(1)\ldots] < \ldots < u[\sigma(n)\ldots]$.
+
+\begin{proof}[Heuristique]
+  Plaçons-nous dans le cas où $i + 2^{k+1} - 1$ et $j + 2^{k+1} - 1$ sont
+  inférieurs à $n$. Alors
+  \[ w[i \ldots i + 2^{k+1} - 1] < w[j \ldots i + 2^{k+1} - 1] \]
+\[    \Leftrightarrow
+    w[i \ldots i + 2^{k} - 1] \cdot w[i + 2^k \ldots i + 2^{k+1} - 1] <
+    w[j \ldots j + 2^{k} - 1] \cdot w[j + 2^k \ldots j + 2^{k+1} - 1]
+  \]
+\[  \Leftrightarrow
+    (w[i \ldots i + 2^{k} - 1], w[i + 2^k \ldots i + 2^{k+1} - 1]) <
+    (w[j \ldots j + 2^{k} - 1], w[j + 2^k \ldots j + 2^{k+1} - 1])
+  \]
+  et il ne reste plus qu'à traduire cela en termes de rangs.
 \end{proof}
 
-D'où l'algorithme suivant, qui ne fait pas référence à $u$ :
+\begin{proof}[Début d'une preuve plus rigoureuse]
+  Le souci avec l'argument précédent, c'est les dépassements d'indice. Pour les
+  éviter en se facilitant la vie, on pose $u = w\$^\omega \in (A \cup
+  \{\$\}^\omega$, où $ \$ $ est plus petit que les lettres de $A$, cette
+  condition s'écrit aussi $u[\sigma(1)\ldots] < \ldots < u[\sigma(n)\ldots]$.
+  Puis on étudie l'ordre des suffixes (infinis !) de $u$ sans répétition, en
+  attribuant à $\$^\omega$ le rang 0 : cela correspond aux rangs donnés par $R$.
+\end{proof}
 
+\newpage
+
+D'où l'algorithme suivant :
 \begin{algorithm}
 \begin{algorithmic}
   \Procedure{TriSuffixes}{$w$}
   \State $n \gets |w|$
-  \State $R \gets $ \Call{TriRang}{$[w[i] \mid i = 1, \ldots, n]$}
+  \State $R_0 \gets $ \Call{TriRang}{$[w[i] \mid i = 1, \ldots, n]$}
   \For{$k \gets 1, \ldots, \lceil \log_2 n \rceil$}
-  \State $R \gets $ \Call{TriRang}{$[(R[k-1][i], R[k-1][i+k]) \mid i = 1, \ldots, n]$}
+  \State $R_k \gets $ \Call{TriRang}{$[(R_{k-1}[i], R_{k-1}[i+k]) \mid i = 1, \ldots, n]$}
   \EndFor
-  \State \textbf{renvoyer} l'inverse de la permutation $R[k]$
+  \State \textbf{renvoyer} l'inverse de la permutation $R_k$
   \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-
-
 \paragraph{Implémentation du tri}
 
-On sait que $0 \leq R[k-1][i] \leq n$ pour tout $i \in \N^*$. Trier les couples
-$(R[k-1][i], R[k-1][i+k])$ revient donc à trier une liste de $n$ nombres à 2
+On sait que $0 \leq R_{k-1}[i] \leq n$ pour tout $i \in \N^*$. Trier les couples
+$(R_{k-1}[i], R_{k-1}[i+k])$ revient donc à trier une liste de $n$ nombres à 2
 chiffres en base $n+1$.
 
 Rappelons que l'algorithme de \emph{tri par base}\footnote{En anglais,
@@ -223,11 +316,10 @@ On a $\lceil \log_2 n \rceil$ itérations dont chacune coûte $O(n)$ : au total,
 l'algorithme tourne en temps $O(n \log n)$. On a donc battu l'algorithme naïf
 d'un facteur $n$ !
 
-En espace, l'implémentation proposée consomme $O(n \log n)$. Il est possible de
-ne retenir que $R[k-1]$ et $R[k]$ à chaque itération, ce qui fait descendre
-l'usage mémoire à $O(n)$. Cependant, garder en mémoire la matrice $R$ est utile
-par la suite dans la construction de la table des suffixes, pour calculer les
-plus longs préfixes communs entre deux suffixes.
+En espace, l'implémentation proposée consomme $O(n)$. Cependant, garder en
+mémoire les $R_k$ pour $k = 1, \ldots, \lceil \log_2 n \rceil$, ce qui prend
+$O(n \log n)$, est utile par la suite dans la construction de la table des
+suffixes, pour calculer les plus longs préfixes communs entre deux suffixes.
 
 
 \newpage
@@ -272,6 +364,8 @@ Avec une astuce pour rendre le truc plus rapide, merci Jill-Jênn !
 
 \subsection{Réduction de 2SAT à la connexité forte}
 
+
+\newpage
 
 \section{Automates, calculabilité et complexité}
 
@@ -329,15 +423,121 @@ Pour avoir une minoration correspondante, on considère $L = X^{n-1}aX^*$ où $X
 miroir a $2^n$ résiduels ! La minimisation ne fait que \emph{rajouter} un état
 puits pour rendre l'automate complet.
 
+\newpage
+
+\subsection{Les fonctions calculables par machine de Turing sont récursives}
+
+
+
+\newpage
 
 \subsection{Théorème de Baker--Gill--Solovay}
 
 Proposé à la prépa agrég de Cachan par C. Lemonnier.
 
+\newpage
+
 \section{Logique et réécriture}
 
+\subsection{Théorème de Herbrand sémantique}
+
+On suppose que le langage $\mathcal{L}$ contient des constantes, pour assurer la non-vacuité
+des modèles de Herbrand.
+
+\begin{theorem}[Herbrand sémantique]
+  Soit $A$ une formule existentielle : $A = \exists x_1 \ldots \exists x_n\,B$
+  où $B$ est sans quantificateur. Alors $A$ est valide si et seulement si il
+  existe un entier $k$ et $k$ instances $B\sigma_1, \ldots, B\sigma_k$ telles
+  que $B\sigma_1 \lor \ldots \lor B\sigma_k$ soit valide.
+\end{theorem}
+
+On peut étendre le résultat en remplaçant \enquote{formule valide} par
+\enquote{conséquence d'une théorie axiomatisée par des formules purement
+  universelles}.
+
+La preuve procède par réduction de la logique du premier ordre à la logique
+propositionnelle. Soit $\mathcal{A}$ l'ensemble des atomes clos du langage
+$\mathcal{L}$ (les $R(t_1, \ldots, t_n)$ où $R$ est un symbole de relation
+$n$-aire ($n \in \mathbf{N}$) autre que $=$ et $t_1, \ldots, t_n$ sont des
+termes clos).
+
+\begin{remark}[fondamentale !]
+  Les formules closes sans quantificateur sur $\mathcal{L}$ correspondent aux
+  formules propositionnelles sur l'ensemble de variables propositionnelles
+  $\mathcal{A}$.
+\end{remark}
+
+On peut donc parler de satisfaisabilité \emph{propositionnelle} pour les
+formules sans quantificateur : cela correspond à être satisfaisable pour toute
+valuation booléenne $v : \mathcal{A} \to \{\mathrm{V}, \mathrm{F}\}$.
+
+\begin{lemma}
+  Si $A$ est valide au premier ordre, alors $\{\lnot B\sigma \mid \sigma\,
+  \text{\emph{substitution}} \}$ est insatisfaisable propositionnellement.
+\end{lemma}
+
+La preuve est renvoyée à plus tard. Par compacité propositionnelle, il existe
+$B\sigma_1, \ldots, B\sigma_k$ tels que $\lnot B\sigma_1 \land \ldots \land
+\lnot B\sigma_k$ soit insatisfaisable propositionnellement.
+
+Maintenant, si $\mathfrak{M}$ est une $\mathcal{L}$-structure, alors elle induit
+une valuation booléenne sur les atomes $X \in \mathcal{A}$ :
+$v_{\mathfrak{M}}(X) = \mathrm{V} \Leftrightarrow \mathfrak{M} \models X$. On a
+besoin d'un petit lemme technique.
+
+\begin{lemma}
+  Une formule close $\varphi$ est satisfaite par $v_{\mathfrak{M}}$ si et
+  seulement si $\mathfrak{M} \models \varphi$.
+\end{lemma}
+\begin{proof}
+  Par induction structurelle triviale.
+\end{proof}
 
 
+Comme $v_{\mathfrak{M}}$ ne satisfait pas $\lnot B\sigma_1 \land \ldots \land
+\lnot B\sigma_k$, on a donc que $\mathfrak{M} \nvDash \lnot B\sigma_1 \land
+\ldots \land \lnot B\sigma_k$, autrement dit $\mathfrak{M} \models B\sigma_1
+\lor \ldots \lor B\sigma_k$, et ce pour toute $\mathcal{L}$-structure.
+
+$B\sigma_1 \lor \ldots \lor B\sigma_k$ est donc valide, CQFD ; reste à montrer
+le lemme.
+
+\begin{proof}[Preuve du premier lemme]
+  On a vu que la validité propositionnelle était plus forte que la validité au
+  premier ordre ; il s'agit d'établir une sorte de réciproque.
+
+  Supposons par l'absurde que $v$ soit une valuation satisfaisant tous les
+  $\lnot B\sigma$. On construit un \emph{modèle de Herbrand} $\mathfrak{M}$ :
+  \begin{itemize}
+  \item dont les élements $\bar{t}$ sont en bijection avec les termes clos $t$
+    du langage ;
+  \item où les symboles de fonctions sont interprétés par $f(\overline{t_1}, \ldots,
+    \overline{t_n}) = \overline{f(t_1, \ldots, t_n)}$ ;
+  \item où $\mathfrak{M} \models R(\bar{t_1}, \ldots, \bar{t_n})$ ssi $v(R(t_1,
+    \ldots, t_n))$ vaut vrai.
+  \end{itemize}
+  On a donc par construction $v_{\mathfrak{M}} = v$, donc (par le second lemme)
+  $M \models \lnot B\sigma$ pour toute substitution $\sigma$ par des termes
+  clos.
+  
+  Comme $A$ est valide, $\mathfrak{M} \models \exists x_1 \ldots \exists x_n B$,
+  c'est-à-dire qu'il existe $\overline{t_1}, \ldots, \overline{t_n}$ dans le
+  modèle tels que $\mathfrak{M} \models B[\overline{t_1}/x_1, \ldots,
+  \overline{t_n}/x_n]$. Par un lemme d'adéquation qu'on pourrait montrer par
+  induction structurelle mais qui est évident, en interprétant les éléments du
+  modèles comme des termes, on a en fait $\mathfrak{M} \models B\sigma$ où
+  $\sigma(x_i) = t_i$. Contradiction.
+\end{proof}
+
+\newpage
+
+\subsection{Lemme de Newman}
+
+\subsection{Algorithme naïf d'unification}
+
+
+
+\newpage
 
 \section{Idées exclues}
 
