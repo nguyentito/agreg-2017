@@ -1,0 +1,494 @@
+\documentclass[a4paper, 11pt]{article}
+
+% Math symbols, notation, etc.
+% Apparently, must be loaded earlier than mathspec?
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{amsthm}
+
+% Locale/encoding with XeTeX: UTF-8 by default, use fontspec
+\usepackage{unicode-math}
+\usepackage[frenchb]{babel}
+\usepackage{csquotes} % guillemets
+
+% TeX Gyre Pagella = URW Palladio (free Palatino) extended
+\setmainfont[Mapping=tex-text]{TeX Gyre Pagella}
+\setmathfont{Asana Math}
+
+% Other
+\usepackage{fullpage}
+%\usepackage{enumerate}
+%\usepackage{graphicx}
+
+\newtheorem*{definition}{Définition}
+\newtheorem*{example}{Exemple}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{theorem}{Théorème}
+\newtheorem*{application}{Application}
+\newtheorem*{algo}{Algorithme}
+\newtheorem*{lemma}{Lemme}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{corollary}{Corollaire}
+
+\begin{document}
+
+\title{Compte-rendu des oraux d'agrég de math (option D)}
+\author{Nguyễn Lê Thành Dũng}
+\date{29 juin -- 1\up{er} juillet 2017}
+\maketitle
+
+\section*{Leçon d'informatique fondamentale (29/06)}
+
+\paragraph{Couplage}
+
+Leçon choisie : \textbf{915 -- Classes de complexité. Exemples.}
+
+Alternative : \emph{913 -- Machines de Turing. Applications.}\\
+
+Horreur et damnation, un couplage qui ne laisse aucune possibilité d'échapper
+aux machines de Turing ! J'ai choisi le moindre mal, en m'appuyant sur le livre
+de Perifel pour construire un plan tout à fait banal :
+\begin{enumerate}
+\item Modèle des machines de Turing et premiers résultats (accélération,
+  hiérarchie)
+\item Classes de complexité en temps (P, NP, EXP)
+\item Classes de complexité en espace (L, NL, PSPACE)
+\end{enumerate}
+Malheureusement la rédaction du plan m'a pris trop de temps ce qui ne m'a pas
+permis de bien préparer mes développements.
+
+\paragraph{Développements proposés}
+
+Choix du jury : \textbf{Le problème d'universalité des automates finis
+  non-déterministes est PSPACE-difficile}.
+
+Alternative : \emph{Théorème de Savitch} (sans hypothèse de constructibilité en
+espace).\\
+
+Pour résumer : on a un langage PSPACE, une machine de Turing $\mathcal{M}$ à un
+ruban fonctionnant en espace $\leq p(n)$ ($p \in \mathbb{N}[X]$) qui le
+reconnaît, et on veut construire à partir d'un mot $x \in \Sigma$ un automate
+$\mathcal{A}_x$ sur un alphabet $\Sigma'$ tel que $L(\mathcal{A}_x) = \Sigma'^*$
+ssi $\mathcal{M}$ \emph{rejette} $x$ (sachant que PSPACE est stable par
+complémentaire). Soit $n = |x|$. On définit d'abord une représentation des
+configurations de $\mathcal{M}$ comme des mots de $p(n)+1$ lettres ($p(n)$ cases
+mémoire + un symbole état interne à la position de la tête de lecture), puis on
+cherche à construire $\mathcal{A}_x$ de sorte que $\Sigma'^* \setminus
+L(\mathcal{A}_x)$ représente l'ensemble des chemins acceptants dans
+$\mathcal{M}$ sur l'entrée $x$.
+
+Donc il faut que $\mathcal{A}_x$ détecte (1) les mots mal formés (ne correspondant
+pas à des suites de configurations), (2) les suites avec deux configurations
+consécutives qui ne peuvent pas se succéder dans un calcul légal, (3) celles qui
+n'aboutissent pas sur un état acceptant. Il s'agissait de convaincre l'auditoire
+que c'était faisable avec $|\mathcal{A}_x| = O(p(n))$. \\
+
+En raison à la fois d'un manque de travail en amont sur ce développement et d'un
+manque de temps durant la préparation, la présentation de cet automate a été
+brouillonne et peu formelle / rigoureuse. Bref, j'ai fait exactement ce que JGL
+nous a déconseillé de faire pendant toute l'année… S'ensuivirent 20 minutes de
+questions sur le développement pour préciser des points, culminant en la
+description formelle d'un automate détectant si les cases du ruban loin de la
+tête de lecture ont été mal recopiés d'une configuration à la suivante.
+
+\paragraph{Questions}
+
+Après tout cela, il restait moins d'une dizaine de minutes pour un petit
+exercice. Il s'agissait de réduire le problème de $k$-coloriabilité d'un graphe
+à la $(k+1)$-coloriabilité. C'est facile, j'ai à peu près expédié le truc (en
+essayant d'être assez formel cette fois-ci), sauf que j'ai écrit
+$\mathrm{Col}(k+1) \leq_p \mathrm{Col}(k)$ au lieu du contraire. C'est avec ce
+genre d'inattention qu'on se retrouve avec des remarques dans le rapport du jury
+comme quoi même les bons candidats ne maîtrisent pas le sens des réductions…
+
+\subsection*{Bonus : leçon d'info d'un camarade lyonnais (01/07)}
+
+Je suis allé assister à ça l'après-midi après avoir fini mes oraux. La leçon
+était \textbf{927 -- Exemples de preuve d'algorithme : correction, terminaison.}
+Le développement présenté était la preuve de correction de Floyd--Warshall avec
+l'optimisation en espace (réutilisation du même tableau à chaque itération de la
+boucle for extérieure).
+
+Il n'y a pas eu énormément de questions sur le développement, mais les exercices
+n'étaient pas des plus passionnants. Des preuves de terminaison et correction
+(détaillées, mais pas formalisées en logique de Hoare) ont été demandées pour le
+tri fusion récursif et pour la recherche dichotomique itérative, ce qui
+impliquait beaucoup de manipulations de parties entières.
+
+\newpage
+
+\section*{Modélisation et analyse de systèmes informatiques (30/06)}
+
+Le texte que j'ai présenté portait sur \emph{l'arbre de Stern--Brocot}, un arbre
+binaire infini où chaque rationnel strictement positif apparaît exactement une
+fois, et sur des calculs opérant sur la représentations des rationnels comme
+chemins dans cet arbre. L'autre texte du couplage parlait de codes correcteurs
+d'erreurs. En fait, j'ai choisi parmi les deux celui qui parlait d'un sujet que
+je connaissais déjà, puisque j'avais conçu un sujet du concours Prologin portant
+là-dessus. Pour en savoir plus sur ce magnifique objet mathématique, voir
+l'article \emph{Functional pearl -- Enumerating the rationals} puis parcourir
+le graphe des références bibliographiques. On pourrait dire que j'ai de la
+chance, mais en même temps pendant l'année il est souvent arrivé que je tombe
+sur des textes de modélisation qui parlent de choses que je connaissais…
+
+\paragraph{Le sujet}
+
+En gros, on définit un système de réécriture sur $\mathbb{Q}_+^*$ :
+\[ \frac{m}{n} \xrightarrow{G} \frac{m}{n-m} \quad \text{si}\; m < n
+ \qquad \frac{m}{n} \xrightarrow{D} \frac{m-n}{n} \quad \text{si}\; m > n \]
+Ensuite, on interprète les mots de $\{G,D\}^*$ comme les adresses des nœuds d'un
+arbre binaire complet infini (chemins à partir de la racine avec $G$ = gauche,
+$D$ = droite), et on étiquette le nœud d'adresse $w$ avec l'unique $r \in
+\mathbb{Q}_+^*$  tel que $r \overset{w}{\longrightarrow^*} 1$.
+
+Le texte donnait une méthode un peu compliquée pour calculer $r$ à partir de
+$w$, tout en suggérant qu'il en existait une plus simple. Il proposait ensuite
+un ordre sur $\{G,D\}^*$ dont il affirmait que ça correspondait à l'ordre total
+sur les rationnels ; en déchiffrant, cela revenait en fait à dire que l'arbre de
+Stern--Brocot est un \emph{arbre binaire de recherche}. Une seconde partie
+proposait ensuite de calculer des homographies sur les rationnels à partir des
+mots de $\{G,D\}^*$ correspondants, de façon \emph{paresseuse} : après avoir
+regardé seulement un préfixe de l'entrée, on est déjà capable d'afficher un
+préfixe de la sortie.
+
+\paragraph{Exposé}
+
+Mon plan était :
+\begin{enumerate}
+\item Définitions, énumération des rationnels (avec exercice de programmation)
+\item Propriétés d'ordre (i.e.\ preuve que c'est un ABR)
+\item Représentation des irrationnels
+\item Calculs sur des flux dans $\mathbb{Q}_+^*$ et dans
+  $\overline{\mathbb{R}_+}$
+\end{enumerate}
+Dans le temps imparti, j'ai pu traiter (1) et (2) proprement au tableau,
+raconter (3) à l'oral vers la fin, et je n'ai pas du tout abordé (4). Je n'ai
+pas fait de vraie conclusion à mon exposé ; c'était peut-être une faute, d'un
+autre côté il n'y avait pas vraiment de situation de départ modélisée à laquelle
+revenir…
+
+Pour l'exercice de programmation, il était demandé d'écrire une fonction qui
+calcule les nœuds du $n$-ième étage de l'arbre dans l'ordre. J'ai proposé deux
+méthodes pour le faire :
+\begin{itemize}
+\item Méthode simple : pour obtenir le $i$-ième rationnel ($0 \leq i \leq 2^n -
+  1$), on interprète $i$ comme un mot binaire (avec $G \leftrightarrow 0$ et $D
+  \leftrightarrow 1$), puis on inverse le système de réécriture en partant de 1.
+\item Méthode compliquée : on calcule d'abord le $n$-ième étage de \emph{l'arbre
+    de Calkin--Wilf}, pour lequel il existe une formule magique calculant le
+  successeur d'un rationnel pour l'ordre du parcours en largeur. (Grâce au temps
+  de préparation abondant, j'ai pu retrouver cette formule dont je connaissais
+  préalablement l'existence.) Le $n$-ième étage de l'arbre de Stern--Brocot s'en
+  déduit par \emph{permutation à inversion de bits} (une opération qui
+  intervient aussi dans la transformée de Fourier rapide).
+\end{itemize}
+
+Pour la partie (3), je suis parti de l'exemple, fourni par le texte, du nombre
+d'or approché par $F_{n+1}/F_n$ avec $(F_n)$ la suite de Fibonacci, pour
+proposer de représenter les irrationnels par des chemins \emph{infinis} dans
+l'arbre. J'ai conclu l'exposé en disant que l'application $\{G,D\}^\omega \to
+\overline{\mathbb{R}_+}$ n'est malheureusement pas bijective puisque chaque
+rationnel a deux antécédents, mais qu'on pouvait s'y attendre puisque l'espace
+de Cantor n'est pas homéomorphe à la droite réelle achevée. Le jury n'a pas
+voulu saisir la perche topologique qui lui était tendue.
+
+\paragraph{Questions} \emph{Complexité des algorithmes pour l'exercice de
+  programmation ?} J'avais oublié de la mentionner… c'est en temps $O(n 2^n)$
+pour les deux. Ils m'ont demandé ensuite si c'était possible de faire mieux. On
+a une minoration $\Omega(2^n)$ ; j'ai dit que pour atteindre la borne, on
+pourrait faire le parcours de l'arbre tronqué à la hauteur $n$ dans l'ordre
+infixe, à condition de savoir passer d'un nœud à son fils gauche/droit en
+$O(1)$, ce que je ne savais pas faire. Puis on est passés à autre chose.
+
+J'avais parlé de \emph{récursivité terminale} en présentant mon code ; ils m'ont
+demandé l'intérêt, puis m'ont posé quelques questions élémentaires sur cette
+notion.
+
+Comme je n'avais pas réfléchi à la méthode tordue du texte pour trouver un
+rationnel à partir d'un mot, ils m'ont demandé une \emph{interprétation
+  matricielle} des règles de réécriture, puis de rendre compte à la fois de ma
+méthode et de celle du texte à partir de cette interprétation. Si j'ai
+rapidement compris que la mienne était équivalente à multiplier successivement
+un vecteur par des matrices, il a fallu qu'un membre du jury évoque
+l'associativité du produit pour que je comprenne que celle du texte revenait à
+calculer d'abord le produit matriciel en associant à gauche, puis de multiplier
+le vecteur par la matrice obtenue.
+
+On m'a demandé d'expliquer ce dont j'allais parler dans ma partie (4), en
+particulier ce que je voulais dire par \enquote{flux}. J'ai dit que le fait
+d'utiliser une stratégie paresseuse permettait d'opérer sur des suites infinies
+et qu'on pouvait ainsi espérer calculer l'image d'un irrationnel par une
+homographie.
+
+Dernière question : \emph{connaissez-vous des langages de programmation
+  paresseux ?} \enquote{Oui, j'ai pratiqué la programmation en Haskell,
+  d'ailleurs, on a des suites infinies… mais tous les types sont coinductifs,
+  donc on ne peut pas définir le type des suites forcément finies !}
+L'examinateur qui avait posé la question avait l'air ravi d'entendre cela. Plus
+tard, cependant, je me suis aperçu que c'était faux puisqu'on peut annoter des
+champs comme stricts dans les déclarations de types !
+
+\newpage
+
+\section*{Leçon de mathématiques pour l'informatique (29/06)}
+
+\def\F{\mathbb{F}}
+\def\Z{\mathbb{Z}}
+\def\GL{\mathrm{GL}}
+\def\SL{\mathrm{SL}}
+\def\PSL{\mathrm{PSL}}
+\def\Sigmap{\mathfrak{S}}
+
+\paragraph{Couplage}
+
+Leçon choisie : \textbf{123 -- Corps finis. Applications.}
+
+Alternative : \emph{223 -- Suites numériques. Convergence, valeurs d'adhérence.
+  Exemples et applications.}\\
+
+Étant passé sur la leçon \emph{Nombres premiers} pendant l'année, j'étais ravi
+de pouvoir profiter de ma préparation spécifique ainsi que des remarques de
+Claudine Picaronny. Mon plan était :
+\begin{enumerate}
+\item Rappels de théorie des corps (caractéristique, extensions finies)
+\item Cartographie des corps finis (existence et unicité, inclusions, clôture
+  algébrique)
+\item Groupe multiplicatif $\F_q^*$, carrés (cyclicité avec applications au
+  petit théorème de Fermat et au théorème de Wilson, puis les histoires de
+  symbole de Legendre etc.)
+\item Algèbre linéaire et bilinéaire sur $\F_q$ (groupes $\GL_n$ / $\SL_n$,
+  formes quadratiques)
+\item Polynômes irréductibles (Eisenstein, Berlekamp)
+\end{enumerate}
+Mes références étaient Perrin, Demazure (pour l'algorithme de Berlekamp) et
+Caldero--Germoni, aussi connu sous le nom de H2G2 (pour les formes quadratiques
+et les développements).
+
+Pendant la défense du plan j'ai dessiné au tableau le trellis de tous les corps
+finis d'une caractéristique $p$ fixée.
+
+
+
+\paragraph{Développements proposés} Deux jolis développements tirés de H2G2 tome
+premier.
+
+Choix du jury : \textbf{Loi de réciprocité quadratique} (en comptant les points de
+coniques sur $\F_q^p$).
+
+Alternative : \emph{Non-isomorphisme exceptionnel des groupes simples
+  $\PSL_3(\F_4)$ et $\PSL_4(\F_2)$}.\\
+
+Je n'ai pas fait tenir le développement dans les 15 minutes : il m'a fallu
+sauter une partie calculatoire pour arriver à la conclusion. À part ça, ça s'est
+pas trop mal passé.
+
+J'avais écrit $u \in \GL(\F_q^p)$ au tableau, un examinateur m'a demandé
+\enquote{N'y a-t-il pas une notation plus canonique, que vous utilisez dans
+  votre plan ?}. J'ai expliqué que je notais $\GL(\F_q^p)$ pour un groupes
+d'applications linéaires et $\GL_p(\F_q)$ pour un groupe de matrices. Réaction :
+\enquote{Ah, bon, d'accord.}.
+
+Ils m'ont ensuite demandé de compléter le développement, j'ai commencé à
+faire le calcul en montrant où le $(-1)^{(p-1)(q-1)/4}$ allait apparaître, ils
+ont proposé de passer à autre chose.
+
+Comme je parlais d'hyperplans affines dans le développement, ils m'ont demandé
+le nombre d'hyperplans affines dans $\F_q^n$.
+
+Sur l'autre développement, ils ont juste demandé : \enquote{Vous affirmez que
+  ces deux groupes sont de même cardinal, quel est ce cardinal ? --- 20160, si
+  je ne m'abuse. --- Ah, vingt mille, quand même !}. J'ai rajouté que c'était le
+plus petit cardinal où l'on trouve deux groupes simples non isomorphes.
+
+\paragraph{Questions}
+
+Elles étaient nombreuses ; souvent, une fois que le jury était convaincu que ça
+allait aboutir, on passait tout de suite à un autre exercice. Les voici, pas
+forcément dans l'ordre :
+
+\begin{itemize}
+\item \emph{Que pouvez-vous dire de $\GL_2(\F_2)$ ?} C'est la même chose que
+  $\PSL_2(\F_2)$, dont j'avais mis dans mon plan qu'il est isomorphe à
+  $\Sigmap_3$. \emph{Démonstration ?} J'ai décrit l'action de $\GL_2(\F_2)$ sur
+  $\F_2^2 \setminus \{0\}$, puis ils ont voulu que je prouve proprement la
+  bijectivité du morphisme dans $\Sigmap_3$ correspondant. \emph{À quel
+    sous-groupe correspond $\mathfrak{A}_3$ ?} J'ai explicité les matrices
+  correspondantes.
+\item \emph{Démonstration de la cyclicité de $\F_q^*$ ?} J'ai honteusement
+  hésité sur ce grand classique, mais j'ai quand même fini par retrouver la
+  preuve sans indication, ils étaient plutôt convaincus sans que je détaille
+  tout.
+\item \emph{Si un groupe fini est d'exposant 2, que peut-on dire ?} Réponse : on
+  peut montrer que c'est abélien, c'est un $\F_2$-espace vectoriel, donc
+  isomorphe à $(\Z/2\Z)^n$. Vu que je connaissais déjà le truc ils ne m'ont pas
+  demandé la démonstration.
+\item \emph{L'application $\F_p$-linéaire $u : x \in \F_{p^2} \mapsto x^p$
+    est-elle diagonalisable ?} Il m'a demandé d'abord pourquoi c'était linéaire
+  (réponse : c'est un automorphisme de corps qui fixe $\F_p$) et en particulier
+  pourquoi ça préserve les sommes (\enquote{Quelle propriété des coefficients
+    binomiaux utilisez-vous ? --- $p \mid C_p^k$}). Ensuite j'ai tout de suite
+  remarqué que le polynôme minimal de $u$ était $X^2 - 1$ et le tour était joué.
+  (À un moment, j'ai dit que $X^2 - 1 = (X-1)^2$ en pensant à mon développement
+  sur $\PSL_4(\F_2)$ et en oubliant de préciser \enquote{en caractéristique 2}…)
+\item \emph{Quelle est la classe d'équivalence de $q(x) = x^2 + xy + y^2 + z^2$
+    sur $\F_5$ ?} Il suffit de calculer le discriminant et de tester si c'est un
+  carré.
+\item \emph{Comment déterminer les polynômes irréductibles de degré 2 sur
+    $\F_2$~?} En éliminant les produits de polynômes de degré 1. Après avoir
+  constaté qu'il y a avait 3 polynômes scindés je ne me suis pas rendu compte
+  qu'il n'en restait qu'un seul d'irréductible…
+\item \emph{Savez-vous décrire les $p$-Sylow de $\GL_n(\F_p)$ ?} Ça ne me disait
+  pas grand-chose, mais après avoir calculé $v_p(|\GL_n(\F_p)|) = p^{n(n-1)/2}$,
+  j'ai dit que ça évoquait des matrices antisymétriques ou triangulaires.
+  L'examinateur m'a dit de partir sur cette dernière idée, et en fait à partir
+  de là c'est facile. Après l'épreuve je me suis rappelé que c'était dans la
+  preuve du premier théorème de Sylow dans le Perrin (qui vient apparemment de
+  J.-P. Serre).
+\item \emph{Exemple d'application du critère d'Eisenstein ?} L'irréductibilité
+  du $p$-ième polynôme cyclotomique, en regardant $\Phi_p(X+1)$, a semblé plaire
+  au jury. Sans doute aurait-il été préférable d'inclure l'exemple dans le plan…
+\item \emph{Connaissez-vous d'autres preuves de la réciprocité quadratique ?}
+  J'ai cité les mots-clés \enquote{somme de Gauss} et \enquote{équivalent
+    asymptotique de la fonction thêta} (\emph{cf. annexe}). \enquote{Donc il en
+    existe beaucoup, des démonstrations différentes de la réciprocité
+    quadratique ? --- Oui, il y en a plein ! --- Et comment est-ce que ça
+    s'inscrit dans la théorie du corps des classes ? --- Désolé, je ne connais
+    pas grand-chose en théorie algébrique des nombres…}.
+  Puis un autre membre du jury, amusé : \enquote{Je crois que ce n'est pas au
+    programme de l'agrég, ça !}
+\item La question pour finir : \emph{Pouvez-vous décrire tous les morphismes de
+    $\PSL_4(\F_2)$ dans $\Sigmap_3$ ?} J'ai séché pendant quelques secondes,
+  puis l'examinateur me dit \enquote{Je n'ai pas choisi ce groupe par hasard, il
+    est dans votre plan !} et en effet une fois qu'on se souvient que c'est un
+  groupe simple, la question devient, justement, simple.
+\end{itemize}
+
+Dernière remarque : le partage du temps de parole était très inégal, l'un des
+membres du jury a posé la grande majorité des questions pendant qu'une autre ne
+disait quasiment rien (peut-être était-ce une analyste ?).
+
+\newpage
+
+\subsection*{Annexe : réciprocité des sommes de Gauss et fonction thêta}
+
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\Re{\textnormal{Re}}
+
+Ceci est une tentative inaboutie de fabriquer un développement original pour les
+leçons sur les séries et les développements asymptotiques. Elle m'aura donc
+malgré tout servi à répondre à une question du jury ! Il y a une arnaque dans la
+démonstration ci-dessous ; \textbf{avis aux amateurs : je suis à la recherche
+  d'une solution satisfaisante}.
+
+Référence livresque : Richard Bellman\footnote{Un analyste qui a aussi eu une
+  carrière fructueuse de mathématicien appliqué : il est l'inventeur de la
+  \emph{programmation dynamique}, qui est au programme de l'agrég option D en
+  algorithmique, mais intervient aussi en recherche opérationnelle et théorie du
+  contrôle.}, \emph{A brief introduction to theta functions}. Voir aussi
+l'article d'Anders Karlsson, \emph{Applications of heat kernels on abelian
+  groups: $\zeta(2n)$, quadratic reciprocity, Bessel integrals}, qui raconte
+également d'autres applications fort jolies. Cependant, aucun des deux ne
+fournit de preuve rigoureuse complète.\\
+
+Dans tout ce qui suit, on fixe $p, q \in \N^*$ premiers entre eux. La
+\emph{somme de Gauss} associée est :
+\[S(p,q) = \sum_{k \in \Z/q\Z} \exp(-i\pi k^2 p/q) \]
+
+Rappelons aussi que la \emph{fonction $\theta$ de Jacobi} est définie sur
+$\{\Re(z) > 0\}$ par
+\[ \theta : z \mapsto \sum_{n \in \Z} e^{-\pi n^2 z} \]
+et vérifie la formule d'inversion (avec le prolongement analytique de
+$\sqrt{\cdot}$ à $\{\Re(z) > 0\}$)
+\[ \theta(1/z) = \sqrt{z}\theta(z) \]
+(preuve : via formule de Poisson, fait dans le TD d'analyse de Fourier…).
+
+On va montrer le résultat suivant, à partir duquel la loi de réciprocité
+quadratique se déduit :
+
+\begin{theorem}[Réciprocité des sommes de Gauss]
+  $\sqrt{p}S(p,q) = e^{-i\pi/4}\sqrt{q}\overline{S(q,p)}$, i.e.
+  \[ \frac{1}{\sqrt{q}} \sum_{k \in \Z/q\Z}
+    \exp\left(\frac{-i\pi k^2 p}{q}\right) =
+    \ \frac{e^{-i\pi/4}}{\sqrt{p}} \sum_{k \in \Z/p\Z}
+    \exp\left(\frac{i\pi k^2 q}{p}\right) \]
+\end{theorem}
+
+Cette identité exacte peut en fait être obtenue à partir du développement
+asymptotique de $\theta(x + ip/q)$ pour $x \to 0^+$.
+
+\begin{lemma} Soit $k \in \N^*$. Quand $x \to 0^+$,
+  $\displaystyle \sum_{l = 0}^{+\infty} \exp(-\pi(k+lq)^2x)
+  \sim \frac{1}{2q\sqrt{x}}$.
+\end{lemma}
+
+\begin{proof}
+  La fonction $f : t \mapsto \exp(-\pi(k+tq)^2x)$ est décroissante et intégrable
+  sur $\R_+$, donc par comparaison série-intégrale,
+ \[ \sum_{l \geq 1} f(l) \leq \int_0^{+\infty} f(t)\,dt \leq
+   \sum_{l \geq 0} f(l) \quad \text{soit} \quad
+   0 \leq \sum_{l \geq 0} f(l) - \int_0^{+\infty} f(t)\,dt \leq f(0) =
+   e^{-\pi k^2 x} \leq 1
+ \]
+ Calculons l'intégrale :
+ \[ \int_0^{+\infty} \exp(-\pi(k+tq)^2x)\,dt =
+   \frac{1}{q\sqrt{\pi x}} \int_{k\sqrt{\pi x}}^{+\infty} e^{-u^2}\,du
+    \underset{x \to 0^+}{\sim} \frac{1}{2q\sqrt{x}}
+   \qquad
+  (u = \sqrt{\pi x}(k + tq))
+\]
+\end{proof}
+
+\begin{proposition}
+  Quand $x \to 0^+$,
+  $\displaystyle \theta\left( x + i\frac{p}{q} \right)
+  \sim \frac{S(p,q)}{q\sqrt{x}}$.
+\end{proposition}
+
+\begin{proof}
+  Par une interversion de sommes, justifiée par la sommabilité
+  de la famille considérée, on obtient facilement que
+  \[ \sum_{n \in \N^*} \exp\left(-\pi n^2 \left( x + i\frac{p}{q}  \right)\right)
+    = \sum_{k = 1}^q \left( \sum_{l \in \N} \exp(-\pi(k+lq)^2x) \right)
+    \exp\left(\frac{-i\pi k^2 p}{q} \right)
+  \]
+  Grâce au lemme, on sait que les sommes intérieures sont équivalentes à
+  $1/2q\sqrt{x}$, donc
+\[ \theta\left( x + i\frac{p}{q} \right) = 1 + 2 \sum_{n \in \N^*}
+  \exp\left(-\pi n^2 \left( x + i\frac{p}{q} \right)\right)
+      \underset{x \to 0^+}{\sim} \frac{S(p,q)}{q\sqrt{x}}
+\]
+\end{proof}
+
+Maintenant, écrivons l'équation fonctionnelle de $\theta$ :
+  \[ \theta\left( \frac{1}{x + ip/q} \right) =
+    \sqrt{x + i\frac{p}{q}} \times \theta\left( x + i\frac{p}{q} \right)
+    \underset{x \to 0^+}{\sim} e^{i\pi/4} \sqrt{\frac{p}{q}}
+    \times \frac{S(p,q)}{q\sqrt{x}}
+  \]
+D'autre part, on a
+  \[ \frac{1}{x - ip/q} \underset{x \to 0^+}{=}
+    x\frac{q^2}{p^2} + i \frac{q}{p} + O(x^2)  \]
+\emph{Arnaquons maintenant allègrement} en considérant que notre équivalent
+asymptotique, valable quand $z \to ip/q$ en suivant une demi-droite parallèle à
+$\R_+$, le reste en suivant un courbe qui finit par être tangente à cette
+demi-droite. Alors
+\[ \theta\left( \frac{1}{x + ip/q} \right)
+  = \overline{\theta\left( \frac{1}{x - ip/q} \right)}
+    \underset{x \to 0^+}{\sim} \frac{\overline{S(q,p)}}{p\sqrt{xq^2/p^2}}
+  \]
+  On voit donc apparaître du $S(q,p)$ ! En simplifiant et en comparant nos deux
+  équivalents asymptotiques, on obtient l'identité arithmétique désirée.
+
+Pour que ça marche vraiment, il faudrait étendre le cadre de validité du lemme,
+en faisant une comparaison série-intégrale plus subtile, peut-être en utilisant
+une formule du genre
+  \[ \int_0^{+\infty} f(t)\,dt - \sum_{n=1}^{+\infty} f(n) =
+    \int_0^{+\infty} (t - \lfloor t \rfloor)f'(t)\,dt
+  \]
+  On pourrait dire qu'en fin de compte, on obtient la loi de réciprocité
+  quadratique par une comparaison série-intégrale !
+
+\end{document}
+
