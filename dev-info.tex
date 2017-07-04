@@ -24,6 +24,10 @@
 %\usepackage{enumerate}
 %\usepackage{graphicx}
 
+% References
+\usepackage{nameref}
+\usepackage[colorlinks]{hyperref}
+
 % Macros de Jill-Jênn
 \def\A{{\cal{A}}}
 \def\F{\mathbb{F}}
@@ -82,50 +86,25 @@
 
 \begin{document}
 
-\title{Mes développements pour l'agrég de maths\\(leçons d'informatique)}
-\author{Nguyễn Lê Thành Dũng\\(ENS Ulm, département informatique, promo 2012)}
+\title{Quelques développements pour l'agrég de maths\\(leçons d'informatique)}
+\author{Nguyễn Lê Thành Dũng (ENS Ulm, département informatique, promo 2012)}
 \date{Préparation à l'agrégation de l'ENS Paris-Saclay, 2016--2017}
 \maketitle
+
+Voici quelques développements relativement originaux pour les leçons
+d'informatique de l'agrégation. Ils devraient garder leur pertinence après le
+changement de programme de la session 2018 qui voit le lambda-calcul et la
+sémantique opérationnelle remplacer la réécriture et l'unification.
+
+Je conseille fortement d'aller puiser de l'inspiration pour les développements
+d'algorithmique dans les notes de cours de Jeff Erickson, disponibles sur le
+Oueb à l'adresse suivante : \texttt{algorithms.wtf}.
 
 \tableofcontents
 
 \newpage
 
-\section{Développements transversaux}
-
-\subsection{Rationalité des témoins en arithmétique de Presburger}
-
-Référence : LFCC de Carton.
-
-Soit $\phi(x_1,\ldots,x_k)$ une formule à $k$ variables libres de l'arithmétique
-de Presburger, c'est-à-dire formée à partir des symboles $0$, $1$, $+$, $=$.
-Soit $S_\phi$ son ensemble de témoins d'existence : $S_\phi = \{ (n_1, \ldots,
-n_k) \in \N^k \mid \N \models \phi(n_1, \ldots, n_k) \}$. Définissons maintenant
-le langage suivant :
-
-\[ L_\phi = \left\{  \right\}\]
-C'est compliqué à écrire formellement, mais ça représente juste des $k$-uplets
-d'entiers codés en binaire. Comme la taille des entiers est non bornée et $k$
-est fixe, on \enquote{transpose} les listes de listes de bits représentant
-naturellement ces $k$-uplets pour avoir des mots sur un alphabet fini.
-
-$L_\phi$ est un langage sur l'alphabet $\{0,1\}^k$.
-
-\begin{proposition}
-  $L_\phi$ est un langage rationnel, et de plus, on dispose d'une procédure
-  effective pour construire un automate reconnaissant $L_\phi$ à partir de
-  $\phi$.
-\end{proposition}
-
-\begin{corollary}
-  L'arithmétique de Presburger est décidable.
-\end{corollary}
-
-\newpage
-
-\section{Algorithmique}
-
-\subsection{Algorithme de Hirschberg}
+\section{Algorithme de Hirschberg}
 
 Une superbe astuce qui consiste à utiliser un diviser-pour-régner afin de
 baisser la complexité spatiale d'un algorithme de programmation dynamique. On
@@ -181,8 +160,8 @@ dynamique.)
   sous-mot commun.
 \end{proof}
 
-Ce lemme conduit immédiatement à considérer l'algorithme suivant, dont il prouve
-la correction :
+Ce lemme conduit à considérer l'algorithme suivant, dont il prouve la
+correction~:
 
 \begin{algorithm}
   \begin{algorithmic}
@@ -194,7 +173,9 @@ la correction :
     \Else
     \State $(g,d) \gets (u[1 … \lfloor m/2 \rfloor], u[\lfloor m/2 \rfloor + 1…m])$
     \State $lg \gets [l(g, v[1 … i]) \mid i = 1, \ldots, n]$
+    \Comment{En un seul appel à la sous-routine de prog.\ dyn.}
     \State $ld \gets [l(d, v[i+1 … n]) \mid i = 1, \ldots, n]$
+    \Comment{Idem en renversant le tableau}
     \State Soit $i$ minimisant $lg[i] + ld[i]$
     \State \textbf{renvoyer} \Call{Hirschberg}{$g,v[1…i]$} $\cdot$
     \Call{Hirschberg}{$d,v[i+1…n]$}
@@ -208,7 +189,7 @@ L'analyse n'est pas très dure, mais il faut expliciter des constantes…
 
 \newpage
 
-\subsection{Tri des suffixes}
+\section{Tri des suffixes}
 
 Ce développement d'algorithmique du texte se recase aussi dans la leçon
 \emph{Exemples d'algorithmes de tri}, en fournissant une application inattendue
@@ -326,13 +307,52 @@ suffixes, pour calculer les plus longs préfixes communs entre deux suffixes.
 
 
 
-\subsection{Union-find avec compression de chemin}
+\section{Union-find avec compression de chemin}
 
-Trouvable sur CS Stack Exchange.
+On considère l'implémentation usuelle d'une structure \emph{Union-Find} (qui
+maintient des classes d'équivalence d'un ensemble fini, de cardinal $n$) avec
+une forêt enracinée. Il existe deux optimisations classiques :
+\begin{itemize}
+\item l'\emph{union par rang} permet d'avoir des opérations en temps $O(\log n)$
+  dans le pire cas ;
+\item la \emph{compression de chemins} permet d'atteindre une complexité
+  $O(\alpha(n))$ amortie, où $\alpha$ est la réciproque de la fonction
+  d'Ackermann (autant dire qu'il s'agit quasiment de $O(1)$).
+\end{itemize}
+En pratique, c'est la compression de chemins qui apporte une accélération
+significative, l'union par rang ne faisant principalement qu'ajouter un overhead
+d'un facteur constant quand les deux optimisations sont implémentées. Souvent,
+dans la vraie vie, on va donc implémenter \emph{uniquement} la compression de
+chemins. Obtient-on alors une complexité raisonnable en théorie ?
 
-\[ \Phi(x) = \sum_{i=1}^n \log_2 w_i \]
+\begin{theorem}
+  L'implémentation de la structure \emph{Union-Find} sans union par rang et avec
+  compression de chemins a des opérations en temps $O(\log n)$ amorti.
+\end{theorem}
 
-On ne va étudier que Find (exercice : montrer que pour Union c'est bon).
+La démonstration donnée ici est inspirée d'une réponse trouvée sur
+\texttt{cs.stackexchange} ; une autre preuve est proposée dans Melhorn,
+\emph{Algorithms and Data Structures -- The Basic Toolbox}.
+
+\paragraph{Description de l'implémentation}
+
+On représente une partition de $\{1,\ldots,n\}$ par une forêt : chaque partie
+$E$ correspond à un arbre étiqueté par les éléments de $E$, dont la racine $r
+\in E$ est le représentant canonique. Cette forêt est elle-même codée par un
+tableau : $T[i] = j$ signifie que
+\begin{itemize}
+\item si $i = j$, le nœud d'étiquette $i$ est une racine ;
+\item sinon, $i$ a pour parent $j$.
+\end{itemize}
+L'opération \textsc{Union}, qui fusionne deux parties, chacune correspondant à
+un arbre, affecte la racine d'un arbre comme fils de la racine de l'autre arbre.
+L'opération \textsc{Find} prend en entrée un élément $x \in \{1, \ldots, n\}$ et
+renvoie la racine $r$ correspondante ; ainsi, on peut tester si $x$ et $y$ sont
+dans la même partie par $\textsc{Find}(x) = \textsc{Find}(y)$.
+
+La compression de chemins consiste à faire en sorte que \textsc{Find}
+\enquote{aplatisse} le chemin entre $x$ et $r$ en rattachant tous les nœuds sur
+ce chemin directement à la racine.
 
 \begin{algorithm}
 \caption*{\textbf{Implémentation} de la structure Union-Find}
@@ -351,27 +371,55 @@ $T[x] \gets $ \Call{Find}{$T, t[x]$}
 \State \textbf{renvoyer} $T[x]$
 \EndProcedure
 \Procedure{Union}{$T, x, y$}
-\State $T[\text{\Call{Find}{$x$}}] \gets T[\text{\Call{Find}{$y$}}]$
+\State $T[\text{\Call{Find}{$x$}}] \gets \text{\Call{Find}{$y$}}$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Tri par tas}
+\newpage
 
-\subsection{Sélection en temps linéaire}
+\paragraph{Analyse amortie}
 
-Avec une astuce pour rendre le truc plus rapide, merci Jill-Jênn !
+On va compter le nombre d'appels récursifs à \textsc{Find} comme mesure de
+complexité (ce qui est raisonnable, puisque \textsc{Find} effectue un traitement
+en $O(1)$ avant de s'appeler récursivement). On utilise la \emph{méthode du
+  potentiel} avec la fonction potentiel suivante :
+\[ \Phi = \sum_{i=1}^n \log_2 w(i) \]
+où $w(i)$ est la taille du sous-arbre enraciné en $i$.
 
-\subsection{Réduction de 2SAT à la connexité forte}
+\paragraph{Complexité de \textsc{Find}}
 
+Regardons ce qui se passe quand on appelle $\textsc{Find}(x)$. Soit $x = x_1
+\rightarrow \ldots \rightarrow x_k = r$ le chemin à la racine. On a alors $k$
+appels à \textsc{Find} : c'est le coût réel.
+
+La différence de potentiel, elle, s'écrit (en notant $w$ (resp.\ $w'$) pour les
+coûts avant (resp.\ après) les mutations entraînées par \textsc{Find})
+\[ \Phi' - \Phi = \sum_{i=1}^n \log_2 \frac{w'(i)}{w(i)}
+  = \sum_{j=1}^k \log_2 \frac{w'(x_j)}{w(x_j)}
+  = \sum_{j=2}^{k-1} \log_2 \left(1 - \frac{w(x_{j-1})}{w(x_j)} \right)
+\]
+En effet, d'une part, les nœuds en-dehors du chemin ne sont pas affectés ;
+d'autre part, on a $w'(x_j) = w(x_j) - w(x_{j-1})$ pour les nœuds intermédiaires
+du chemin puisque l'on enlève à $x_j$ son fils $x_{j-1}$ pour le rattacher à la
+racine.
+
+Maintenant, on veut montrer $k + \Phi' - \Phi = O(\log n)$ ; il suffit pour cela
+qu'il n'y ait qu'au plus $O(\log n)$ nœuds intermédiaires tels que
+$1 - w(x_{j-1})/w(x_j) \geq 1/2$. On peut s'en convaincre en remarquant qu'en
+parcourant le chemin de $x$ à la racine, la taille du sous-arbre enraciné au
+nœud actuel ne peut doubler qu'au plus $\log_2 n$ fois.
+
+\paragraph{Complexité de \textsc{Union}}
+
+C'est aussi du $O(\log n)$ amorti (il est important d'utiliser la même fonction
+potentiel que pour \textsc{Find}) : en exercice pour la lectrice !
 
 \newpage
 
-\section{Automates, calculabilité et complexité}
+\section{Minimisation par double renversement}
 
-\subsection{Minimisation par double renversement (avec complexité)}
-
-Source : Sakarovitch.
+Source : Sakarovitch, \emph{Éléments de théorie des automates}.
 
 Notons $D$ la déterminisation d'un automate, prenant en entrée un AFN et
 renvoyant un AFDC, partie accessible de l'automate des parties. Notons $T$ la
@@ -425,21 +473,7 @@ puits pour rendre l'automate complet.
 
 \newpage
 
-\subsection{Les fonctions calculables par machine de Turing sont récursives}
-
-
-
-\newpage
-
-\subsection{Théorème de Baker--Gill--Solovay}
-
-Proposé à la prépa agrég de Cachan par C. Lemonnier.
-
-\newpage
-
-\section{Logique et réécriture}
-
-\subsection{Théorème de Herbrand sémantique}
+\section{Théorème de Herbrand sémantique}
 
 On suppose que le langage $\mathcal{L}$ contient des constantes, pour assurer la non-vacuité
 des modèles de Herbrand.
@@ -458,7 +492,7 @@ On peut étendre le résultat en remplaçant \enquote{formule valide} par
 La preuve procède par réduction de la logique du premier ordre à la logique
 propositionnelle. Soit $\mathcal{A}$ l'ensemble des atomes clos du langage
 $\mathcal{L}$ (les $R(t_1, \ldots, t_n)$ où $R$ est un symbole de relation
-$n$-aire ($n \in \mathbf{N}$) autre que $=$ et $t_1, \ldots, t_n$ sont des
+$n$-aire ($n \in \mathbb{N}$) autre que $=$ et $t_1, \ldots, t_n$ sont des
 termes clos).
 
 \begin{remark}[fondamentale !]
@@ -517,8 +551,8 @@ le lemme.
     \ldots, t_n))$ vaut vrai.
   \end{itemize}
   On a donc par construction $v_{\mathfrak{M}} = v$, donc (par le second lemme)
-  $M \models \lnot B\sigma$ pour toute substitution $\sigma$ par des termes
-  clos.
+  $\mathfrak{M} \models \lnot B\sigma$ pour toute substitution $\sigma$ par des
+  termes clos.
   
   Comme $A$ est valide, $\mathfrak{M} \models \exists x_1 \ldots \exists x_n B$,
   c'est-à-dire qu'il existe $\overline{t_1}, \ldots, \overline{t_n}$ dans le
@@ -531,17 +565,7 @@ le lemme.
 
 \newpage
 
-\subsection{Lemme de Newman}
-
-\subsection{Algorithme naïf d'unification}
-
-
-
-\newpage
-
-\section{Idées exclues}
-
-\subsection{Schéma de réflexion de Kreisel}
+\section{Idée exclue : schéma de réflexion de Kreisel}
 
 \begin{theorem}[Kreisel]
   Soit $T$ un sous-système fini de l'arithmétique de Peano. Pour toute formule
@@ -570,6 +594,6 @@ structurelle est valide…) car cela devient imbuvable sans un recours intensif 
 l'agitage de mains.
 
 Je ne connais pas d'autre référence \enquote{livre de cours} que Le Point
-aveugle pour ce théorème…
+aveugle (Girard) pour ce théorème…
 
 \end{document}
