@@ -24,6 +24,10 @@
 %\usepackage{enumerate}
 %\usepackage{graphicx}
 
+% References
+\usepackage{nameref}
+\usepackage[colorlinks]{hyperref}
+
 % Macros de Jill-Jênn
 \def\A{{\cal{A}}}
 \def\F{\mathbb{F}}
@@ -94,14 +98,46 @@
 \begin{document}
 
 \title{Mes développements pour l'agrég de maths\\
-  (leçons d'algèbre et analyse, option D)}
+  (leçons d'algèbre et analyse, option informatique)}
 \author{Nguyễn Lê Thành Dũng (ENS Ulm, département informatique, promo 2012)}
 \date{Préparation à l'agrégation de l'ENS Paris-Saclay, 2016--2017}
 \maketitle
 
+Ce document recense les développements que j'ai travaillés et rédigés pendant mon
+année de prépa agrég, en vue de l'oral de leçon de mathématiques. (En option D,
+il y a un unique oral \enquote{Mathématiques pour l'informatique} où peuvent
+tomber à la fois des leçons d'algèbre et des leçons d'analyse.)\\
 
-Développements d'algèbre issus de l'excellent \emph{Histoires hédonistes de
-  groupes et de géométries, tome premier} (Caldero--Germoni) :
+Parmi ceux-ci, un certain nombre sont originaux, voire exotiques. On ne les
+trouvera pas dans les livres classiques de l'agrég, mais j'ai tout de même
+essayé d'indiquer des références livresques quand c'était possible.
+\begin{itemize}
+\item \nameref{dual}
+\item \nameref{zigzag} (tiré des développements de Paul Melotti)
+\item \nameref{gram}
+\item \nameref{s6}
+\item \nameref{monotone}
+\item \nameref{theta} (inabouti, il reste une arnaque à régler, qui pourra
+  constituer un exercice pour la lectrice ; envoyez vos suggestions de preuve à
+  \texttt{nltd@nguyentito.eu})
+\end{itemize}
+D'autres sont des développements \enquote{classiques} mais pour lesquels je
+propose des preuves améliorées.
+\begin{itemize}
+\item \nameref{conv-ortho} : au niveau agrég, on est censé avoir entendu parler
+  de décomposition en valeurs singulières
+\item \nameref{tauber} : on économise beaucoup de découpage d'$\varepsilon$ en
+  invoquant des sommes de Riemann
+\item \nameref{stable} (ou \enquote{théorème de Liapounov}) : preuve plus
+  directe et concise que celle proposée par Rouvière
+\end{itemize}
+Le reste est relativement classique.
+On trouvera également une section \nameref{exclu}.\\
+
+On pourra consulter l'excellent \emph{Histoires hédonistes de groupes et de
+  géométries, tome premier} de Caldero et Germoni pour y trouver d'autres
+développements pour lesquels j'ai une grande affection, mais que je n'ai pas
+pris la peine de taper, notamment :
 \begin{itemize}
 \item Revêtement universel $\mathrm{SU}(2) \to \mathrm{SO}(3)$ via les
   quaternions
@@ -109,8 +145,12 @@ Développements d'algèbre issus de l'excellent \emph{Histoires hédonistes de
   (trop beau !)
 \item Existence de la réduction de Frobenius (utilisant l'orthogonalité duale)
 \end{itemize}
-Noter que preuve fausse pour non-iso.
-Lie--Kolchin
+Le développement \nameref{non-iso} est également issu de H2G2 tome 1, mais la
+preuve qui y est donnée est légèrement fausse, c'est pourquoi une version
+corrigée est rédigée ici. Ce développement gagnerait d'ailleurs à être plus
+connu, étant donné qu'il se recase dans de nombreuses leçons d'algèbre, faisant
+intervenir à la fois la réduction des endomorphismes nilpotents, les groupes
+finis, et les corps finis.
 
 \newpage
 
@@ -121,9 +161,10 @@ Lie--Kolchin
 \section{Algèbre/géométrie et analyse}
 
 \subsection{Dualité lagrangienne et extrema liés en optimisation convexe}
+\label{dual}
 
-On montre ici un théorème fondamental en recherche opérationnelle, variante du
-théorème des extrema liés où :
+On montre ici un théorème fondamental en \emph{recherche opérationnelle},
+variante du théorème des extrema liés où :
 \begin{itemize}
 \item on a des multiplicateurs de Lagrange \emph{positifs} correspondant à des
   contraintes d'\emph{inégalité} (on ne pourra donc pas invoquer les
@@ -131,6 +172,10 @@ théorème des extrema liés où :
 \item les conditions nécessaires du premier ordre sont également
   \emph{suffisantes} grâce à la convexité.
 \end{itemize}
+Il est recommandé d'avoir quelques connaissances en optimisation
+(notamment, l'application à la dualité en programmation linéaire et
+programmation semi-définie) si on veut présenter ce développement.
+
 Soient $f,g_1,\ldots,g_k : \R^n \to \R$ des fonctions \emph{convexes}.
 On considère le problème de minimisation
 \[ p = \inf_{x \in F} f(x) \qquad F = \left\{ x \in \R^n \mid
@@ -152,7 +197,7 @@ $i$.
 \end{theorem}
 
 Afin de montrer cela, introduisons le \emph{lagrangien} $\L : \R^n \times
-\R_+^k$ et le problème dual associé :
+\R_+^k \to \R$ et le problème dual associé :
 \[ \L(x, \mu) = f(x) + \sum_{i=1}^k \mu_i g_i(x) \qquad
   d = \sup_{\mu \in \R_+^k} \inf_{x \in \R^n} \L(x,\mu) \]
 
@@ -283,6 +328,7 @@ d'hyperplan séparateur ?
 \newpage
 
 \subsection{Enveloppe convexe du groupe orthogonal}
+\label{conv-ortho}
 
 Je propose ici une démonstration bien plus expéditive que celle qu'on trouve
 par-ci par-là dans des PDF sur Internet, relativement autosuffisante avec le
@@ -421,6 +467,7 @@ convexe (faire un dessin).
 
 
 \subsection{Fonction tangente et permutations zigzag}
+\label{zigzag}
 
 Cf. Richard P. Stanley, \emph{A Survey of Alternating Permutations}. Le
 développement lui-même est tiré du PDF de Paul Melotti.
@@ -668,6 +715,7 @@ pas.
 \section{Algèbre (et géométrie)}
 
 \subsection{Points à distances impaires, avec le déterminant de Gram}
+\label{gram}
 
 Le résultat suivant est tiré d'un petit article : \emph{Are there $n+2$ points
   in $E^n$ with odd integral distances}, Graham, Rothschild \& Straus. Il a été
@@ -788,6 +836,7 @@ distances impaires.
 
 
 \subsection{Étude des automorphismes extérieurs de $\Sigmap_6$}
+\label{s6}
 
 (Inspiré d'un billet de blog de David Madore.)
 
@@ -987,6 +1036,7 @@ $\varphi$ est donc un isomorphisme qui n'est pas induit par une bijection.
 \newpage
 
 \subsection{Non-isomorphisme exceptionnel (avec la réduction de Jordan)}
+\label{non-iso}
 
 Dans H2G2 tome 1, ou encore dans le Perrin exercice IV.5.1. Le premier contient
 des erreurs et le second est un exercice sans correction…
@@ -1366,6 +1416,7 @@ $\mathrm{Gal}(\Q(\zeta_p))/\Q$ des automorphismes de $\Q(\zeta_p)$.
 \section{Analyse}
 
 \subsection{Les fonctions monotones (continues) sont dérivables presque partout}
+\label{monotone}
 
 Un joli résultat suggéré par le rapport de jury d'agrég… mais c'est long !
 (Peut-être trop pour 15 minutes ?) Ce qui suit est une tentative de
@@ -1983,6 +2034,7 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
 \newpage
 
 \subsection{Formule de Poisson et formule d'inversion de la fonction thêta}
+\label{poisson}
 
 On commence par un résultat qui lie séries de Fourier et transformée de Fourier :
 $2\pi$-périodiser une fonction revient à garder ses pulsations entières. (Existe
@@ -2066,21 +2118,24 @@ La preuve fera intervenir les gaussiennes $g_\sigma : t \mapsto
 \newpage
 
 \subsection{Équivalent asymptotique de la fonction thêta et sommes de Gauss}
+\label{theta}
 
-Référence livresque : Richard Bellman\footnote{Un analyste qui a aussi eu une
-  carrière fructueuse de mathématicien appliqué : il est l'inventeur de la
-  \emph{programmation dynamique}, qui est au programme de l'agrég option D en
-  algorithmique, mais intervient aussi en recherche opérationnelle et théorie du
-  contrôle.}, \emph{A brief introduction to theta functions}. Voir aussi
-l'article d'Anders Karlsson, \emph{Applications of heat kernels on abelian
-  groups: $\zeta(2n)$, quadratic reciprocity, Bessel integrals}, qui raconte
-également d'autres applications fort jolies. Cependant, aucun des deux ne
-fournit de preuve rigoureuse complète.\\
+…ou comment caser un morceau de preuve de la réciprocité quadratique (!) dans
+des leçons d'analyse. Référence livresque : Richard Bellman\footnote{Un analyste
+  qui a aussi eu une carrière fructueuse de mathématicien appliqué : il est
+  l'inventeur de la \emph{programmation dynamique}, qui est au programme de
+  l'agrég option D en algorithmique, mais intervient aussi en recherche
+  opérationnelle et théorie du contrôle.}, \emph{A brief introduction to theta
+  functions}. Voir aussi l'article d'Anders Karlsson, \emph{Applications of heat
+  kernels on abelian groups: $\zeta(2n)$, quadratic reciprocity, Bessel
+  integrals}, qui raconte également d'autres applications fort jolies de cette
+fameuse fonction thêta. Cependant, aucun des deux ne fournit de preuve
+rigoureuse complète.\\
 
-On renvoie au développement précédent (TODO ref) pour la définition de la
-fonction thêta de Jacobi et son équation fonctionnelle.
-Dans tout ce qui suit, on fixe $p, q \in \N^*$ premiers entre eux. La
-\emph{somme de Gauss} associée est :
+On renvoie au développement précédent (\nameref{poisson}) pour la définition de
+la fonction $\theta$ de Jacobi et son équation fonctionnelle. Dans tout ce qui
+suit, on fixe $p, q \in \N^*$ premiers entre eux. La \emph{somme de Gauss}
+associée est :
 \[S(p,q) = \sum_{k \in \Z/q\Z} \exp(-i\pi k^2 p/q) \]
 
 On va montrer le résultat suivant, à partir duquel la loi de réciprocité
@@ -2173,6 +2228,7 @@ une formule du genre
 \newpage
 
 \subsection{Théorème taubérien fort de Hardy--Littlewood}
+\label{tauber}
 
 Référence : Gourdon, \emph{Analyse}. On propose ici une preuve avec moins de
 découpage d'$\varepsilon$, en utilisant des sommes de Riemann ainsi qu'en
@@ -2465,6 +2521,7 @@ suivante :
 \newpage
 
 \subsection{Stabilité asymptotique d'un équilibre}
+\label{stable}
 
 On prouve ici que pour montrer qu'un point d'équilibre est asymptotiquement
 stable, il suffit de linéariser à son voisinage et de vérifier que c'est le cas
@@ -2651,6 +2708,76 @@ En étudiant à l'ordre 2, on peut avoir plus de précisions :
 
 
 \section{Idées exclues}
+\label{exclu}
+
+\subsection{Unicité de la topologie de $\R$-EVT séparé en dimension finie}
+
+(EVT = \emph{espace vectoriel topologique}, c'est-à-dire espace vectoriel muni
+d'une topologie rendant continues les lois de compositions interne et externe.)
+
+Évidemment, $\R$ est considéré avec sa topologie usuelle, et ça marche aussi
+pour les $\C$-EVT.
+
+\begin{theorem}
+  Le $\R$-espace vectoriel $\R^n$ n'admet qu'une seule topologie de $\R$-EVT
+  séparé, qui est la topologie produit.
+\end{theorem}
+
+\begin{remark}
+  Les topologies non séparées sont obtenues comme topologie initiale d'une
+  projection sur un quotient séparé et sont donc en bijection avec les
+  sous-espaces vectoriels (prendre l'adhérence de $\{0\}$).
+\end{remark}
+
+Un résultat qui généralise l'équivalence des normes et clôt la question. Fait
+dans les premières pages de Bourbaki, \emph{Espaces vectoriels topologiques},
+dans le cadre général des corps valués non discrets.
+
+\subsection{Lemme de Hensel, ou méthode de Newton $p$-adique}
+
+Violemment hors-programme, dommage, c'est plus original que la méthode de Newton
+usuelle et c'est de la jolie algèbre en plus… Un PDF de Keith Conrad raconte ça
+super bien.
+
+\begin{definition}
+  On appelle \emph{entier $p$-adique} une suite $(a_n)_{n \in \N^*}$
+  avec $a_n \in \Z/p^n\Z$ et $\pi_n(a_{n+1}) = a_n$ pour $n \in \N^*$,
+  où $\pi_n : \Z/p^{n+1}\Z \to \Z/p^n\Z$ est la projection canonique.
+\end{definition}
+\begin{proposition}
+  Les entiers $p$-adiques forment un sous-anneau de
+  $\prod_{n \in \N^*} \Z/p^n\Z$, de caractéristique nulle. Cet anneau
+  est noté $\Z_p$.
+\end{proposition}
+
+\begin{definition}
+  Le \emph{corps des nombres $p$-adiques} $\Q_p$ est le complété de
+  $\Q$ pour la distance $d_p(x,y) = p^{-v_p(x-y)}$.
+\end{definition}
+\begin{proposition}
+  La boule fermée de centre 0 et de rayon 1 dans $\Q_p$ est un
+  sous-anneau isomorphe à $\Z_p$.
+\end{proposition}
+
+\begin{lemma}[Hensel]
+  Soient $f \in \Z_p[X]$ et $a \in \Z/p\Z$ tels que dans $\Z/p\Z$, on
+  ait $f(a) = 0$ et $f'(a) \neq 0$. Alors il existe un unique
+  $\alpha \in \Z_p$ tel que $f(\alpha) = 0$ et dont la classe dans
+  $\Z/p\Z$ soit $a$.
+\end{lemma}
+
+\begin{corollary}
+  Soient $f \in \Z[X]$ et $a \in \Z$ tels que $f(a) \equiv 0 \mod p$
+  et $f'(a) \not\equiv 0 \mod p$. Alors pour tout $n \in \N^*$, il
+  existe $\alpha \in \Z$ tel que $f(\alpha) \equiv 0 \mod p^n$ et
+  $\alpha \equiv a \mod p$.
+\end{corollary}
+
+On a deux procédés d'itération légèrement différents pour relever des solutions
+dans un $\Z/p^n\Z$ plus grand : l'un est la méthode de Newton, l'autre ressemble
+à la preuve du théorème d'inversion locale.
+
+\newpage
 
 \subsection{Fonctions invariantes d'une équation différentielle linéaire}
 
@@ -2763,74 +2890,6 @@ ENFIN BREF VOILÀ
 Publié dans les annales scientifiques de l'ENS par un matheux oublié par
 l'Histoire. 
 
-\newpage
-
-\subsection{Unicité de la topologie de $\R$-EVT séparé en dimension finie}
-
-(EVT = \emph{espace vectoriel topologique}, c'est-à-dire espace vectoriel muni
-d'une topologie rendant continues les lois de compositions interne et externe.)
-
-Évidemment, $\R$ est considéré avec sa topologie usuelle, et ça marche aussi
-pour les $\C$-EVT.
-
-\begin{theorem}
-  Le $\R$-espace vectoriel $\R^n$ n'admet qu'une seule topologie de $\R$-EVT
-  séparé, qui est la topologie produit.
-\end{theorem}
-
-\begin{remark}
-  Les topologies non séparées sont obtenues comme topologie initiale d'une
-  projection sur un quotient séparé et sont donc en bijection avec les
-  sous-espaces vectoriels (prendre l'adhérence de $\{0\}$).
-\end{remark}
-
-Un résultat qui généralise l'équivalence des normes et clôt la question. Fait
-dans les premières pages de Bourbaki, \emph{Espaces vectoriels topologiques},
-dans le cadre général des corps valués non discrets.
-
-\subsection{Lemme de Hensel, ou méthode de Newton $p$-adique}
-
-Violemment hors-programme, dommage, c'est plus original que la méthode de Newton
-usuelle et c'est de la jolie algèbre en plus… Un PDF de Keith Conrad raconte ça
-super bien.
-
-\begin{definition}
-  On appelle \emph{entier $p$-adique} une suite $(a_n)_{n \in \N^*}$
-  avec $a_n \in \Z/p^n\Z$ et $\pi_n(a_{n+1}) = a_n$ pour $n \in \N^*$,
-  où $\pi_n : \Z/p^{n+1}\Z \to \Z/p^n\Z$ est la projection canonique.
-\end{definition}
-\begin{proposition}
-  Les entiers $p$-adiques forment un sous-anneau de
-  $\prod_{n \in \N^*} \Z/p^n\Z$, de caractéristique nulle. Cet anneau
-  est noté $\Z_p$.
-\end{proposition}
-
-\begin{definition}
-  Le \emph{corps des nombres $p$-adiques} $\Q_p$ est le complété de
-  $\Q$ pour la distance $d_p(x,y) = p^{-v_p(x-y)}$.
-\end{definition}
-\begin{proposition}
-  La boule fermée de centre 0 et de rayon 1 dans $\Q_p$ est un
-  sous-anneau isomorphe à $\Z_p$.
-\end{proposition}
-
-\begin{lemma}[Hensel]
-  Soient $f \in \Z_p[X]$ et $a \in \Z/p\Z$ tels que dans $\Z/p\Z$, on
-  ait $f(a) = 0$ et $f'(a) \neq 0$. Alors il existe un unique
-  $\alpha \in \Z_p$ tel que $f(\alpha) = 0$ et dont la classe dans
-  $\Z/p\Z$ soit $a$.
-\end{lemma}
-
-\begin{corollary}
-  Soient $f \in \Z[X]$ et $a \in \Z$ tels que $f(a) \equiv 0 \mod p$
-  et $f'(a) \not\equiv 0 \mod p$. Alors pour tout $n \in \N^*$, il
-  existe $\alpha \in \Z$ tel que $f(\alpha) \equiv 0 \mod p^n$ et
-  $\alpha \equiv a \mod p$.
-\end{corollary}
-
-On a deux procédés d'itération légèrement différents pour relever des solutions
-dans un $\Z/p^n\Z$ plus grand : l'un est la méthode de Newton, l'autre ressemble
-à la preuve du théorème d'inversion locale.
 
 
 
