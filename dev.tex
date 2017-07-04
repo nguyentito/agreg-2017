@@ -99,24 +99,26 @@
 \date{Préparation à l'agrégation de l'ENS Paris-Saclay, 2016--2017}
 \maketitle
 
+
+Développements d'algèbre issus de l'excellent \emph{Histoires hédonistes de
+  groupes et de géométries, tome premier} (Caldero--Germoni) :
+\begin{itemize}
+\item Revêtement universel $\mathrm{SU}(2) \to \mathrm{SO}(3)$ via les
+  quaternions
+\item Réciprocité quadratique par double comptage d'une conique sur $\F_q^p$
+  (trop beau !)
+\item Existence de la réduction de Frobenius (utilisant l'orthogonalité duale)
+\end{itemize}
+Noter que preuve fausse pour non-iso.
+Lie--Kolchin
+
+\newpage
+
 \tableofcontents
 
 \newpage
 
 \section{Algèbre/géométrie et analyse}
-
-Liste de développements que je n'ai pas voulu taper :
-
-\begin{itemize}
-\item Groupe circulaire : référence à trouver 
-\item Réciprocité quadratique par double comptage d'une conique sur $\F_p$ (trop
-  beau !) : dans H2G2 tome 1
-\item Algorithme de Berlekamp : cf. PDF de Jill-Jênn Vie
-\item Existence de la réduction de Frobenius (utilisant l'orthogonalité duale) :
-  fait en cours dans H2G2 tome 1
-\end{itemize}
-
-\newpage
 
 \subsection{Dualité lagrangienne et extrema liés en optimisation convexe}
 
@@ -240,9 +242,10 @@ donc $x$ minimise bien $f$ sur $F$.
 \end{proof}
 
 \paragraph{Ci-dessous, une tentative de prouver autrement la dualité forte…}
-comme corollaire du \emph{théorème du minimax de Sion}. L'intérêt étant de voir
-un lien entre condition de Slater et compacité. On suppose donc qu'il existe
-$x_0$ strictement réalisable.
+comme corollaire du \emph{théorème du minimax de Sion} ; ce théorème pourrait
+d'ailleurs faire l'objet d'un développement fort intéressant. L'intérêt étant de
+voir un lien entre condition de Slater et compacité. On suppose donc qu'il
+existe $x_0$ strictement réalisable.
 
 On a besoin comme hypothèse supplémentaire que $d > -\infty$ (comment s'en
 passer ?). On rappelle qu'un sup de fonctions semi-continues inférieurement
@@ -489,9 +492,9 @@ qu'on ne fera pas ici.
 \end{proof}
 
 Nous pouvons maintenant passer au dénombrement. Posons $a_n = |Z_n^+| = |Z_n^-|$
-et $b_n = a_n/n!$ ; la série génératrice exponentielle s'écrit alors $G(x) =
-\sum_{n \in \N} b_n x^n$. Comme $0 \leq b_n \leq |\Sigmap_n| / n! = 1$, $G$ est
-de rayon de convergence au moins 1
+et $b_n = a_n/n!$ ; la série génératrice exponentielle s'écrit alors $G(z) =
+\sum_{n \in \N} b_n z^n$. Comme $0 \leq b_n \leq |\Sigmap_n| / n! = 1$, $G$ est
+de rayon de convergence au moins 1.
 
 La relation de récurrence se réécrit, avec les cardinaux,
 \[ |Z_{n+1}| = \sum_{G \sqcup D = \llbracket 1,n \rrbracket} a_{|G|} \cdot
@@ -505,7 +508,7 @@ l'identité avec des séries entières. Mais attention au terme $n = 0$ ! Pour $
 \geq 1$, comme $Z_{n+1}^+ \cap Z_{n+1}^- = \emptyset$, on a $|Z_{n+1}| =
 2a_{n+1}$ soit $|Z_{n+1}|/n! = 2(n+1)b_{n+1}$. Pour $n = 0$, $|Z_1|/0! = 1 =
 2 \times 1 \times b_1 - 1$. Ainsi :
-\[ \sum_{n \in \N} \frac{|Z_{n+1}|}{n!}x^n = \sum_{n \in \N} 2(n+1)b_{n+1}x^n - 1
+\[ \sum_{n \in \N} \frac{|Z_{n+1}|}{n!}z^n = \sum_{n \in \N} 2(n+1)b_{n+1}z^n - 1
   = 2G'(z) - 1
 \]
 le rayon de convergence étant au moins 1 pour la même raison que précédemment.
@@ -611,30 +614,54 @@ On note $S_n(\R)$ l'espace des matrices symétriques réelles de taille $n$.
 
 Référence : à trouver.
 
-Soient $A \in \GL_n(\R)$ et $b \in \R^n$. On veut résoudre $Ax = b$
-itérativement. Pour cela, on pose $(l_1, \ldots, l_n)$ les lignes de $A$, et
-$p_i$ le projecteur orthogonal sur l'hyperplan affine $H_i$ d'équation $l_ix =
-b_i$ ($i \in \{1, \ldots, n\}$). À partir de $x_0 \in \R^n$ quelconque, on
+Soient $A \in \M_{m,n}(\R)$, et $b \in \R^m$. On veut résoudre $Ax = b$ ($x \in
+\R^n$) itérativement. Pour cela, on pose $(l_1, \ldots, l_m)$ les lignes de $A$,
+et $p_i$ le projecteur orthogonal sur l'hyperplan affine $H_i$ d'équation $l_ix
+= b_i$ ($i \in \{1, \ldots, m\}$). À partir de $x_0 \in \R^n$ quelconque, on
 définit par récurrence
-\[ x_{k+1} = p_{(k+1\, \textnormal{mod}\, n)}(x_k). \]
+\[ x_{k+1} = p_{(k+1\, \textnormal{mod}\, n)}(x_k) \]
+(faire un dessin !). On va montrer que la suite $(x_k)$ converge vers une
+solution (sous réserve d'existence), et même mieux :
 
-Soit $x^* = A^{-1}b$ l'unique solution. $\bigcap_{i=1}^n H_i = \{x^*\}$, et
-c'est l'unique point fixe commun de $p_1, \ldots, p_n$. En posant $y_k = x_k -
-x^*$, on voit que
-\[ y_{k+1} = p_i(x_k) - x^* = p_i(x_k) - p_i(x^*) = \pi_i(y_k) \] où $\pi_i$ est
-la partie linéaire de $p_i$, soit la projection orthogonale sur $\Ker(l_i)$.
+\begin{proposition}
+  Soit $S$ le sous-espace affine des solutions. Supposons que $S$ soit non vide.
+  Alors la suite $(x_k)$ tend vers la solution de $Ax = b$ la plus proche de
+  $x_0$, soit le projeté orthogonal de $x_0$ sur $S$.
+\end{proposition}
 
-Nous souhaitons maintenant montrer que $x_k \longrightarrow x^*$, soit $y_k
-\longrightarrow 0$. Pour cela, on va montrer que $\|\Pi\| < 1$ où $\Pi = \pi_n
-\circ \ldots \circ \pi_1$. Ensuite, comme $\|\pi_i\| = 1$, on aura $\|y_k\| \leq
-\|\Pi\|^{\lfloor p/n \rfloor} \|y_0\|$, d'où convergence linéaire.
+En particulier, s'il existe une unique solution et $(x_k)$ converge vers elle.
+Par contre, s'il n'y a pas de solutions, on peut voir que la suite ne converge
+pas.
 
-Soit $z \in \R^n$. On a $\|\pi_i(z)\| = \|z\|$ si et seulement si $\pi(z) = z$
-soit $z \in \Ker(l_i)$, et $\|\pi_i(z)\| < \|z\|$ sinon (par théorème de
-Pythagore…). Donc $\Pi(z) = z \Leftrightarrow z \in \bigcap_{i=1}^n \Ker(l_i) =
-\{0\}$ (car $A \in \GL_n(\R)$) : pour tout $z \neq 0$, $\|\Pi(z)\| < \|z\|$.
-Comme nous sommes en dimension finie, ceci implique que $\|\Pi\| < 1$ (par
-compacité de la sphère unité).
+\begin{proof}
+  On a $S = \bigcap_{i=1}^n H_i$. Ainsi, $S$ est aussi l'ensemble des points
+  fixes communs de $p_1, \ldots, p_m$. Soit $x^*$ le projeté orthogonal de $x_0$
+  sur $S$ ; il s'agit de montrer que $x_k \longrightarrow x^*$ quand $k \to
+  +\infty$.
+
+  En posant $y_k = x_k - x^*$, cela revient à montrer $y_k \longrightarrow 0$.
+  On voit que
+  \[ y_{k+1} = p_i(x_k) - x^* = p_i(x_k) - p_i(x^*) = \pi_i(y_k) \]
+  où $\pi_i$ est la partie linéaire de $p_i$, soit la projection orthogonale sur
+  $\Ker(l_i)$.
+
+  Notons également $H'_i$ la direction de $H_i$ (qui est un hyperplan
+  vectoriel), et $S' = \bigcap_{i=1}^n H'_i$ la direction de $S$. Comme tous les
+  $\pi_i$ stabilisent $S'$, ils stabilisent aussi $F = S'^\perp$. Par
+  récurrence, $y_k \in F$ pour tout $k \in \N$.
+
+  Pour montrer que $y_k \longrightarrow 0$, on va établir que $\|\Pi_{|F}\| < 1$
+  où $\Pi = \pi_n \circ \ldots \circ \pi_1$. Ensuite, comme $\|\pi_i\| = 1$, on
+  aura $\|y_k\| \leq \|\Pi_{|F}\|^{\lfloor p/n \rfloor} \|y_0\|$, d'où
+  convergence linéaire.
+
+  Soit $z \in F$. On a $\|\pi_i(z)\| = \|z\|$ si et seulement si $\pi(z) = z$
+  soit $z \in \Ker(l_i)$, et $\|\pi_i(z)\| < \|z\|$ sinon (par théorème de
+  Pythagore…). Donc $\Pi(z) = z \Leftrightarrow z \in \bigcap_{i=1}^n \Ker(l_i)
+  = S'$. Comme $F \perp S'$, dès que $z \neq 0$, $\|\Pi(z)\| < \|z\|$. Comme
+  nous sommes en dimension finie, ceci implique que $\|\Pi_{|F}\| < 1$ (par
+  compacité de la sphère unité).
+\end{proof}
 
 \newpage
 
@@ -892,7 +919,11 @@ l'identité.
 transpositions, elles commutent. (En effet, dans $\mathfrak{A}_4$, les doubles
 transpositions et l'identité forment un sous-groupe isomorphe à $(\Z/2\Z)^2$,
 qui est abélien.) Ainsi, les co-étoiles correspondent aux partitions du graphe
-complet à 6 éléments en 5 triplets d'arêtes disjointes.
+complet à 6 éléments en 5 triplets d'arêtes disjointes, c'est-à-dire aux
+\emph{1-factorisations} (un \emph{1-facteur}, aussi appelé \emph{couplage
+  parfait}, est un ensemble d'arêtes tel que chaque sommet soit incident à
+exactement une arête du couplage ; ici, cela correspond donc aux
+triples transpositions).
 
 \paragraph{Annexe : construction d'un automorphisme extérieur de $\Sigmap_6$} La
 construction présentée ici est tirée de Perrin, \emph{Cours d'algèbre},
@@ -1112,7 +1143,7 @@ $G/F(G)$ est abélien. On notera donc additivement :
 \begin{proof}
   Soit $g \in G$ un représentant de $\overline{g}$. Pour $H < G$ maximal, notons
   $[g]_H$ sa classe dans $G/H$. Comme $G/H \simeq \Z/p\Z$, on a $[g]_H^p =
-  [1]_H$, soit $g^p \in H$. Ainsi, $g^p \in \cap_H H = F(G)$.
+  [1]_H$, soit $g^p \in H$. Ainsi, $g^p \in \bigcap_H H = F(G)$.
 \end{proof}
 
 On peut donc définir la loi externe
@@ -1583,21 +1614,58 @@ l'intégrale de Lebesgue au programme des classes préparatoires.
 
 \subsection{Lemme de Hoeffding}
 
-Le lemme lui-même est une majoration de la fonction génératrice des moments
-d'une variable aléatoire bornée p.s. ; on en déduit une inégalité de
-concentration.
+Il existe deux versions de ce lemme : une faible qui s'applique aux variables
+aléatoires $X$ avec $-c \leq X \leq c$ p.s., et une autre plus forte qui suppose
+que $a \leq X \leq b$ p.s. La première se démontre simplement par des inégalités
+de convexité. La seconde admet une preuve plus compliquée, qui présente
+l'intérêt de se recaser dans la leçon sur les intégrales à paramètre. Dans les
+deux cas, on peut en déduire une inégalité de concentration, \emph{l'inégalité
+  de Hoeffding}.
 
-\begin{lemma}[Hoeffding]
-  Soit $X$ une variable aléatoire telle que $a \leq X \leq b$ presque sûrement.
-  Alors on a $\E[e^{tX}] \leq \exp(t^2(b-a)^2/8)$.
-\end{lemma}
+Rappelons que pour $X$ une variable aléatoire réelle, la \emph{fonction
+  génératrice des moments} et la \emph{fonction génératrice des cumulants} sont
+définies respectivement par
+\[ M_X(t) = \E\left[ e^{tX} \right] \quad \text{et} \quad K_X(t) = \ln M_X(t) \]
+Si $X$ est bornée p.s., ces fonctions sont définies et même $\Cf^\infty$ sur
+$\R$. De plus, $X$ admet des moments à tout ordre, et $M_X$ est la série
+génératrice exponentielle des moments, d'où le nom. De même, on appelle
+\emph{cumulants} les quantités $\kappa_n = K_X^{(n)}(0)$.
 
-Pour 
-
-\begin{proof}[Preuve du lemme de Hoeffding]
-  
+\begin{proposition}
+  $\kappa_1 = \E[X]$ et $\kappa_2 = \Var(X)$.
+\end{proposition}
+\begin{proof}
+  Calculer en utilisant la dérivation sous le signe $\int$ (ou plutôt $\E$).
 \end{proof}
 
+Fixons à partir de maintenant $a < b$, et $X$ une v.a. réelle avec $a \leq X
+\leq b$ presque sûrement.
+
+\begin{proposition}[Inégalité de Popoviciu]
+  $\displaystyle \Var(X) \leq \frac{(b-a)^2}{4}$.
+\end{proposition}
+\begin{proof}
+  $\E[(X - \mu)^2]$ atteint son minimum $\Var(X)$ en $\mu = \E[X]$ ; prendre
+  $\mu = (a+b)/2$ pour obtenir l'inégalité.
+\end{proof}
+
+\begin{lemma}[Hoeffding]
+  $K_X(t) \leq t\E[X] + t^2(b-a)^2/8$.
+\end{lemma}
+\begin{proof}
+  Fixons $t \in \R$. On peut voir que $K_X(t+s) = K_X(t) + K_{Y_t}(s)$ où $Y_t$
+  est telle que
+  \[ \P_{Y_t} \ll \P_X, \quad \frac{\mathrm{d}\P_{Y_t}}{\mathrm{d}\P_X} =
+    \frac{e^{tX}}{\E\left[ e^{tX} \right]}\]
+  ($\P_{Y_t}, \P_X$ étant les mesures images sur $\R$). En particulier $a \leq
+  Y_t \leq b$ p.s. En dérivant par rapport à $s$ deux fois,
+  \[ K_X''(t) = K_{Y_t}''(0) = \Var(Y_t) \leq \frac{(b-a)^2}{4} \]
+  On considère maintenant $t$ variable et on intègre deux fois ; l'énoncé du
+  lemme en découle immédiatement.
+\end{proof}
+
+On complète le développement en présentant l'application à l'inégalité de
+Hoeffding.
 
 \newpage
 
@@ -1831,7 +1899,7 @@ elle est intégrable tout comme toutes ses dérivées.
 
 \begin{lemma}
   Pour tout $f \in L^1(\R)$,
-  $g_\sigma * f \xrightarrow[\sigma \to 0]{}$ dans $L^1(\R)$.
+  $g_\sigma * f \xrightarrow[\sigma \to 0]{} f$ dans $L^1(\R)$.
 \end{lemma}
 \begin{proof}
   Admis. Cette propriété découle du fait que les gaussiennes sont des
@@ -1914,16 +1982,15 @@ attention, $\Cf_c(\R)$ n'est pas dense dans $\Cf_b(\R)$ pour la norme uniforme !
 
 \newpage
 
-\subsection{Formule de Poisson et fonction thêta}
+\subsection{Formule de Poisson et formule d'inversion de la fonction thêta}
 
-C'est un résultat qui lie séries de Fourier et transformée de Fourier :
+On commence par un résultat qui lie séries de Fourier et transformée de Fourier :
 $2\pi$-périodiser une fonction revient à garder ses pulsations entières. (Existe
 aussi en version \enquote{1-périodiser = garder les fréquences entières}.)
 
-\begin{theorem}[Poisson]
-  Soit $f \in \S(\R)$. On a, pour tout $x \in \R$,
-  $\displaystyle \sum_{n \in \Z} f(t + 2\pi n) = \frac{1}{2\pi} \sum_{n \in \Z}
-    \hat{f}(n)e^{int}$.
+\begin{theorem}[Formule sommatoire de Poisson]
+  $\displaystyle \forall f \in \S(\R),\; \forall t \in \R,\; \sum_{n \in \Z} f(t
+  + 2\pi n) = \frac{1}{2\pi} \sum_{n \in \Z} \hat{f}(n)e^{int}$.
 \end{theorem}
 
 \begin{remark}
@@ -1940,18 +2007,17 @@ aussi en version \enquote{1-périodiser = garder les fréquences entières}.)
   transformée de Fourier de $f$.
 \end{proof}
 
-Voici maintenant une application classique. On peut notamment en déduire
-l'équation fonctionnelle de la fonction $\zeta$ de Riemann ; cf. Anders
-Karlsson, \emph{Applications of heat kernels on abelian groups: $\zeta(2n)$,
-  quadratic reciprocity, Bessel integrals}, pour d'autres conséquences
-surprenantes.
+Voici maintenant une application classique à la \emph{fonction $\theta$ de
+  Jacobi}. On peut notamment en déduire l'équation fonctionnelle de la fonction
+$\zeta$ de Riemann ; cf. le développement suivant pour une autre conséquence
+surprenante.
 
-\begin{theorem}[Formule d'inversion de la fonction $\theta$ de Jacobi]
-  Soit $\theta : x \mapsto \sum_{n \in \Z} e^{-\pi n^2 x}$.\\
+\begin{theorem}
+  Soit $\theta : x \mapsto \sum_{n \in \Z} e^{-\pi n^2 x}$.
   Alors $\theta(1/x) = \sqrt{x}\theta(x)$ pour tout $x \in \R_+^*$.
 \end{theorem}
 \begin{remark}
-  La fonction $\theta$ est analytique sur le demi-plan $\{\mathrm{Re}(z) > 0\}
+  La fonction $\theta$ est analytique sur le demi-plan $\{\Re(z) > 0\}
   \subset \C$, et l'identité s'étend par unicité du prolongement analytique à ce
   demi-plan, où il existe une unique détermination de la racine carrée
   coïncidant avec celle sur $\R^*_+$.
@@ -1996,6 +2062,113 @@ La preuve fera intervenir les gaussiennes $g_\sigma : t \mapsto
   Il suffit de vérifier que $\displaystyle \theta(u) = 1 + 2 \sum_{n=1}^\infty
   e^{-\pi n^2 u}\to 1$ quand $u \to +\infty$ ($u = -\pi/\ln x$) et c'est bon…
 \end{proof}
+
+\newpage
+
+\subsection{Équivalent asymptotique de la fonction thêta et sommes de Gauss}
+
+Référence livresque : Richard Bellman\footnote{Un analyste qui a aussi eu une
+  carrière fructueuse de mathématicien appliqué : il est l'inventeur de la
+  \emph{programmation dynamique}, qui est au programme de l'agrég option D en
+  algorithmique, mais intervient aussi en recherche opérationnelle et théorie du
+  contrôle.}, \emph{A brief introduction to theta functions}. Voir aussi
+l'article d'Anders Karlsson, \emph{Applications of heat kernels on abelian
+  groups: $\zeta(2n)$, quadratic reciprocity, Bessel integrals}, qui raconte
+également d'autres applications fort jolies. Cependant, aucun des deux ne
+fournit de preuve rigoureuse complète.\\
+
+On renvoie au développement précédent (TODO ref) pour la définition de la
+fonction thêta de Jacobi et son équation fonctionnelle.
+Dans tout ce qui suit, on fixe $p, q \in \N^*$ premiers entre eux. La
+\emph{somme de Gauss} associée est :
+\[S(p,q) = \sum_{k \in \Z/q\Z} \exp(-i\pi k^2 p/q) \]
+
+On va montrer le résultat suivant, à partir duquel la loi de réciprocité
+quadratique (!) se déduit :
+
+\begin{theorem}[Réciprocité des sommes de Gauss]
+  $\sqrt{p}S(p,q) = e^{-i\pi/4}\sqrt{q}\overline{S(q,p)}$, i.e.
+  \[ \frac{1}{\sqrt{q}} \sum_{k \in \Z/q\Z}
+    \exp\left(\frac{-i\pi k^2 p}{q}\right) =
+    \ \frac{e^{-i\pi/4}}{\sqrt{p}} \sum_{k \in \Z/p\Z}
+    \exp\left(\frac{i\pi k^2 q}{p}\right) \]
+\end{theorem}
+
+Cette identité exacte peut en fait être obtenue à partir d'un équivalent
+asymptotique de $\theta(x + ip/q)$ pour $x \to 0^+$.
+
+\begin{lemma} Soit $k \in \N^*$. Quand $x \to 0^+$,
+  $\displaystyle \sum_{l = 0}^{+\infty} \exp(-\pi(k+lq)^2x)
+  \sim \frac{1}{2q\sqrt{x}}$.
+\end{lemma}
+
+\begin{proof}
+  La fonction $f : t \mapsto \exp(-\pi(k+tq)^2x)$ est décroissante et intégrable
+  sur $\R_+$, donc par comparaison série-intégrale,
+ \[ \sum_{l \geq 1} f(l) \leq \int_0^{+\infty} f(t)\,dt \leq
+   \sum_{l \geq 0} f(l) \quad \text{soit} \quad
+   0 \leq \sum_{l \geq 0} f(l) - \int_0^{+\infty} f(t)\,dt \leq f(0) =
+   e^{-\pi k^2 x} \leq 1
+ \]
+ Calculons l'intégrale :
+ \[ \int_0^{+\infty} \exp(-\pi(k+tq)^2x)\,dt =
+   \frac{1}{q\sqrt{\pi x}} \int_{k\sqrt{\pi x}}^{+\infty} e^{-u^2}\,du
+    \underset{x \to 0^+}{\sim} \frac{1}{2q\sqrt{x}}
+   \qquad
+  (u = \sqrt{\pi x}(k + tq))
+\]
+\end{proof}
+
+\begin{proposition}
+  Quand $x \to 0^+$,
+  $\displaystyle \theta\left( x + i\frac{p}{q} \right)
+  \sim \frac{S(p,q)}{q\sqrt{x}}$.
+\end{proposition}
+
+\begin{proof}
+  Par une interversion de sommes, justifiée par la sommabilité
+  de la famille considérée, on obtient facilement que
+  \[ \sum_{n \in \N^*} \exp\left(-\pi n^2 \left( x + i\frac{p}{q}  \right)\right)
+    = \sum_{k = 1}^q \left( \sum_{l \in \N} \exp(-\pi(k+lq)^2x) \right)
+    \exp\left(\frac{-i\pi k^2 p}{q} \right)
+  \]
+  Grâce au lemme, on sait que les sommes intérieures sont équivalentes à
+  $1/2q\sqrt{x}$, donc
+\[ \theta\left( x + i\frac{p}{q} \right) = 1 + 2 \sum_{n \in \N^*}
+  \exp\left(-\pi n^2 \left( x + i\frac{p}{q} \right)\right)
+      \underset{x \to 0^+}{\sim} \frac{S(p,q)}{q\sqrt{x}}
+\]
+\end{proof}
+
+Maintenant, écrivons l'équation fonctionnelle de $\theta$ :
+  \[ \theta\left( \frac{1}{x + ip/q} \right) =
+    \sqrt{x + i\frac{p}{q}} \times \theta\left( x + i\frac{p}{q} \right)
+    \underset{x \to 0^+}{\sim} e^{i\pi/4} \sqrt{\frac{p}{q}}
+    \times \frac{S(p,q)}{q\sqrt{x}}
+  \]
+D'autre part, on a
+  \[ \frac{1}{x - ip/q} \underset{x \to 0^+}{=}
+    x\frac{q^2}{p^2} + i \frac{q}{p} + O(x^2)  \]
+\emph{Arnaquons maintenant allègrement} en considérant que notre équivalent
+asymptotique, valable quand $z \to ip/q$ en suivant une demi-droite parallèle à
+$\R_+$, le reste en suivant un courbe qui finit par être tangente à cette
+demi-droite. Alors
+\[ \theta\left( \frac{1}{x + ip/q} \right)
+  = \overline{\theta\left( \frac{1}{x - ip/q} \right)}
+    \underset{x \to 0^+}{\sim} \frac{\overline{S(q,p)}}{p\sqrt{xq^2/p^2}}
+  \]
+  On voit donc apparaître du $S(q,p)$ ! En simplifiant et en comparant nos deux
+  équivalents asymptotiques, on obtient l'identité arithmétique désirée.
+
+Pour que ça marche vraiment, il faudrait étendre le cadre de validité du lemme,
+en faisant une comparaison série-intégrale plus subtile, peut-être en utilisant
+une formule du genre
+  \[ \int_0^{+\infty} f(t)\,dt - \sum_{n=1}^{+\infty} f(n) =
+    \int_0^{+\infty} (t - \lfloor t \rfloor)f'(t)\,dt
+  \]
+  On pourrait dire qu'en fin de compte, on obtient la loi de réciprocité
+  quadratique par une comparaison série-intégrale !
+
 
 \newpage
 
@@ -2291,6 +2464,191 @@ suivante :
 
 \newpage
 
+\subsection{Stabilité asymptotique d'un équilibre}
+
+On prouve ici que pour montrer qu'un point d'équilibre est asymptotiquement
+stable, il suffit de linéariser à son voisinage et de vérifier que c'est le cas
+du système linéarisé.
+
+\begin{theorem}
+  Considérons le système différentiel autonome
+  \[ x'(t) = f(x(t)) \qquad f \in \Cf^1(R^n, R^n)  \]
+  Supposons que 0 soit un point d'équilibre et que $Df(0)$ ait toutes ses
+  valeurs propres de partie réelle strictement négatives. Alors il existe un
+  voisinage $V$ de 0 tel que pour tout solution vérifiant $x(0) \in V$, $x(t)
+  \to 0$ quand $t \to +\infty$.
+\end{theorem}
+
+Ce résultat est semble-t-il dû à Perron. C'est aussi un cas particulier du
+\emph{théorème de stabilité de Lyapunov}. La démonstration par construction
+d'une fonction de Lyapunov est présentée dans le Rouvière, qui renvoie vers
+Coddington \& Levinson, \emph{Theory of Ordinary Differential Equations}, pour
+une preuve plus expéditive ; c'est cette dernière qui est présentée ici.
+
+On va utiliser le \emph{lemme de Grönwall} sous la forme intégrale simplifiée
+suivante :
+\begin{lemma}
+  Soient $\alpha \in \Cf^0(I, \R)$ croissante, $\beta \in \Cf^0(I, \R_+)$ et $u
+  \in \Cf^0(I)$ ($0 \in I$) vérifiant
+  \[ \forall t \geq 0,\; u(t) \leq \alpha(t) + \int_0^t \beta(s)u(s)\,ds.  \]
+  Alors pour tout $t \geq 0$,
+  \[ u(t) \leq \alpha(t) \exp\left(\int_0^t \beta(s)\,ds\right) \]
+\end{lemma}
+\begin{proof}
+  Admis. L'astuce est de multiplier par le facteur intégrant $e^{-\beta t}$ …
+\end{proof}
+
+\paragraph{Stabilité du système linéarisé}
+
+Posons $A = Df(0)$, alors $f(x) = Ax + g(x)$ avec $g(x) = o(|x|)$.
+
+Si $y$ est une solution du système $y'(t) = Ay(t)$, alors $y(t) = \exp(tA)y(0)$
+pour tout $t$. On voudrait montrer que $\exp(tA) \to 0$ quand $t \to +\infty$.
+
+En fixant $\mu < 0$ tel que $\mu > \Re(\lambda)$ pour toute valeur propre
+$\lambda$ de $A$, on montre que :
+\[ \exists M > 0 \mid \forall t \geq 0,\, \|\exp(tA)\| \leq M e^{\mu t} \]
+pour une norme d'opérateur induite par une norme quelconque sur $\R^n$.
+
+\paragraph{Extension au système original}
+
+Soit $x$ une solution définie sur un intervalle ouvert $I$, contenant l'origine.
+On a $(\exp(-tA)x(t))' = \exp(-tA)g(x(t))$ d'où en intégrant
+\[ \exp(-tA)x(t) = x(0) + \int_0^t \exp(-sA)g(x(s))\,ds \]
+\[ x(t) = \exp(tA)x(0) + \int_0^t \exp((t-s)A)g(x(s))\,ds \]
+En prenant la norme et en appliquant la majoration de l'exponentielle,
+\[ x(t) \leq M e^{\mu t}|x(0)| + \int_0^t M e^{\mu(t-s)}|g(x(s))|\,ds \]
+
+Comme $g(x) = o(|x|)$ au voisinage de 0, on peut écrire $|g(x)| = |x|
+h(x) / M$ avec $h(x) \geq 0$ et $h(x) = o(1)$, ce qui donne :
+\[ \forall t \in I,\; e^{-\mu t}|x(t)| \leq M |x(0)| + 
+   \int_0^t e^{-\mu s}|x(s)| \cdot h(x(s)) \,ds \]
+Le lemme de Gronwall donne alors
+\[ |x(t)| \leq M|x(0)| \exp\left(\int_0^t (h(x(s)) + \mu) \,ds\right) \]
+Tant que la trajectoire de $x$ reste suffisamment proche de l'origine, $h(x(s))
++ \mu < 0$ et ainsi $x$ reste bornée… on voit d'où vient la stabilité.
+
+Pour formaliser ça, considérons $U = B(0,r)$ un voisinage de $0$ tel que
+$h(U) \subseteq\, ]\mu/2, -\mu/2[$, et $V = B(0,r/M)$. On va établir que les
+trajectoires partant de $x(0) \in V$ sont asymptotiquement stables. Posons
+\[ T = \inf\, \{ T > 0 \mid \forall t \in [0, T[,\; x(t)\,\text{définie},\;
+  x(t) \in U \} \]
+Si $x(0) \in V$, alors $T > 0$. Supposons maintenant $T < +\infty$. Pour $t \in
+[0,T[$, on a alors $|x(t)| < M|x(0)|$ soit $x(t) \in U$. Par théorème de
+sortie de tout compact, $x$ est définie en $T$, et même sur un voisinage à
+droite de $T$. Il n'en faut pas beaucoup plus pour montrer que $x$ reste dans
+$U$ à droite de $T$, d'où contradiction : par l'absurde, $T = +\infty$.
+
+Ainsi, $x$ est définie sur $\R_+$, et décroit exponentiellement.
+
+\newpage
+
+
+\subsection{Méthode de Newton pour les polynômes}
+
+Incontournable… Références : mix entre Rouvière (qu'on consultera pour une très
+bonne explication des points fixes attractifs / superattractifs / répulsifs) et
+Chambert-Loir--Fermigier (pour les polynômes).
+
+Soit $P$ un polynôme unitaire scindé sur $\R$ (par commodité, on va supposer
+$\deg P \geq 2$) :
+\[ P(x) = (x - \xi_1)^{m_1} \ldots (x - \xi_r)^{m_r}
+  \qquad \xi_1 < \ldots < \xi_r \]
+On cherche une racine de $P$ par la \emph{méthode de Newton} : on part d'un
+point $x_0$ et on calcule par récurrence
+\[ x_{n+1} = f(x_n) \qquad f(x) = x - \frac{P(x)}{P'(x)} \]
+
+Le cas particulier des polynômes présente deux intérêts :
+\begin{itemize}
+\item Si $x_0 > \xi_r$, on tombe toujours sur la racine $\xi_r$. Ainsi, la
+  convergence n'est pas seulement locale. C'est vrai généralement pour des
+  fonctions convexes.
+\item Les hypothèses usuelles de la méthode de Newton comportent que $P'(\xi_r)
+  \neq 0$, donc que $\xi_r$ est une racine simple. Pour une racine multiple, on
+  va voir qu'on a quand même convergence, mais avec une vitesse plus lente.
+\end{itemize}
+
+\paragraph{La récurrence est bien définie} Par le théorème de Gauss--Lucas, $P'$
+et $P''$ ont leurs racines dans $[\xi_1, \xi_r]$. Donc, sur $]\xi_r, +\infty[$,
+$P' > 0$ et $P'' > 0$, $P$ est strictement croissante et strictement convexe, et
+$f$ est bien définie.
+
+Par stricte convexité, pour $x_n > \xi_r$, $x_{n+1} = f(x_n) > \xi_r$. Pour le
+voir, il suffit de faire un dessin : la courbe de $P$ est au-dessus de la
+tangente qui relie $(x_{n+1}, 0)$ et $(x_n, P(x_n))$. Formellement : $P(x_n) =
+(x_n - x_{n+1})P'(x_n)$ d'une part ; d'autre part $P(x_n) = P'(y)(x_n - \xi_r)$
+avec $y \in ]\xi_r, x_n[$ par accroissements finis, or $P'(y) < P'(x_n)$ par
+convexité donc $x_n - x_{n+1} < x_n - \xi_r$.
+
+Ainsi, $f : ]\xi_r, +\infty[ \to ]\xi_r, +\infty[$ est bien définie, il en va de
+même de la suite $(x_n)$. Celle-ci est donc (strictement) minorée par $\xi_r$,
+et de plus décroissante : elle converge.
+
+
+\paragraph{Convergence vers un point fixe de $f$}
+
+Montrons que $f$ peut être prolongée en $\xi_r$. $m = m_r \geq 1$ étant la
+multiplicité de la racine $\xi_r$, on a
+$P(\xi_r + h) = a_{m}h^{m} + O(h^{m+1})$
+et $P'(\xi_r + h) = ma_{m}h^{m} + O(h^m)$ 
+donc
+\[  \frac{P(\xi_r + h)}{P'(\xi_r + h)} \sim \frac{h}{m}
+  \qquad \text{d'où} \qquad
+  f(\xi_r + h) = \xi_r + \left( 1 - \frac{1}{m} \right)h + o(h)
+\]
+$f$ se prolonge donc par continuité sur $[\xi_r, +\infty[$ par $f(\xi_r) =
+\xi_r$ ; comme c'est une fraction rationnelle, $f \in \Cf^\infty([\xi_r,
++\infty[)$. De plus, $f'(\xi_r) = 1 - 1/m$. $\xi_r$ étant l'unique point fixe
+sur cet intervalle, $x_n \to \xi_r$ quand $n \to +\infty$.
+
+\paragraph{Cas d'une racine simple}
+
+C'est le cas usuel : comme $f'(\xi_r) = 0$, le point fixe est superattractif.
+
+Par la formule de Taylor--Lagrange à l'ordre 2 :
+\[ \forall n \in \N,\; \exists z_n \in ]\xi_r, x_n[ \;/\;
+  x_{n+1} - \xi_r = f(x_n) - f(\xi_r) = \frac{f''(z_n)}{2} (x_n - \xi_r)^2
+\]
+Donc la convergence est au moins \emph{quadratique} :
+\[ \frac{x_{n+1} - \xi_r}{(x_n - \xi_r)^2} \xrightarrow[n \to +\infty]{}
+  \frac{f''(\xi_r)}{2} \qquad \text{soit} \qquad
+  x_{n+1} - \xi_r = O\left( (x_n - \xi_r)^2 \right)
+\]
+i.e. le nombre de chiffres significatifs de l'approximation double à peu près à
+chaque itération.
+
+\paragraph{Cas d'une racine multiple}
+
+Maintenant, $f'(\xi_r) > 0$, le point fixe est attractif et la convergence sera
+donc \emph{linéaire}. En effet, on s'y prend de la même façon qu'avant, mais à
+l'ordre 1 :
+\[ \forall n \in \N,\; \exists z_n \in ]\xi_r, x_n[ \;/\;
+  x_{n+1} - \xi_r = f(x_n) - f(\xi_r) = f'(z_n)(x_n - \xi_r)
+\]
+\[ \frac{x_{n+1} - \xi_r}{x_n - \xi_r} \xrightarrow[n \to +\infty]{}
+  f'(\xi_r) = 1 - \frac{1}{m} < 1
+\]
+En étudiant à l'ordre 2, on peut avoir plus de précisions :
+
+\begin{proposition}
+  Il existe $\lambda > 0$ tel que $x_n - \xi_r \sim \lambda (1 - 1/m)^n$.
+\end{proposition}
+\begin{proof}
+  On écrit Taylor--Lagrange :
+  \[ \forall n \in \N,\; \exists z_n \in ]\xi_r, x_n[ \;/\;
+    x_{n+1} - \xi_r = f'(\xi_r)(x_n - \xi_r)
+    + \frac{f''(z_n)}{2} (x_n - \xi_r)^2
+  \]
+  \[ \frac{x_{n+1} - \xi_r}{x_n - \xi_r} = f'(\xi_r)\left( 1 + O(x_n - \xi_r)
+    \right)
+  \]
+  On montre, en s'aidant de la convergence linéaire précédemment établie, que
+  $x_n - \xi_r = O(c^n)$ pour $1-1/m < c < 1$, puis que $\prod_n \left( 1 +
+    O(x_n - \xi_r) \right)$ converge. On conclut par produit téléscopique.
+\end{proof}
+
+\newpage
+
 
 \section{Idées exclues}
 
@@ -2298,7 +2656,9 @@ suivante :
 
 Un développement inspiré par une remarque dans \emph{Ten lessons I wish I had
   learned before I started teaching differential equations} (item 3) de
-Gian-Carlo Rota. Voir la fin pour plus de remarques culturelles. 
+Gian-Carlo Rota. Voir la fin pour plus de remarques culturelles.
+
+En vrai, c'est assez décevant comme truc.
 
 On considère ici l'équation différentielle linéaire
 homogène
@@ -2399,6 +2759,9 @@ ENFIN BREF VOILÀ
 \end{remark}
 
 \paragraph{Culture, biblio, etc.}
+
+Publié dans les annales scientifiques de l'ENS par un matheux oublié par
+l'Histoire. 
 
 \newpage
 
