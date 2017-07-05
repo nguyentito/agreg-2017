@@ -126,10 +126,11 @@ propose des preuves améliorées.
 \begin{itemize}
 \item \nameref{conv-ortho} : au niveau agrég, on est censé avoir entendu parler
   de décomposition en valeurs singulières
-\item \nameref{tauber} : on économise beaucoup de découpage d'$\varepsilon$ en
-  invoquant des sommes de Riemann
-\item \nameref{stable} (ou \enquote{théorème de Liapounov}) : preuve plus
-  directe et concise que celle proposée par Rouvière
+\item \nameref{tauber} (saviez-vous qu'il était dû à Littlewood sans Hardy ?) :
+  on découpe moins d'$\varepsilon$ en invoquant les sommes de Riemann
+\item \nameref{stable} (ou \enquote{théorème de Liapounov} ; saviez-vous qu'il
+  était dû à Perron ?) : preuve plus
+  directe et concise que celle proposée par le Rouvière
 \end{itemize}
 Le reste est relativement classique.
 On trouvera également une section \nameref{exclu}.\\
@@ -1639,7 +1640,7 @@ ce qui aurait pu permettre de traiter la partie finitude (exercice pour la
 lectrice). Ce résultat est à comparer avec le suivant, utilisé pour démontrer
 d'autres théorèmes de dérivation presque partout dans le même esprit (cf. par
 exemple \emph{An introduction to measure theory} de Terence Tao) :
-\begin{theorem}[Inégalité maximale de Hardy-Littlewood]
+\begin{theorem}[Inégalité maximale de Hardy--Littlewood]
   Soit $f \in L^1(\R)$, et soit $\beta > 0$. Alors
   \[ \mu\left( \left\{ x \in \R \;\middle|\; \sup_{h > 0} \frac{1}{h} \int_x^{x+h}
         |f(t)|\,dt \geq \beta \right\} \right)
@@ -2227,18 +2228,24 @@ une formule du genre
 
 \newpage
 
-\subsection{Théorème taubérien fort de Hardy--Littlewood}
+\subsection{Théorème taubérien fort de Littlewood}
 \label{tauber}
 
-Référence : Gourdon, \emph{Analyse}. On propose ici une preuve avec moins de
-découpage d'$\varepsilon$, en utilisant des sommes de Riemann ainsi qu'en
-sortant un peu du programme de prépa.
+Référence : Gourdon, \emph{Analyse}. La preuve astucieuse du Gourdon a été
+découverte par Jovan Karamata ; elle figure déjà telle quelle dans un livre de
+1939, \emph{The Theory of Functions} de Titchmarsh. On propose ici une variante
+de la méthode de Karamata avec moins de découpage d'$\varepsilon$, en utilisant
+des sommes de Riemann ainsi qu'en sortant un peu du programme de prépa. (Sans
+doute ne suis-je pas la première personne à découvrir cette astuce, mais je n'ai
+pas de référence.)
 
 Pour présenter ce développement, il faut un peu de culture sur les théorèmes
 abéliens et taubériens, en particulier savoir énoncer le théorème d'Abel radial
 ou angulaire, dont le résultat suivant est une réciproque partielle.
 
-\begin{theorem}[Hardy--Littlewood]
+\begin{theorem}[Littlewood\footnote{À ne pas confondre avec le théorème
+    taubérien de Hardy--Littlewood, qui parle de convergence au sens de Cesàro ! La
+    méthode de Karamata pouvant aussi être appliquée pour démontrer ce théorème.}]
   Soit $(a_n) \in \R^n$ telle que $a_n = O(1/n)$ quand $n \to +\infty$. En
   particulier, la série entière $F(x) = \sum_{n \in \N} a_n x^n$ a un rayon de
   convergence au moins 1.
